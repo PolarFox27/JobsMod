@@ -1,7 +1,7 @@
 package com.dorian2712.jobs.commands;
 
 import com.dorian2712.jobs.data.JobsInfo;
-import com.dorian2712.jobs.data.PlayerList;
+import com.dorian2712.jobs.data.PlayerData;
 import com.dorian2712.jobs.util.Constants.Job;
 import net.minecraft.command.CommandBase;
 import net.minecraft.command.CommandException;
@@ -70,8 +70,7 @@ public class CommandInfo extends CommandBase {
 
     private void printInfoOfPlayer(ICommandSender sender, EntityPlayerMP target)
     {
-        String uuid = target.getGameProfile().getId().toString();
-        JobsInfo infos = PlayerList.getJobsOfPlayer(uuid);
+        JobsInfo infos = PlayerData.getPlayerJobs(target);
         sender.sendMessage(new TextComponentString(TextFormatting.LIGHT_PURPLE + "Stats of " + TextFormatting.BLUE + target.getName()));
 
         for(int i = 0; i < 4; i++)

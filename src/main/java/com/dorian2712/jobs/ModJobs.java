@@ -1,5 +1,6 @@
 package com.dorian2712.jobs;
 
+import com.dorian2712.jobs.data.PlayerData;
 import com.dorian2712.jobs.util.Reference;
 import com.dorian2712.jobs.util.handlers.GuiHandler;
 import com.dorian2712.jobs.util.handlers.PacketHandler;
@@ -7,7 +8,6 @@ import com.dorian2712.jobs.util.handlers.RegistryHandler;
 import com.dorian2712.jobs.util.proxy.CommonProxy;
 
 import com.dorian2712.jobs.util.save.LoadUtil;
-import com.dorian2712.jobs.util.save.SaveLoadPlayersData;
 import net.minecraft.util.text.TextFormatting;
 import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.common.Mod.EventHandler;
@@ -18,8 +18,7 @@ import net.minecraftforge.fml.common.network.NetworkRegistry;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 
-@Mod(modid = Reference.MOD_ID, name = Reference.NAME, version = Reference.VERSION,
-acceptedMinecraftVersions = Reference.ACCEPTED_VERSIONS)
+@Mod(modid = Reference.MOD_ID, name = Reference.NAME, version = Reference.VERSION, acceptedMinecraftVersions = Reference.ACCEPTED_VERSIONS)
 public class ModJobs {
 
     @Instance
@@ -33,6 +32,8 @@ public class ModJobs {
     {
         PacketHandler.registerPackets();
         System.out.println(TextFormatting.BLUE + "[Jobs] Packets Registered");
+        PlayerData.register();
+        System.out.println(TextFormatting.BLUE + "[Jobs] Capabilities Registered");
     }
 
     @EventHandler
@@ -53,15 +54,8 @@ public class ModJobs {
     {
         RegistryHandler.registerCommands(e);
         System.out.println(TextFormatting.BLUE + "[Jobs] Commands Registered");
-        SaveLoadPlayersData.loadData();
         LoadUtil.loadData();
         System.out.println(TextFormatting.BLUE + "[Jobs] Data Loaded");
 
-    }
-
-    @EventHandler
-    public static void serverFinish(FMLServerStoppingEvent e)
-    {
-        SaveLoadPlayersData.saveData();
     }
 }

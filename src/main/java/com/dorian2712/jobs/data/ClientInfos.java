@@ -106,26 +106,35 @@ public class ClientInfos {
         {
             case BREAKING:
                 for(Block b : BREAK_BLOCK_XP.keySet())
-                    if(BREAK_BLOCK_JOB.get(b) == j)
-                        list.add(new ItemStack(b));
-                return list;
+                {
+                	if(BREAK_BLOCK_JOB.get(b) == j)
+                		list.add(new ItemStack(b));
+                }
+                break;
             case CRAFTING:
-                for(Item b : CRAFT_ITEM_XP.keySet())
-                    if(CRAFT_ITEM_JOB.get(b) == j)
-                        list.add(new ItemStack(b));
-                return list;
+                for(Item i : CRAFT_ITEM_XP.keySet())
+                {
+                	if(CRAFT_ITEM_JOB.get(i) == j)
+                		list.add(new ItemStack(i));
+                }
+                break;
             case SMELTING:
-                for(Item b : SMELT_ITEM_XP.keySet())
-                    if(SMELT_ITEM_JOB.get(b) == j)
-                        list.add(new ItemStack(b));
-                return list;
+                for(Item i : SMELT_ITEM_XP.keySet())
+                {
+                	if(SMELT_ITEM_JOB.get(i) == j)
+                        list.add(new ItemStack(i));
+                }
+                break;
             case HARVESTING:
-                for(Item b : HARVEST_CROP_XP.keySet())
-                    if(HARVEST_CROP_JOB.get(b) == j)
-                        list.add(new ItemStack(b));
-                return list;
+                for(Item i : HARVEST_CROP_XP.keySet())
+                {
+                	if(HARVEST_CROP_JOB.get(i) == j)
+                		list.add(new ItemStack(i));
+                }
+                break;
             case KILLING:
                 for(String s : KILL_ENTITY_XP.keySet())
+                {
                     if(KILL_ENTITY_JOB.get(s) == j)
                     {
                         ItemStack stack = new ItemStack(Items.DIAMOND_SWORD);
@@ -133,10 +142,11 @@ public class ClientInfos {
                         stack.getTagCompound().setString("class", s);
                         list.add(stack);
                     }
-                return list;
+                }
+                break;
             default:
-            	return list;
-            	   
+            	break;            	   
         }
+        return list;
     }
 }

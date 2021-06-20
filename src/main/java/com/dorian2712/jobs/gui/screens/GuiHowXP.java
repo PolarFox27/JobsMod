@@ -44,10 +44,12 @@ public class GuiHowXP extends GuiScreen {
     {
         this.job = j;
         this.page = 0;
-        for(XPCategories c : XPCategories.values())
+        for(XPCategories c : XPCategories.getXPValues())
         {
         	if(!ClientInfos.getStacksFromCategories(c, this.job).isEmpty())
+        	{
         		this.categories.add(c);
+        	}
         }
         
         for (int i = 0; i < this.categories.size(); i ++)
@@ -154,7 +156,7 @@ public class GuiHowXP extends GuiScreen {
                 if(stack.getItem() == Items.DIAMOND_SWORD && stack.hasTagCompound())
                 {
                 	int scale = Constants.getClassScaleByName().get(stack.getTagCompound().getString("class"));
-                    GuiJobInfos.drawEntityOnScreen(x + 8, y + 16, scale/2, 200, 100,
+                    GuiJobInfos.drawEntityOnScreen(x + 8, y + 16, scale/2, this.width/2 - mouseX, this.height/2 - mouseY,
                             Constants.getEntityByName(stack.getTagCompound().getString("class"), Minecraft.getMinecraft().player.world));
                 }
                 else this.itemRender.renderItemAndEffectIntoGUI(stack, x, y);
@@ -168,7 +170,7 @@ public class GuiHowXP extends GuiScreen {
                     tooltip.add(s.getTagCompound().getString("class"));
 
                 else tooltip.add(s.getDisplayName());
-                long xp = 0;
+                long xp = 0L;
                 int lvl = ClientInfos.job.getLevelByJob(this.job);
                 if (lvl < 25)
                 {
@@ -193,7 +195,7 @@ public class GuiHowXP extends GuiScreen {
                         if(ClientInfos.KILL_ENTITY_JOB.containsKey(s.getTagCompound().getString("class")))
                             xp = ClientInfos.KILL_ENTITY_XP.get(s.getTagCompound().getString("class"))[lvl];
                     }
-                    if(xp != 0) tooltip.add(TextFormatting.GREEN + "" + xp + " xp");
+                    if(xp != 0L) tooltip.add(TextFormatting.GREEN + "" + xp + " xp");
                     else
                     {
                         boolean toUnlock = false;
@@ -206,37 +208,37 @@ public class GuiHowXP extends GuiScreen {
                                     tooltip.add(TextFormatting.RED + I18n.translateToLocal("text.unlock_lvl") + " " + j);
                                     break;
                                 }
-                                else if(ClientInfos.SMELT_ITEM_XP.containsKey(s.getItem()))
-                                    if(ClientInfos.SMELT_ITEM_XP.get(s.getItem())[j] > 0)
-                                    {
-                                        toUnlock = true;
-                                        tooltip.add(TextFormatting.RED + I18n.translateToLocal("text.unlock_lvl") + " " + j);
-                                        break;
-                                    }
-                                    else if(ClientInfos.BREAK_BLOCK_XP.containsKey(Block.getBlockFromItem(s.getItem())))
-                                        if(ClientInfos.BREAK_BLOCK_XP.get(Block.getBlockFromItem(s.getItem()))[j] > 0)
-                                        {
-                                            toUnlock = true;
-                                            tooltip.add(TextFormatting.RED + I18n.translateToLocal("text.unlock_lvl") + " " + j);
-                                            break;
-                                        }
-                                        else if(ClientInfos.HARVEST_CROP_XP.containsKey(s.getItem()))
-                                            if(ClientInfos.HARVEST_CROP_XP.get(s.getItem())[j] > 0)
-                                            {
-                                                toUnlock = true;
-                                                tooltip.add(TextFormatting.RED + I18n.translateToLocal("text.unlock_lvl") + " " + j);
-                                                break;
-                                            }
-                                            else if(s.getItem() == Items.DIAMOND_SWORD && s.hasTagCompound())
-                                            {
-                                                if(ClientInfos.KILL_ENTITY_XP.containsKey(s.getTagCompound().getString("class")))
-                                                    if(ClientInfos.KILL_ENTITY_XP.get(s.getTagCompound().getString("class"))[j] > 0)
-                                                    {
-                                                        toUnlock = true;
-                                                        tooltip.add(TextFormatting.RED + I18n.translateToLocal("text.unlock_lvl") + " " + j);
-                                                        break;
-                                                    }
-                                            }
+                            if(ClientInfos.SMELT_ITEM_XP.containsKey(s.getItem()))
+                                if(ClientInfos.SMELT_ITEM_XP.get(s.getItem())[j] > 0)
+                                {
+                                    toUnlock = true;
+                                    tooltip.add(TextFormatting.RED + I18n.translateToLocal("text.unlock_lvl") + " " + j);
+                                    break;
+                                }
+                            if(ClientInfos.BREAK_BLOCK_XP.containsKey(Block.getBlockFromItem(s.getItem())))
+                                if(ClientInfos.BREAK_BLOCK_XP.get(Block.getBlockFromItem(s.getItem()))[j] > 0)
+                                {
+                                    toUnlock = true;
+                                    tooltip.add(TextFormatting.RED + I18n.translateToLocal("text.unlock_lvl") + " " + j);
+                                    break;
+                                }
+                            if(ClientInfos.HARVEST_CROP_XP.containsKey(s.getItem()))
+                                if(ClientInfos.HARVEST_CROP_XP.get(s.getItem())[j] > 0)
+                                {
+                                    toUnlock = true;
+                                    tooltip.add(TextFormatting.RED + I18n.translateToLocal("text.unlock_lvl") + " " + j);
+                                    break;
+                                }
+                            if(s.getItem() == Items.DIAMOND_SWORD && s.hasTagCompound())
+                            {
+                            	if(ClientInfos.KILL_ENTITY_XP.containsKey(s.getTagCompound().getString("class")))
+                            		if(ClientInfos.KILL_ENTITY_XP.get(s.getTagCompound().getString("class"))[j] > 0)
+                            		{
+                            			toUnlock = true;
+                            			tooltip.add(TextFormatting.RED + I18n.translateToLocal("text.unlock_lvl") + " " + j);
+                            			break;
+                            		}
+                            }
 
                         }
                         if(!toUnlock)

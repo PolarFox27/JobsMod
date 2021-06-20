@@ -5,14 +5,22 @@ import java.lang.reflect.Constructor;
 import java.lang.reflect.InvocationTargetException;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Map.Entry;
+
+import org.apache.http.cookie.SM;
 
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.entity.EntityPlayerSP;
 import net.minecraft.entity.EntityLivingBase;
+import net.minecraft.entity.boss.EntityDragon;
+import net.minecraft.entity.boss.EntityWither;
 import net.minecraft.entity.monster.EntityBlaze;
+import net.minecraft.entity.monster.EntityCaveSpider;
 import net.minecraft.entity.monster.EntityCreeper;
+import net.minecraft.entity.monster.EntityElderGuardian;
 import net.minecraft.entity.monster.EntityEnderman;
 import net.minecraft.entity.monster.EntityGhast;
+import net.minecraft.entity.monster.EntityGuardian;
 import net.minecraft.entity.monster.EntityMagmaCube;
 import net.minecraft.entity.monster.EntityPigZombie;
 import net.minecraft.entity.monster.EntitySkeleton;
@@ -23,10 +31,11 @@ import net.minecraft.entity.monster.EntityWitherSkeleton;
 import net.minecraft.entity.monster.EntityZombie;
 import net.minecraft.entity.passive.EntityChicken;
 import net.minecraft.entity.passive.EntityCow;
+import net.minecraft.entity.passive.EntityDonkey;
 import net.minecraft.entity.passive.EntityPig;
 import net.minecraft.entity.passive.EntityRabbit;
 import net.minecraft.entity.passive.EntitySheep;
-import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.entity.passive.EntityHorse;
 import net.minecraft.world.World;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
@@ -49,8 +58,9 @@ public class Constants {
 															   180600, 230100, 293200, 373200, 473200}; //21 - 25
 	
 	public static final String[] ENTITIES = new String[]{"Cow", "Chicken", "Zombie", "Sheep", "Rabbit", "Blaze", "Creeper", "Enderman",
-		"Ghast", "Magma Cube", "Pig", "Skeleton", "Slime", "Spider", "Witch", "Wither Skeleton", "Zombie Pigman", "Player"};
-	public static final int[] IDS = new int[]{0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17};
+		"Ghast", "Magma Cube", "Pig", "Skeleton", "Slime", "Spider", "Witch", "Wither Skeleton", "Zombie Pigman", "Player", "Wither", 
+		"Ender Dragon", "Guardian", "Elder Guardian", "Horse", "Donkey", "Cave Spider"};
+	public static final int[] IDS = new int[]{0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24};
 
 	public static Map<String, Integer> getEntitiesID()
 	{
@@ -93,6 +103,13 @@ public class Constants {
 		map.put("Wither Skeleton", EntityWitherSkeleton.class);
 		map.put("Zombie Pigman", EntityPigZombie.class);
 		map.put("Player", EntityPlayerSP.class);
+		map.put("Wither", EntityWither.class);
+		map.put("Ender Dragon", EntityDragon.class);
+		map.put("Guardian", EntityGuardian.class);
+		map.put("Elder Guardian", EntityElderGuardian.class);
+		map.put("Horse", EntityHorse.class);
+		map.put("Donkey", EntityDonkey.class);
+		map.put("Cave Spider", EntityCaveSpider.class);
 		return map;
 	}
 
@@ -112,12 +129,29 @@ public class Constants {
 		map.put("Pig", 18);
 		map.put("Skeleton", 15);
 		map.put("Slime", 30);
-		map.put("Spider", 20);
+		map.put("Spider", 18);
 		map.put("Witch", 15);
 		map.put("Wither Skeleton", 12);
 		map.put("Zombie Pigman", 15);
 		map.put("Player", 15);
+		map.put("Wither", 10);
+		map.put("Ender Dragon", 5);
+		map.put("Guardian", 15);
+		map.put("Elder Guardian", 10);
+		map.put("Horse", 15);
+		map.put("Donkey", 15);
+		map.put("Cave Spider", 20);
 		return map;
+	}
+	
+	public static String getNameByClass(Class<? extends EntityLivingBase> clazz)
+	{
+		for(Entry<String, Class> e : getClassesByName().entrySet())
+		{
+			if(e.getValue().isAssignableFrom(clazz))
+				return e.getKey();
+		}
+		return "";
 	}
 
 	@SideOnly(Side.CLIENT)
@@ -202,6 +236,11 @@ public class Constants {
 		{
 			this.isCategory = isCategory;
 			this.index = in;
+		}
+		
+		public static XPCategories[] getXPValues()
+		{
+			return new XPCategories[] {CRAFTING, SMELTING, BREAKING, KILLING, HARVESTING};
 		}
 
 	}

@@ -1,7 +1,7 @@
 package com.dorian2712.jobs.commands;
 
 import com.dorian2712.jobs.network.PacketUpdateClientJob;
-import com.dorian2712.jobs.data.PlayerList;
+import com.dorian2712.jobs.data.PlayerData;
 import com.dorian2712.jobs.util.Constants.Job;
 import com.dorian2712.jobs.util.handlers.PacketHandler;
 import net.minecraft.command.CommandBase;
@@ -51,9 +51,9 @@ public class CommandAdd extends CommandBase {
             sendError(sender);
             return;
         }
-        PlayerList.getJobsOfPlayer(target.getGameProfile().getId().toString()).gainXP(job, xp, target);
+        PlayerData.getPlayerJobs(target).gainXP(job, xp, target);
         sender.sendMessage(new TextComponentString(xp + " xp added to " + target.getName() + " for job " + job.name()));
-        PacketHandler.INSTANCE.sendTo(new PacketUpdateClientJob(target.getGameProfile().getId().toString()), target);
+        PacketHandler.INSTANCE.sendTo(new PacketUpdateClientJob(target), target);
 
 
 

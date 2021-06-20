@@ -2,7 +2,7 @@ package com.dorian2712.jobs.events.server;
 
 import com.dorian2712.jobs.data.ClientInfos;
 import com.dorian2712.jobs.data.JobsInfo;
-import com.dorian2712.jobs.data.PlayerList;
+import com.dorian2712.jobs.data.PlayerData;
 import com.dorian2712.jobs.data.GainXPUtil;
 import com.dorian2712.jobs.util.Constants.Job;
 import net.minecraft.block.Block;
@@ -40,7 +40,7 @@ public class BreakBlockEvents {
         if(!(event.getPlayer() instanceof EntityPlayerMP)) return;
         EntityPlayerMP player = (EntityPlayerMP) event.getPlayer();
         Block block = event.getState().getBlock();
-        JobsInfo jobs = PlayerList.getJobsOfPlayer(player.getGameProfile().getId().toString());
+        JobsInfo jobs = PlayerData.getPlayerJobs(player);
 
         //Ores
         if(GainXPUtil.BREAK_BLOCK_XP.containsKey(block))

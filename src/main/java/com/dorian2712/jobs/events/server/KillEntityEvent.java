@@ -1,7 +1,8 @@
 package com.dorian2712.jobs.events.server;
 
 import com.dorian2712.jobs.data.JobsInfo;
-import com.dorian2712.jobs.data.PlayerList;
+import com.dorian2712.jobs.data.PlayerData;
+import com.dorian2712.jobs.util.Constants;
 import com.dorian2712.jobs.util.Constants.Job;
 import com.dorian2712.jobs.data.GainXPUtil;
 import net.minecraft.entity.player.EntityPlayerMP;
@@ -22,11 +23,11 @@ public class KillEntityEvent {
         {
             String name = "";
             if(event.getEntityLiving() instanceof EntityPlayerMP) name = "Player";
-            else name = event.getEntityLiving().getName();
+            else name = Constants.getNameByClass(event.getEntityLiving().getClass());
 
             EntityPlayerMP p = (EntityPlayerMP)event.getSource().getTrueSource();
             if(!GainXPUtil.KILL_ENTITY_XP.containsKey(name)) return;
-            JobsInfo infos = PlayerList.getJobsOfPlayer(p.getGameProfile().getId().toString());
+            JobsInfo infos = PlayerData.getPlayerJobs(p);
             Job j = GainXPUtil.KILL_ENTITY_JOB.get(name);
             long xp = GainXPUtil.KILL_ENTITY_XP.get(name)[infos.getLevelByJob(j)];
 

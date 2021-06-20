@@ -2,7 +2,7 @@ package com.dorian2712.jobs.gui.containers;
 
 import com.dorian2712.jobs.data.GainXPUtil;
 import com.dorian2712.jobs.data.JobsInfo;
-import com.dorian2712.jobs.data.PlayerList;
+import com.dorian2712.jobs.data.PlayerData;
 import com.dorian2712.jobs.util.Constants.Job;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.EntityPlayerMP;
@@ -174,7 +174,7 @@ public class ContainerCraft extends Container {
         if (!world.isRemote)
         {
             EntityPlayerMP entityplayermp = (EntityPlayerMP)player;
-            JobsInfo infos = PlayerList.getJobsOfPlayer(entityplayermp.getGameProfile().getId().toString());
+            JobsInfo infos = PlayerData.getPlayerJobs(entityplayermp);
             ItemStack itemstack = ItemStack.EMPTY;
             IRecipe irecipe = CraftingManager.findMatchingRecipe(craftMatrix, world);
 

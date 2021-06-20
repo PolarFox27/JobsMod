@@ -1,7 +1,7 @@
 package com.dorian2712.jobs.commands;
 
+import com.dorian2712.jobs.data.PlayerData;
 import com.dorian2712.jobs.network.PacketUpdateClientJob;
-import com.dorian2712.jobs.data.PlayerList;
 import com.dorian2712.jobs.util.Constants;
 import com.dorian2712.jobs.util.Constants.Job;
 import com.dorian2712.jobs.util.handlers.PacketHandler;
@@ -79,9 +79,8 @@ public class CommandSet extends CommandBase {
 
     private void setJob(EntityPlayerMP target, Job j, long xp)
     {
-        String uuid = target.getGameProfile().getId().toString();
-        PlayerList.getJobsOfPlayer(uuid).set(j, xp);
-        PacketHandler.INSTANCE.sendTo(new PacketUpdateClientJob(uuid), target);
+        PlayerData.getPlayerJobs(target).set(j, xp);
+        PacketHandler.INSTANCE.sendTo(new PacketUpdateClientJob(target), target);
     }
 
     @Override

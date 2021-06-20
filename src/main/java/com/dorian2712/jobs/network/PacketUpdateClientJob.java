@@ -2,8 +2,9 @@ package com.dorian2712.jobs.network;
 
 import com.dorian2712.jobs.data.ClientInfos;
 import com.dorian2712.jobs.data.JobsInfo;
-import com.dorian2712.jobs.data.PlayerList;
+import com.dorian2712.jobs.data.PlayerData;
 import io.netty.buffer.ByteBuf;
+import net.minecraft.entity.player.EntityPlayer;
 import net.minecraftforge.fml.common.network.simpleimpl.IMessage;
 import net.minecraftforge.fml.common.network.simpleimpl.IMessageHandler;
 import net.minecraftforge.fml.common.network.simpleimpl.MessageContext;
@@ -14,9 +15,9 @@ public class PacketUpdateClientJob implements IMessage {
     private long[] xps = new long[]{0, 0, 0, 0};
 
     public PacketUpdateClientJob(){}
-    public PacketUpdateClientJob(String uuid)
+    public PacketUpdateClientJob(EntityPlayer player)
     {
-        this.xps = PlayerList.getJobsOfPlayer(uuid).toTotalXPs();
+        this.xps = PlayerData.getPlayerJobs(player).toTotalXPs();
     }
 
 

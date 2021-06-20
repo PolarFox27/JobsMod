@@ -11,6 +11,7 @@ import com.dorian2712.jobs.util.JobsMath;
 import com.dorian2712.jobs.util.handlers.PacketHandler;
 import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.item.ItemStack;
+import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.text.TextComponentString;
 import net.minecraft.util.text.TextFormatting;
 import net.minecraft.util.text.translation.I18n;
@@ -119,7 +120,7 @@ public class JobsInfo {
 
 		int previousLVL = this.levels[j.index]; 
 		addXP(j, xp);
-		PacketHandler.INSTANCE.sendTo(new PacketUpdateClientJob(p.getGameProfile().getId().toString()), p);
+		PacketHandler.INSTANCE.sendTo(new PacketUpdateClientJob(p), p);
 		int LVL = this.levels[j.index];
 		PacketHandler.INSTANCE.sendTo(new PacketAddXP(j, xp), p);
 		if(LVL > previousLVL)
@@ -171,6 +172,28 @@ public class JobsInfo {
 		p.inventoryContainer.detectAndSendChanges();
 	}
 	
+	public void fromNBT(NBTTagCompound nbt)
+	{
+		this.fromTotalXPs(new long[] {nbt.getLong("hunter"),
+									  nbt.getLong("magician"),
+									  nbt.getLong("farmer"),
+									  nbt.getLong("miner")});
+	}
 	
+	public NBTTagCompound toNBT()
+	{
+		NBTTagCompound nbt = new NBTTagCompound();
+		long[] xps = this.toTotalXPs();
+		nbt.setLong("hunter", xps[0]);
+		nbt.setLong("magician", xps[1]);
+		nbt.setLong("farmer", xps[2]);
+		nbt.setLong("miner", xps[3]);
+		return nbt;
+	}
+	
+	public void copy(JobsInfo other)
+	{
+		this.fromTotalXPs(other.toTotalXPs());
+	}
 
 }

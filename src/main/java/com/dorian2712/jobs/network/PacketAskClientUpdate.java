@@ -24,8 +24,7 @@ public class PacketAskClientUpdate implements IMessage {
         @Override
         public IMessage onMessage(PacketAskClientUpdate message, MessageContext ctx) {
             if (ctx.side == Side.SERVER) {
-                String uuid = ctx.getServerHandler().player.getGameProfile().getId().toString();
-                PacketHandler.INSTANCE.sendTo(new PacketUpdateClientJob(uuid), ctx.getServerHandler().player);
+                PacketHandler.INSTANCE.sendTo(new PacketUpdateClientJob(ctx.getServerHandler().player), ctx.getServerHandler().player);
             }
 
             return null;
