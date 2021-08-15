@@ -1,0 +1,38 @@
+//KeyBindings
+
+keys.jobs.category=Jobs
+keys.jobs.open_gui=Open Jobs Menu
+
+//Jobs
+
+jobs.hunter=Hunter
+jobs.magician=Magician
+jobs.farmer=Farmer
+jobs.miner=Miner
+
+//Items
+item.jobs_book.name=Jobs Book
+
+
+
+//Texts
+text.level=level
+text.levelup=Level Up
+text.jobs.title=Jobs
+text.level.max=Level Max
+text.unlocked=Unlocked
+text.unlock_craft=Craft Unlocked
+text.unlock_drop=Harvesting Unlocked
+text.unlock_lvl=Unlock at lvl
+text.rewards=Rewards
+text.total_progression=Total Progression
+text.need_book=You need a
+
+category.CRAFTING=Crafting
+category.SMELTING=Smelting
+category.BREAKING=Breaking
+category.KILLING=Killing
+category.HARVESTING=Harvesting
+category.UNLOCK=Locked Items
+category.XP=How to XP ?
+
