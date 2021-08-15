@@ -1,0 +1,17 @@
+[
+{
+  "modid": "jobs",
+  "name": "Jobs",
+  "description": "A mod that adds a Jobs system to Minecraft, with Rewards and Crafts Unlocking.",
+  "version": "1.3",
+  "mcversion": "1.12.2",
+  "url": "",
+  "updateUrl": "",
+  "authorList": ["PolarFox27"],
+  "credits": "",
+  "logoFile": "",
+  "screenshots": [],
+  "dependencies": [],
+  "parent": ""
+}
+]
