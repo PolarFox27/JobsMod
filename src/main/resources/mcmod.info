@@ -1,0 +1,16 @@
+[
+{
+  "modid": "jobs",
+  "name": "Jobs",
+  "description": "A mod that adds a Jobs system to Minecraft that adds a new aspect to the game.",
+  "version": "1.4",
+  "mcversion": "1.12.2",
+  "url": "https://www.curseforge.com/minecraft/mc-mods/jobs",
+  "updateUrl": "",
+  "authorList": ["PolarFox27"],
+  "credits": "The staff of Wizardry Kingdoms, for giving me the idea.",
+  "logoFile": "",
+  "screenshots": [],
+  "dependencies": []
+}
+]
