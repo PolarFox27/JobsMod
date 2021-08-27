@@ -213,13 +213,13 @@ Craft : 1 Book + 4 Lapis + 4 Redstone Dust => 1 Jobs Book
 Use : when you right click this book, the Jobs Menu is opened
  
 
+
 In-Game Use :
 
- 
-
-To access the job menu in-game, you can press the key J. (you can change it in the controls options) In this menu, you can see how you can gain xp for each job, and which crafts are blocked for your current level.
+ To access the job menu in-game, you can press the key J. (you can change it in the controls options) In this menu, you can see how you can gain xp for each job, and which crafts are blocked for your current level.
 
  
+
 
 There is also 3 admin commands, useful on servers :
 
@@ -230,26 +230,24 @@ Those commands need a permission level 2 (op players) to be executed.
 
  
 
-Useful Informations : 
+
+ Useful Informations : 
 
  
-
 XP needed per level : (100, 150, 250, 500, 800, 1150, 1550, 2000, 2500, 3100, 3750, 4500, 5500, 7000, 9000, 11500, 15.000, 19.000, 24.000, 30.000, 39.250, 49.500, 63.100,       80.000, 100.000)
  
 
 List of Vanilla Crops (harvestcrop.json)  :
-Wheat : "minecraft-wheat_seeds" (1.16.5 : "minecraft-wheat")
-
+Wheat : 1.12.2 = "minecraft-wheat_seeds" / 1.16.5 = "minecraft-wheat"
 Carrots : "minecraft-carrot"
-
 Potatoes : "minecraft-potato"
-
-Beetroots : "minecraft-beetroot_seeds" (1.16.5 : "minecraft-beetroot")
+Beetroots : 1.12.2 = "minecraft-beetroot_seeds" / 1.16.5 = "minecraft-beetroot"
 
  
 
 Mobs that can be killed to gain XP :
-Chicken, Cow, Sheep, Pig, Horse, Donkey, Rabbit, Slime, Player
+
+ Chicken, Cow, Sheep, Pig, Horse, Donkey, Rabbit, Slime, Player
 Zombie, Skeleton, Creeper, Enderman, Spider, Cave Spider, Blaze, Ghast, Magma Cube, Witch, Wither Skeleton, Zombie Pigman, Guardian, Elder Guardian, Wither, Ender Dragon
 from 1.16.5 (version 2.0) : Piglin, Hoglin, Zoglin, Drawned, Dolphin
   
