@@ -10,5 +10,5 @@ You can create jobs in the mod. The players will need to collect xp to level up 
 
 You can also customize how players will gain their xp, using 6 possible ways : crafting and smelting items, mining blocks, harvesting crops, hunting and breeding mobs.
 ***
-You can follow me on [Patreon](patreon.com/user?u=60125437) for updates and more about the mod. And of course, don't hesitate to send a DM if you have any question, I will be glad to answer them. The mod can be downloaded on [Curseforge](https://www.curseforge.com/minecraft/mc-mods/jobs).
+You can follow me on [Patreon](https://patreon.com/user?u=60125437) for updates and more about the mod. And of course, don't hesitate to send a DM if you have any question, I will be glad to answer them. The mod can be downloaded on [Curseforge](https://www.curseforge.com/minecraft/mc-mods/jobs).
 
