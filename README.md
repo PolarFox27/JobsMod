@@ -1,97 +1,14 @@
 # Jobs
-A minecraft mod that adds jobs to Minecraft
+Welcome to the Jobs github ! In here you will find the source code of the mod, some descriptions and explanations, a Wiki to help you set it up in your Minecraft world and some templates !
+***
+Jobs is a mod that adds a jobs system to Minecraft, to give a new dimension of progress to your games. You will have to gain xp for each jobs to unlock items and blocks. The best part is that it is completely customizable ! You can create your own jobs and choose precisely which items you must unlock and how you gain xp for the different jobs.
 
-Description :
+In the [wiki](https://github.com/PolarFox27/JobsMod/wiki), you will find a complete guide to configure the latest version of the mod for 1.16.5 (v3.0). Other versions are not recommended to use, but you can still find the documentation in the wiki if you really want to use them.
+***
+### Quick Description:
+You can create jobs in the mod. The players will need to collect xp to level up their jobs. You can fully customize the levels of the jobs and the amount of xp required to level up. You can even choose your own names and icons for the jobs !
 
-This mod adds jobs to Minecraft. There are four of them : Hunter, Magician, Farmer and Miner. 
+You can also customize how players will gain their xp, using 6 possible ways : crafting and smelting items, mining blocks, harvesting crops, hunting and breeding mobs.
+***
+You can follow me on [Patreon](patreon.com/user?u=60125437) for updates and more about the mod. And of course, don't hesitate to send a DM if you have any question, I will be glad to answer them.
 
-By doing some actions, the player will gain job experience. You can reach up to level 25 for each job. By passing to the next level of a job, the player will earn rewards and unlock crafts of items !
-
-By pressing the key J, you will open the Jobs menu that tells you what level you are and how to gain xp for each jobs.
-
- 
-
-Compatibility :
-
-This mod can be used on Forge Servers or in Singleplayer Worlds. It is compatible with others mods, but if you discover a bug or a problem, report it.
-
-This mod is also compatible with Mohist Servers.
-
-/!\ Because this mod modify the craft system of minecraft, it may not be compatible with other mods that also modify the crafting system, but it works perfectly fine with JEI.
-
- 
-
-Usage/Config : 
-
-/!\ This mod requires a good knowledge of how JSON files works.
-
-You can find a template config in the branch PolarFox27-misc.
-
- 
-
-On servers :  Start your server once to create the empty JSON config files. You should see yellow message in the command prompt, like this : Warning : File <blockedcrafts.json > not found. An empty file was created.
-
-The config files will be found in the folder /jobs/data/ where is the folder where your server is.
-
-XP Files  :  there are 5 of them :
-
-xp_breakblock.json (config of the xp gained when breaking blocks) 
-xp_craftitem.json (config of the xp gained when crafting items) 
-xp_smeltitem.json (config of the xp gained when smelting items) 
-xp_harvestcrop.json (config of the xp gained when harvesting mature crops) 
-xp_killentity.json (config of the xp gained when killing a mob) those files are composed of a list of this type of json block : 
-
-      "minecraft-iron_ingot":{
-        "job":"MINER",
-        "xp":[1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21,22,23,24,25]
-      }
-This block in the xp_smeltitem.json will tell the game to give xp for the job Miner  : 1xp if the player is level 0, 2xp if the player is level 1, 3xp if the player is level 2, etc.
-
-The syntax for those json config is : 
-
-Jobs must be upper case (HUNTER, MAGICIAN, FARMER, MINER) item names must be hyphen<registry_name>. So you can use non-vanilla items in those config files as long as you use the correct syntax.  the xp array MUST have 25 numbers, they can be 0, but too many or too few numbers will throw an error. The xp_killentity.json do not use item, but entity names as parameter. The list of the available entities is at the end of the description. The xp_harvestcrop.json requires the "seeds" of the crop name, not the crop itself. (e.g. do not use minecraft-wheat, use minecraft-wheat_seeds)  
-
-Other Files :
-
-blockedcraft.json (config of the crafts unlocked with jobs levels) :
-this file is composed of this type of json block : 
-
-      "minecraft-iron_pickaxe":{
-        "job":"MINER",
-        "lvl":1
-      }
-this block will tell the game that a player cannot craft an Iron Pickaxe before he reach level 1 for the job Miner.
-
-The syntax for this json file is basically the same as the syntax of the xp files, but the "lvl" value MUST be between 1 and 25 included.
-
- 
-
-rewards.json (config of the rewards of each level of each jobs) :
-This file is composed of 4 big blocks, one for each job, and those big block is composed of 25 blocks similar to this one : 
-
-      "17":[
-         {"item":"minecraft-arrow","count":10},
-         {"item":"minecraft-bow","count":1}
-      ]
-this block tells the game to give 10 Arrow and 1 Bow when a player reach level 17 of the job in question.
-
-You can add as many items as you want in the list, but the "count" cannot exceed 64. (logic)
-
-If this explanation is not clear for you, download the template available at the end of the description and look how the rewards.json is.
-
- 
-
- 
-
-In Singleplayer Worlds :  
-    The config files are exactly the same as the one on servers. You can find them in .minecraft/saves//jobs/data/ where is the name of your world.
-    The files are exaclty the same as the server files, so take a look above to see how they works.
-
- 
-
- 
-
-The list of available entities for the xp_killentity.json : (Chicken, Cow, Zombie, Sheep, Rabbit, Blaze, Creeper, Enderman, Ghast, Magma Cube, Pig, Skeleton, Slime, Spider, Witch, Wither Skeleton, Zombie Pigman, Player) 
-The xp needed to reach the next level : (100, 150, 250, 500, 800, 1150, 1550, 2000, 2500, 3100, 3750, 4500, 5500, 7000, 9000, 11500, 15.000, 19.000, 24.000, 30.000, 39.250, 49.500, 63.100, 80.000, 100.000)  
-
-You can download a template config in the branch PolarFox27-misc.
