@@ -1,5 +1,5 @@
 # Jobs
-Welcome to the Jobs github ! In here you will find the source code of the mod, some descriptions and explanations, a Wiki to help you set it up in your Minecraft world and some templates !
+Welcome to the Jobs GitHub ! In here you will find the source code of the mod, some descriptions and explanations, a Wiki to help you set it up in your Minecraft world and some templates !
 ***
 Jobs is a mod that adds a jobs system to Minecraft, to give a new dimension of progress to your games. You will have to gain xp for each jobs to unlock items and blocks. The best part is that it is completely customizable ! You can create your own jobs and choose precisely which items you must unlock and how you gain xp for the different jobs.
 
@@ -10,4 +10,4 @@ You can create jobs in the mod. The players will need to collect xp to level up 
 
 You can also customize how players will gain their xp, using 6 possible ways : crafting and smelting items, mining blocks, harvesting crops, hunting and breeding mobs.
 ***
-You can follow me on [Patreon](https://patreon.com/user?u=60125437) for updates and more about the mod. And of course, don't hesitate to send a DM if you have any question, I will be glad to answer them. The mod can be downloaded on [Curseforge](https://www.curseforge.com/minecraft/mc-mods/jobs).
+You can follow me on [Patreon](https://patreon.com/user?u=60125437) for updates and more about the mod. And of course, don't hesitate to send a DM if you have any question, I will be glad to answer them and help you. The mod can be downloaded on [Curseforge](https://www.curseforge.com/minecraft/mc-mods/jobs).
