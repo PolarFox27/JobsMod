@@ -1,0 +1,39 @@
+{
+	"miner":[
+		{"item":"minecraft:torch","level":1},
+		{"item":"minecraft:iron_pickaxe","level":2},
+		{"item":"minecraft:diamond_pickaxe","level":5},
+		{"item":"minecraft:netherite_pickaxe","level":10}
+	],
+	
+	"alchemist":[
+		{"item":"minecraft:book","level":1},
+		{"item":"minecraft:enchanting_table","level":2},
+		{"item":"minecraft:ender_eye","level":3}
+	],
+	"hunter":[
+		{"item":"minecraft:stone_sword","level":1},
+		{"item":"minecraft:iron_sword","level":1},
+		{"item":"minecraft:diamond_sword","level":1},
+		{"item":"minecraft:netherite_sword","level":1}
+	],
+	"farmer":[
+		{"item":"minecraft:iron_hoe","level":1},
+		{"item":"minecraft:iron_boots","level":2},
+		{"item":"minecraft:iron_leggings","level":2},
+		{"item":"minecraft:iron_chestplate","level":2},
+		{"item":"minecraft:iron_helmet","level":2},
+		
+		{"item":"minecraft:diamond_hoe","level":3},
+		{"item":"minecraft:diamond_boots","level":4},
+		{"item":"minecraft:diamond_leggings","level":4},
+		{"item":"minecraft:diamond_chestplate","level":4},
+		{"item":"minecraft:diamond_helmet","level":4},
+		
+		{"item":"minecraft:netherite_hoe","level":10},
+		{"item":"minecraft:netherite_boots","level":12},
+		{"item":"minecraft:netherite_leggings","level":12},
+		{"item":"minecraft:netherite_chestplate","level":12},
+		{"item":"minecraft:netherite_helmet","level":12},
+	]
+}

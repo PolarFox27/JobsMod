@@ -1,0 +1,30 @@
+{
+  "keys.jobs.category" : "Metiers",
+  "keys.jobs.open_gui" : "Ouvrir le Menu",
+
+  "text.level" : "niveau",
+  "text.levelup" : "Niveau Superieur",
+  "text.jobs.title" : "Metiers",
+  "text.level.max" : "Niveau Max",
+  "text.unlock_xp_lvl":"Debloque au niveau",
+  "text.unlocked" : "Crafts et Recoltes Debloques",
+  "text.unlock_crafting" : "Craft Debloque",
+  "text.unlock_breaking" : "Recolte Debloquee",
+  "text.unlock_crafting_lvl" : "Debloque craft au niveau",
+  "text.unlock_breaking_lvl" : "Debloque recolte au niveau",
+  "text.rewards" : "Recompenses",
+  "text.total_progression" : "Progression Totale",
+  "text.no_way_of_gaining_xp" : "Vous ne pouvez pas gagner d'XP pour ce metier",
+  "text.no_unlock": "Rien de debloque",
+  "text.no_reward": "Pas de Recompenses",
+
+  "category.unlock" : "Items Bloques",
+  "category.xp" : "Comment XP ?",
+
+  "category.crafting": "Craft",
+  "category.smelting": "Fonte",
+  "category.breaking": "Minage",
+  "category.harvesting": "Recolte",
+  "category.killing": "Chasse",
+  "category.breeding": "Elevage"
+}
