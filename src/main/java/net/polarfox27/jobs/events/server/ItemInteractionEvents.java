@@ -14,6 +14,10 @@ import net.polarfox27.jobs.data.capabilities.PlayerJobs;
 public class ItemInteractionEvents {
 
 
+    /**
+     * Fired when an item is crafted. Checks if the player can gain xp and gives it to the player.
+     * @param event the Craft Event
+     */
     @SubscribeEvent
     public void onCraft(ItemCraftedEvent event) {
     	if(event.getPlayer().level.isClientSide() || !(event.getPlayer() instanceof ServerPlayerEntity))
@@ -28,6 +32,10 @@ public class ItemInteractionEvents {
         }
     }
 
+    /**
+     * Fired when an item is smelted. Checks if the player can gain xp and gives it to the player.
+     * @param event the Smelt Event
+     */
     @SubscribeEvent
     public void onSmelt(ItemSmeltedEvent event) {
         if(event.getPlayer().level.isClientSide() || !(event.getPlayer() instanceof ServerPlayerEntity))

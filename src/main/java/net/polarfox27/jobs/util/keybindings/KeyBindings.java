@@ -27,11 +27,18 @@ public class KeyBindings {
 	}
 
 
+	/**
+	 * Returns the Input corresponding to a key code
+	 * @param key the key to map.
+	 * @return the input corresponding to that key code
+	 */
 	private static InputMappings.Input getKey(int key) {
 		return InputMappings.Type.KEYSYM.getOrCreate(key);
 	}
-	
 
+	/**
+	 * registers the Jobs key binding
+	 */
 	public static void register() {
 		ClientRegistry.registerKeyBinding(KeyBindings.open_gui);
 	}

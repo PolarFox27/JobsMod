@@ -17,13 +17,24 @@ public class PacketSendRewardsClient{
 
     private final List<ItemStack> stacks = new ArrayList<>();
 
+
     public PacketSendRewardsClient(){}
+
+    /**
+     * Constructs a packet containing a list of Rewards
+     * @param rewards the list of rewards to be sent to the client
+     */
     public PacketSendRewardsClient(List<ItemStack> rewards) {
         for(ItemStack s : rewards)
             stacks.add(s.copy());
     }
 
 
+    /**
+     * Reads the packet from the buffer
+     * @param buf the buffer to read
+     * @return the packet read
+     */
     public static PacketSendRewardsClient fromBytes(PacketBuffer buf) {
     	PacketSendRewardsClient packet = new PacketSendRewardsClient();
         int size = buf.readInt();
@@ -37,6 +48,11 @@ public class PacketSendRewardsClient{
     }
 
 
+    /**
+     * Writes the packet to the buffer
+     * @param packet the packet to write
+     * @param buf the buffer where to write
+     */
     public static void toBytes(PacketSendRewardsClient packet, PacketBuffer buf) {
         buf.writeInt(packet.stacks.size());
         for(ItemStack s : packet.stacks) {
@@ -47,10 +63,15 @@ public class PacketSendRewardsClient{
 
     }
 
-    public static void handle(PacketSendRewardsClient m, Supplier<Context> ctx) {
+    /**
+     * Handles the packet on the client side by adding the rewards stacks to the client
+     * @param message the packet to handle
+     * @param ctx the context of the packet
+     */
+    public static void handle(PacketSendRewardsClient message, Supplier<Context> ctx) {
         if(ctx.get().getDirection() == NetworkDirection.PLAY_TO_CLIENT) {
             ClientJobsData.CURRENT_REWARDS.clear();
-            for(ItemStack s : m.stacks)
+            for(ItemStack s : message.stacks)
                 ClientJobsData.CURRENT_REWARDS.add(s.copy());
         }
         ctx.get().setPacketHandled(true);

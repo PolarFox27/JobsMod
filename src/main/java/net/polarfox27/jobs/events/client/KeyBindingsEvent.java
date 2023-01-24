@@ -17,6 +17,10 @@ import net.polarfox27.jobs.util.keybindings.KeyBindings.Key;
 public class KeyBindingsEvent {
 
 
+    /**
+     * Opens the Jobs menu when the key is pressed
+     * @param event the Key Pressed Event
+     */
     @OnlyIn(Dist.CLIENT)
     @SubscribeEvent
     public static void handleKeyBindings(KeyInputEvent event) {
@@ -30,6 +34,10 @@ public class KeyBindingsEvent {
     }
 
 
+    /**
+     * Returns the key pressed
+     * @return the pressed key
+     */
     private static Key getPressedKey() {
         return KeyBindings.open_gui.isDown() ? Key.OPEN_GUI : Key.NONE;
     }

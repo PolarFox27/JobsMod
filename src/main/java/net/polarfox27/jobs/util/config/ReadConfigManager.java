@@ -11,6 +11,10 @@ import java.util.Map;
 
 public class ReadConfigManager {
 
+    /**
+     * Reads the config json files of the server and puts them in ServerJobsData.
+     * @param server the server from which to read the config files
+     */
     public static void readConfigFiles(MinecraftServer server){
         WriteConfigManager.tryCreateEmptyConfigFiles(server);
         String baseFolder = FileUtil.getBaseFolder(server);
@@ -47,6 +51,11 @@ public class ReadConfigManager {
         JobsIconUtil.loadJobsIcon(server);
     }
 
+    /**
+     * Reads an Item XP registry json
+     * @param object the json object containing the configuration
+     * @param registry the registry to configure
+     */
     public static void loadItemRegistry(JsonObject object, XPRegistry.ItemXPRegistry registry){
         try{
             registry.clear();
@@ -62,6 +71,11 @@ public class ReadConfigManager {
         }
     }
 
+    /**
+     * Reads an Block XP registry json
+     * @param object the json object containing the configuration
+     * @param registry the registry to configure
+     */
     public static void loadBlockRegistry(JsonObject object, XPRegistry.BlockXPRegistry registry){
         try{
             registry.clear();
@@ -77,6 +91,11 @@ public class ReadConfigManager {
         }
     }
 
+    /**
+     * Reads an Entity XP registry json
+     * @param object the json object containing the configuration
+     * @param registry the registry to configure
+     */
     public static void loadEntityRegistry(JsonObject object, XPRegistry.EntityXPRegistry registry){
         try{
             registry.clear();
@@ -92,6 +111,10 @@ public class ReadConfigManager {
         }
     }
 
+    /**
+     * Reads the Rewards json
+     * @param object the json object containing the configuration
+     */
     public static void loadRewards(JsonObject object){
         try{
             ServerJobsData.REWARDS.clear();
@@ -107,6 +130,10 @@ public class ReadConfigManager {
         }
     }
 
+    /**
+     * Reads the Levels json
+     * @param object the json object containing the configuration
+     */
     public static void loadLevels(JsonObject object){
         try{
             ServerJobsData.JOBS_LEVELS.clear();
@@ -120,6 +147,10 @@ public class ReadConfigManager {
         }
     }
 
+    /**
+     * Reads the Blocked Crafts json
+     * @param object the json object containing the configuration
+     */
     public static void loadBlockedCrafts(JsonObject object){
         try{
             ServerJobsData.BLOCKED_CRAFTS.clear();
@@ -135,6 +166,10 @@ public class ReadConfigManager {
         }
     }
 
+    /**
+     * Reads the Blocked Blocks json
+     * @param object the json object containing the configuration
+     */
     public static void loadBlockedBlocks(JsonObject object){
         try{
             ServerJobsData.BLOCKED_BLOCKS.clear();
@@ -150,6 +185,10 @@ public class ReadConfigManager {
         }
     }
 
+    /**
+     * Reads the Translations json
+     * @param object the json object containing the configuration
+     */
     public static void loadTranslations(JsonObject object){
         try{
             ServerJobsData.TRANSLATIONS.reset(ServerJobsData.JOBS_LEVELS.getJobs());

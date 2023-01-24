@@ -18,6 +18,10 @@ import java.util.Map;
 
 public class JobsIconUtil {
 
+    /**
+     * Loads the Jobs Icons from the config folder into ServerJobsData
+     * @param server the server in which the config is located
+     */
     public static void loadJobsIcon(MinecraftServer server){
         Map<String, byte[]> map = ServerJobsData.JOBS_ICONS;
         File folder = new File(FileUtil.getIconFolder(server));
@@ -38,6 +42,11 @@ public class JobsIconUtil {
         }
     }
 
+    /**
+     * Writes the icons in a Byte Buffer
+     * @param buf the buffer where to write
+     * @param map the map mapping the jobs name to the jobs icons
+     */
     public static void toBytes(PacketBuffer buf, Map<String, byte[]> map){
         buf.writeInt(map.size());
         for(Map.Entry<String, byte[]> e : map.entrySet()){
@@ -48,6 +57,11 @@ public class JobsIconUtil {
         }
     }
 
+    /**
+     * Reads the icons from a Byte Buffer
+     * @param buf the buffer where to read
+     * @return the map mapping the jobs name to the jobs icons
+     */
     public static Map<String, byte[]> fromBytes(PacketBuffer buf){
         Map<String, byte[]> map = new HashMap<>();
         int size = buf.readInt();
@@ -61,6 +75,11 @@ public class JobsIconUtil {
         return map;
     }
 
+    /**
+     * Converts the map of images to a map of DynamicTexture usable in GUIs.
+     * @param map the map mapping the jobs name to the jobs icons
+     * @return the map mapping the jobs name to the dynamic textures
+     */
     @OnlyIn(Dist.CLIENT)
     public static Map<String, DynamicTexture> convertToClient(Map<String, byte[]> map){
         Map<String, DynamicTexture> newMap = new HashMap<>();

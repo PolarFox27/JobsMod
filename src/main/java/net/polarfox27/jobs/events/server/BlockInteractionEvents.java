@@ -14,6 +14,10 @@ import net.polarfox27.jobs.data.capabilities.PlayerJobs;
 @EventBusSubscriber
 public class BlockInteractionEvents {
 
+    /**
+     * Fired when a block is broken by a player : checks if the player can gain any xp and gives it to the player.
+     * @param event the Break Block Event
+     */
     @SubscribeEvent
     public void onBreakOreOrCrop(BreakEvent event) {
     	if(event.getWorld().isClientSide() || !(event.getPlayer() instanceof ServerPlayerEntity))

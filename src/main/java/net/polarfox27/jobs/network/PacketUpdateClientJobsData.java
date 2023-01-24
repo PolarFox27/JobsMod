@@ -26,6 +26,15 @@ public class PacketUpdateClientJobsData{
 
     public PacketUpdateClientJobsData(){}
 
+    /**
+     * Creates the packet containing all information
+     * @param registries
+     * @param levelData
+     * @param blockedCraftsData
+     * @param blockedBlocksData
+     * @param icons
+     * @param translationData
+     */
     public PacketUpdateClientJobsData(Set<XPRegistry<? extends XPData>> registries,
                                     LevelData levelData,
                                       BlockedCraftsData blockedCraftsData,
@@ -41,7 +50,11 @@ public class PacketUpdateClientJobsData{
     }
 
 
-
+    /**
+     * Reads the packet from the buffer
+     * @param buf the buffer to read
+     * @return the packet read
+     */
     public static PacketUpdateClientJobsData fromBytes(PacketBuffer buf) {
         Set<XPRegistry<? extends XPData>> registries = new HashSet<>();
         int amount = buf.readInt();
@@ -55,6 +68,12 @@ public class PacketUpdateClientJobsData{
     	return new PacketUpdateClientJobsData(registries, levelData, blockedCrafts, blockedBlocks, icons, translationData);
     }
 
+
+    /**
+     * Writes the packet to the buffer
+     * @param packet the packet to write
+     * @param buf the buffer where to write
+     */
     public static void toBytes(PacketUpdateClientJobsData packet, PacketBuffer buf) {
         buf.writeInt(packet.registries.size());
         for(XPRegistry<? extends XPData> registry : packet.registries)
@@ -67,8 +86,11 @@ public class PacketUpdateClientJobsData{
     }
 
 
-
-
+    /**
+     * Handles the packet on the client side by putting all the information in ClientJobsdata
+     * @param message the packet to handle
+     * @param ctx the context of the packet
+     */
     public static void handle(PacketUpdateClientJobsData message, Supplier<Context> ctx)
     {
         if(ctx.get().getDirection() == NetworkDirection.PLAY_TO_CLIENT)

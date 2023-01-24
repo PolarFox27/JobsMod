@@ -18,7 +18,10 @@ public class PacketHandler {
 	    PROTOCOL_VERSION::equals,
 	    PROTOCOL_VERSION::equals
 	);
-	
+
+	/**
+	 * Registers all the packets types
+	 */
 	public static void registerPackets() {
 		INSTANCE.registerMessage(0, PacketAddXP.class, PacketAddXP::toBytes, PacketAddXP::fromBytes, PacketAddXP::handle);
 		INSTANCE.registerMessage(1, PacketAskClientUpdate.class, PacketAskClientUpdate::toBytes, PacketAskClientUpdate::fromBytes, PacketAskClientUpdate::handle);
@@ -28,8 +31,12 @@ public class PacketHandler {
 		INSTANCE.registerMessage(5, PacketUpdateClientJob.class, PacketUpdateClientJob::toBytes, PacketUpdateClientJob::fromBytes, PacketUpdateClientJob::handle);
 		INSTANCE.registerMessage(6, PacketSendChatMessage.class, PacketSendChatMessage::toBytes, PacketSendChatMessage::fromBytes, PacketSendChatMessage::handle);
 	}
-	
-	
+
+	/**
+	 * Sends a char message to the client
+	 * @param player the player who will receive the message
+	 * @param message the message to send
+	 */
 	public static void sendMessageToClient(ServerPlayerEntity player, ITextComponent message) {
 		INSTANCE.sendTo(new PacketSendChatMessage(message),
 						player.connection.getConnection(),

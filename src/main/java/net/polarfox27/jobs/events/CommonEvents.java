@@ -23,7 +23,11 @@ import java.util.Optional;
 
 @EventBusSubscriber
 public class CommonEvents {
-	
+
+	/**
+	 * Attaches the Jobs capability to a player if it is not already present
+	 * @param event the Capability Event
+	 */
 	@SubscribeEvent
 	public void onEntityCreating(AttachCapabilitiesEvent<Entity> event) {
 		if(event.getObject().level.isClientSide)
@@ -38,7 +42,11 @@ public class CommonEvents {
 								new PlayerData.JobsDispatcher(ServerJobsData.JOBS_LEVELS));
 		}
 	}
-	
+
+	/**
+	 * Fired when a player dies to attach his Jobs to him again, so that the progress is not lost.
+	 * @param event Player Clone Event
+	 */
 	@SubscribeEvent
 	public void onEntityCloned(PlayerEvent.Clone event) {
 		if(!event.isWasDeath())
@@ -52,7 +60,11 @@ public class CommonEvents {
 			new_jobs.copy(old_jobs);
 		}
 	}
-	
+
+	/**
+	 * Fired when a player joins a world : send all the Jobs data to the Client Side.
+	 * @param event the Join World Event
+	 */
 	@SubscribeEvent
 	public void onPlayerJoinedServer(EntityJoinWorldEvent event){
 		if(!(event.getEntity() instanceof ServerPlayerEntity))
@@ -60,6 +72,10 @@ public class CommonEvents {
 		ServerJobsData.sendDataToClient((ServerPlayerEntity)event.getEntity());
 	}
 
+	/**
+	 * Fired when a player joins a world (client side) : asks the data to the server.
+	 * @param event the Join World Event
+	 */
 	@SubscribeEvent
 	@OnlyIn(Dist.CLIENT)
 	public void onPlayerJoinedClient(EntityJoinWorldEvent event) {

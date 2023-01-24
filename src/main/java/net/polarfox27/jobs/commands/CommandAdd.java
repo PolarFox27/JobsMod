@@ -15,7 +15,12 @@ import net.polarfox27.jobs.network.PacketUpdateClientJob;
 import net.polarfox27.jobs.util.handler.PacketHandler;
 
 public class CommandAdd {
-	
+
+	/**
+	 * Registers the command jobs-add with the following arguments :
+	 * jobs-add <player> <job> <xp>
+	 * @param dispatcher the CommandDispatcher where the command will be registered
+	 */
 	public static void register(CommandDispatcher<CommandSource> dispatcher) {
 		dispatcher.register(Commands.literal("jobs-add")
 									.requires((source)-> source.hasPermission(2))
@@ -29,7 +34,14 @@ public class CommandAdd {
 			})))));
 	}
 
-	
+
+	/**
+	 * Adds xp to a player when the command jobs-add is executed
+	 * @param source the Command Source
+	 * @param target the player who will receive the xp
+	 * @param job the job for which the target will gain xp
+	 * @param xp the xp to be gained
+	 */
 	private static void addXP(CommandSource source, ServerPlayerEntity target, String job, long xp) {
 		PlayerData.getPlayerJobs(target).gainXP(job, xp, target);
         PacketHandler.INSTANCE.sendTo(

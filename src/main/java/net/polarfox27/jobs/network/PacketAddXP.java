@@ -13,12 +13,23 @@ public class PacketAddXP{
     private String job;
     private long xpAdded;
     public PacketAddXP(){}
+
+    /**
+     * Constructs a packet containing the xp added for a job
+     * @param j the job to which xp is added
+     * @param xp the amount of xp added
+     */
     public PacketAddXP(String j, long xp)
     {
         this.job = j;
         this.xpAdded = xp;
     }
 
+    /**
+     * Reads the packet from the buffer
+     * @param buf the buffer to read
+     * @return the packet read
+     */
     public static PacketAddXP fromBytes(PacketBuffer buf)
     {
         int length = buf.readInt();
@@ -26,6 +37,11 @@ public class PacketAddXP{
 	}
 
 
+    /**
+     * Writes the packet to the buffer
+     * @param packet the packet to write
+     * @param buf the buffer where to write
+     */
     public static void toBytes(PacketAddXP packet, PacketBuffer buf)
     {
         buf.writeInt(packet.job.getBytes(StandardCharsets.UTF_8).length);
@@ -34,6 +50,11 @@ public class PacketAddXP{
     }
 
 
+    /**
+     * Handles the packet on the client side by showing the gain xp GUI
+     * @param message the packet to handle
+     * @param ctx the context of the packet
+     */
     public static void handle(PacketAddXP message, Supplier<Context> ctx)
     {
         if(ctx.get().getDirection() == NetworkDirection.PLAY_TO_CLIENT)

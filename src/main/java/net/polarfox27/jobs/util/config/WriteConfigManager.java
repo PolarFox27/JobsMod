@@ -23,7 +23,10 @@ import java.util.List;
 public class WriteConfigManager {
 
 
-
+    /**
+     * Checks if all config files are present, and create template files if not
+     * @param server the server in whose files the config is checked
+     */
     public static void tryCreateEmptyConfigFiles(MinecraftServer server) {
         String baseFolder = FileUtil.getBaseFolder(server);
         String xpFolder = FileUtil.getXPFolder(server);
@@ -40,6 +43,10 @@ public class WriteConfigManager {
         tryCreateEmptyTranslationFile(baseFolder, FileUtil.TRANSLATIONS_FILE);
     }
 
+    /**
+     * Sends a warning message to the console if a template file was created.
+     * @param file the file created.
+     */
     public static void showFileCreated(String file){
         ModJobs.info(TextFormatting.YELLOW +  "Warning : File <" +
                         file + "> not found. An empty file was created",
@@ -47,10 +54,14 @@ public class WriteConfigManager {
     }
 
 
-    /*
-    type 0 = item
-    type 1 = block
-    type 2 = entity
+    /**
+     * Creates a template xp registry file
+     * type 0 = item
+     * type 1 = block
+     * type 2 = entity
+     * @param folder the parent folder in which the file will be created
+     * @param name the file name
+     * @param type the xp registry type (see types above)
      */
     public static void tryCreateEmptyXPFile(String folder, String name, int type) {
         new File(folder).mkdirs();
@@ -80,6 +91,11 @@ public class WriteConfigManager {
             showFileCreated(name);
     }
 
+    /**
+     * Creates a template levels file.
+     * @param folder the parent folder in which the file will be created
+     * @param name the file name
+     */
     public static void tryCreateEmptyLevelFile(String folder, String name) {
         new File(folder).mkdirs();
         File f = FileUtil.join(folder, name);
@@ -99,6 +115,12 @@ public class WriteConfigManager {
             showFileCreated(name);
     }
 
+
+    /**
+     * Creates a template translations file.
+     * @param folder the parent folder in which the file will be created
+     * @param name the file name
+     */
     public static void tryCreateEmptyTranslationFile(String folder, String name) {
         new File(folder).mkdirs();
         File f = FileUtil.join(folder, name);
@@ -126,6 +148,11 @@ public class WriteConfigManager {
     }
 
 
+    /**
+     * Creates a template rewards file.
+     * @param folder the parent folder in which the file will be created
+     * @param name the file name
+     */
     public static void tryCreateEmptyRewardFile(String folder, String name) {
         new File(folder).mkdirs();
         File f = FileUtil.join(folder, name);
@@ -148,6 +175,11 @@ public class WriteConfigManager {
             showFileCreated(name);
     }
 
+    /**
+     * Creates a template blocked crafts file.
+     * @param folder the parent folder in which the file will be created
+     * @param name the file name
+     */
     public static void tryCreateEmptyBlockedCraftFile(String folder, String name) {
         new File(folder).mkdirs();
         File f = FileUtil.join(folder, name);
@@ -164,6 +196,11 @@ public class WriteConfigManager {
             showFileCreated(name);
     }
 
+    /**
+     * Creates a template blocked blocks file.
+     * @param folder the parent folder in which the file will be created
+     * @param name the file name
+     */
     public static void tryCreateEmptyBlockedBlockFile(String folder, String name) {
         new File(folder).mkdirs();
         File f = FileUtil.join(folder, name);

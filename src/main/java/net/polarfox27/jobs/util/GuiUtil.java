@@ -24,21 +24,61 @@ public class GuiUtil {
 
 	private static final ResourceLocation GRADIENT_TEXTURE = new ResourceLocation(ModJobs.MOD_ID + ":textures/gui/gui_gain_xp.png");
 
+	/**
+	 * Renders a texture on the screen
+	 * @param mStack
+	 * @param gui
+	 * @param x
+	 * @param y
+	 * @param textX
+	 * @param textY
+	 * @param width
+	 * @param height
+	 */
 	public static void drawTexture(MatrixStack mStack, AbstractGui gui, int x, int y, int textX, int textY, int width, int height) {
 		gui.blit(mStack, x, y, textX, textY, width, height);
 	}
-	
-	
+
+	/**
+	 * Renders a scaled texture on the screen
+	 * @param mStack
+	 * @param x
+	 * @param y
+	 * @param u
+	 * @param v
+	 * @param uWidth
+	 * @param vHeight
+	 * @param width
+	 * @param height
+	 */
 	public static void drawScaledTexture(MatrixStack mStack, int x, int y, float u, float v, int uWidth, int vHeight, int width, int height) {
 		AbstractGui.blit(mStack, x, y, u, v, width, height, uWidth, vHeight);
     }
 
+	/**
+	 * Renders the job icon on the screen
+	 * @param mStack
+	 * @param gui
+	 * @param job
+	 * @param centerX
+	 * @param centerY
+	 * @param size
+	 */
 	public static void drawJobIcon(MatrixStack mStack, AbstractGui gui, String job, int centerX, int centerY, int size) {
 		GL11.glColor4f(1.0F, 1.0F, 1.0F, 1.0F);
 		ClientJobsData.JOBS_ICONS.get(job).bind();
 		GuiUtil.drawScaledTexture(mStack, centerX-size/2, centerY-size/2, 0, 0, size, size, size, size);
 	}
 
+	/**
+	 * Renders an entity on the screen
+	 * @param posX
+	 * @param posY
+	 * @param scale
+	 * @param mouseX
+	 * @param mouseY
+	 * @param entity
+	 */
 	public static void renderEntityInGui(int posX, int posY, int scale, float mouseX, float mouseY, LivingEntity entity) {
 		float size = scale*1.1f/entity.getBbHeight();
 		float f = (float)Math.atan((double)(mouseX / 40.0F));
@@ -81,6 +121,15 @@ public class GuiUtil {
 		GL11.glPopMatrix();
 	}
 
+	/**
+	 * Renders a centered string on the screen
+	 * @param mStack
+	 * @param text
+	 * @param color
+	 * @param x
+	 * @param y
+	 * @param scale
+	 */
 	public static void renderCenteredString(MatrixStack mStack, String text, int color, int x, int y, float scale){
 		GL11.glPushMatrix();
 		GL11.glTranslatef(x, y, 0);
@@ -92,11 +141,34 @@ public class GuiUtil {
 		GL11.glPopMatrix();
 	}
 
+	/**
+	 * Renders a progress bar with the progress written inside in the format "progress/total"
+	 * @param mStack
+	 * @param gui
+	 * @param x
+	 * @param y
+	 * @param width
+	 * @param height
+	 * @param progress
+	 * @param total
+	 */
 	public static void renderProgressBar(MatrixStack mStack, AbstractGui gui, int x, int y, int width, int height, long progress, long total){
 		String info = progress < total ? progress + "/" + total :  I18n.get("text.level.max");
 		renderProgressBarWithText(mStack, gui, x, y, width, height, progress, total, info);
 	}
 
+	/**
+	 * Renders a progress bar with a custom text inside
+	 * @param mStack
+	 * @param gui
+	 * @param x
+	 * @param y
+	 * @param width
+	 * @param height
+	 * @param progress
+	 * @param total
+	 * @param text
+	 */
 	public static void renderProgressBarWithText(MatrixStack mStack, AbstractGui gui, int x, int y, int width, int height, long progress, long total, String text){
 		Minecraft.getInstance().getTextureManager().bind(GRADIENT_TEXTURE);
 		if(progress >= total)

@@ -12,7 +12,12 @@ import net.polarfox27.jobs.data.capabilities.PlayerJobs;
 import net.polarfox27.jobs.util.handler.PacketHandler;
 
 public class CommandInfo {
-	
+
+	/**
+	 * Registers the command jobs-info with the following arguments :
+	 * jobs-info <player>
+	 * @param dispatcher the CommandDispatcher where the command will be registered
+	 */
 	public static void register(CommandDispatcher<CommandSource> dispatcher) {
 		dispatcher.register(Commands.literal("jobs-info")
 							.requires((source) -> source.hasPermission(2))
@@ -28,8 +33,13 @@ public class CommandInfo {
 					return 0;
 				})));
 	}
-	
-	
+
+
+	/**
+	 * shows the infos of the target to the source when the command jobs-info is executed
+	 * @param source the Command Source
+	 * @param target the player whom information will be printed to the source
+	 */
 	private static void showInfos(CommandSource source, ServerPlayerEntity target) {
 		if(!(source.getEntity() instanceof ServerPlayerEntity))
 			return;

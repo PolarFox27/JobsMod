@@ -20,7 +20,10 @@ import net.polarfox27.jobs.util.keybindings.KeyBindings;
 public class ModJobs {
 
 	public static final String MOD_ID = "jobs";
-	
+
+	/**
+	 * Constructor of the Mod. All Event Handlers, Packet Handler and XP Registries are registered.
+	 */
 	public ModJobs() {
 		RegistryHandler.registerListeners();
 		info("Event Handlers Registered", false);
@@ -48,7 +51,12 @@ public class ModJobs {
 		ReadConfigManager.readConfigFiles(event.getServer());
 		info("Configuration Loaded", false);
 	}
-	
+
+	/**
+	 * Prints a message to the console with [Jobs] appended in front, with color codes
+	 * @param message the message to be printed
+	 * @param isError if true, the message will be red
+	 */
 	public static void info(String message, boolean isError) {
 		String msg = (isError ? TextFormatting.RED : TextFormatting.BLUE) + "[Jobs] ";
 		System.out.println(msg + message);

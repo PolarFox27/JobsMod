@@ -6,6 +6,7 @@ import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.screen.Screen;
 import net.minecraft.client.renderer.RenderHelper;
 import net.minecraft.client.resources.I18n;
+import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityType;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.item.ItemStack;
@@ -141,13 +142,17 @@ public class GuiHowXP extends Screen implements SliderParent {
                 int y = this.top + 45 + (j - this.verticalPage)*18;
                 ItemStack stack = xps.get(j).createStack();
                 if(stack.getItem() == Items.BARRIER && stack.hasTag() && Minecraft.getInstance().level != null) {
-                    EntityType.byString(stack.getOrCreateTag().getString("entity"))
-                            .map(t -> t.create(Minecraft.getInstance().level))
-                            .filter(e -> e instanceof LivingEntity)
-                            .map(e -> (LivingEntity)e)
-                            .ifPresent(e ->  GuiUtil.renderEntityInGui(x + 8, y + 16, 10,
+                    EntityType type = EntityType.byString(stack.getOrCreateTag().getString("entity"))
+                            .orElse(null);
+                    if(type == null)
+                        continue;
+                    Entity entity = type == EntityType.PLAYER ? Minecraft.getInstance().player :
+                            type.create(Minecraft.getInstance().level);
+
+                     if(entity instanceof LivingEntity)
+                            GuiUtil.renderEntityInGui(x + 8, y + 16, 10,
                                     this.width/2.0F - mouseX, this.height/2.0F - mouseY,
-                                    e));
+                                    (LivingEntity) entity);
                 }
                 else
                     this.itemRenderer.renderGuiItem(stack, x, y);

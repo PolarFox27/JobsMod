@@ -15,6 +15,11 @@ import net.polarfox27.jobs.data.capabilities.PlayerJobs;
 @EventBusSubscriber
 public class EntityInteractionEvents {
 
+    /**
+     * Fired when an entity dies. Checks if it was killed by a player and checks if the player can gain xp.
+     * If yes it gives it to the player.
+     * @param event the Death Event
+     */
     @SubscribeEvent
     public void onKill(LivingDeathEvent event) {
     	if(event.getEntityLiving().level.isClientSide() ||
@@ -35,6 +40,11 @@ public class EntityInteractionEvents {
         }
     }
 
+    /**
+     * Fired when a baby mob is born. If the parents where bred by the player, checks if the player can gain xp.
+     * If yes it gives it to the player.
+     * @param event the Baby Spawn Event
+     */
     @SubscribeEvent
     public void onBreed(BabyEntitySpawnEvent event) {
         if (event.getCausedByPlayer() == null || event.getCausedByPlayer().level.isClientSide())

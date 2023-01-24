@@ -17,14 +17,26 @@ public class FileUtil {
     public static final String BLOCKED_BLOCKS_FILE = "blocked_blocks.json";
     public static final String REWARDS_FILE = "rewards.json";
 
+    /**
+     * @param server the server where the config is stored
+     * @return the path to the XP Config Folder
+     */
     public static String getXPFolder(MinecraftServer server) {
         return getBaseFolder(server) + "/xp";
     }
 
+    /**
+     * @param server the server where the config is stored
+     * @return the path to the Icons Folder
+     */
     public static String getIconFolder(MinecraftServer server) {
         return getBaseFolder(server) + "/icons";
     }
 
+    /**
+     * @param server the server where the config is stored
+     * @return the path to the Base Config Folder
+     */
     public static String getBaseFolder(MinecraftServer server) {
         String name = server.getMotd().substring(server.getMotd().indexOf(" - ")+3);
         if(server.isSingleplayer())
@@ -33,10 +45,22 @@ public class FileUtil {
             return server.getServerDirectory().getAbsolutePath() + "/jobs";
     }
 
+    /**
+     * Joins the parent path and the file name, and get the file at that location
+     * @param path the parent folder path
+     * @param name the file name
+     * @return the file at that location
+     */
     public static File join(String path, String name){
         return new File(path + "/" + name);
     }
 
+    /**
+     * Writes a JSON object to a file and catch any exception that might be thrown
+     * @param f the file to write
+     * @param object the object to write in the file
+     * @return true if the object was written successfully
+     */
     public static boolean safeWriteJSONtoFile(File f, JsonObject object){
         try{
             FileWriter writer = new FileWriter(f);
@@ -50,6 +74,11 @@ public class FileUtil {
         return false;
     }
 
+    /**
+     * Reads a JSON object from a file and catch any exception that might be thrown
+     * @param f the file to read
+     * @return the object stored in the file
+     */
     public static Optional<JsonObject> safeReadJSONFromFile(File f){
         try{
             if(f.exists())

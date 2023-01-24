@@ -17,8 +17,12 @@ import net.polarfox27.jobs.network.PacketUpdateClientJob;
 import net.polarfox27.jobs.util.handler.PacketHandler;
 
 public class CommandSet {
-	
-	
+
+	/**
+	 * Registers the command jobs-set with the following arguments :
+	 * jobs-set <player> <job> (<total xp> | <level> <xp>)
+	 * @param dispatcher the CommandDispatcher where the command will be registered
+	 */
 	public static void register(CommandDispatcher<CommandSource> dispatcher) {
 		dispatcher.register(Commands.literal("jobs-set")
 			.requires((source) -> source.hasPermission(2))
@@ -39,11 +43,26 @@ public class CommandSet {
 				return 0;
 			}))))));
 	}
-	
+
+	/**
+	 * Sets the player xp and level when the command jobs-set is executed
+	 * @param source the Command Source
+	 * @param target the player whom xp will be set
+	 * @param job the job for which the xp is set
+	 * @param lvl the new level value for the job
+	 * @param xp the new xp value for the job
+	 */
 	private static void setJobs(CommandSource source, ServerPlayerEntity target, String job, int lvl, long xp) {
 		setJobs(source, target, job, ServerJobsData.JOBS_LEVELS.getTotalXPForLevel(job, lvl) + xp);
 	}
-	
+
+	/**
+	 * Sets the player total xp when the command jobs-set is executed
+	 * @param source the Command Source
+	 * @param target the player whom xp will be set
+	 * @param job the job for which the xp is set
+	 * @param total the new total xp value for the job
+	 */
 	private static void setJobs(CommandSource source, ServerPlayerEntity target, String job, long total) {
 		PlayerData.getPlayerJobs(target).set(job, total);
         PacketHandler.INSTANCE.sendTo(

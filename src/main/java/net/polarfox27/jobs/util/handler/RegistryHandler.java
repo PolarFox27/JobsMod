@@ -16,7 +16,11 @@ import net.polarfox27.jobs.events.server.ItemInteractionEvents;
 
 @EventBusSubscriber
 public class RegistryHandler {
-	
+
+	/**
+	 * Registers the Commands of the mod
+	 * @param event
+	 */
 	@SubscribeEvent
 	public void onCommandsRegistered(RegisterCommandsEvent event) {
 		CommandInfo.register(event.getDispatcher());
@@ -24,7 +28,10 @@ public class RegistryHandler {
 		CommandAdd.register(event.getDispatcher());
 		ModJobs.info("Commands Registered", false);
 	}
-	
+
+	/**
+	 * Registers the Event Listeners of the mod
+	 */
 	public static void registerListeners() {
 		MinecraftForge.EVENT_BUS.register(new GuiEvents());
 		MinecraftForge.EVENT_BUS.register(new RegistryHandler());
