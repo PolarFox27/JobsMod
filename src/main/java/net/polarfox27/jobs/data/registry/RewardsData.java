@@ -15,31 +15,29 @@ public class RewardsData {
 
     private final Map<String, List<Reward>> REWARDS_BY_JOB = new HashMap<>();
 
+    /**
+     * Empty Constructor
+     */
     public RewardsData(){
     }
 
-    public RewardsData(PacketBuffer buf){
-        int size = buf.readInt();
-        for(int i = 0; i < size; i++){
-            String job = JobsUtil.readString(buf);
-            int amount = buf.readInt();
-            List<Reward> rewards = new ArrayList<>();
-            for(int j = 0; j < amount; j++)
-                rewards.add(new Reward(buf));
-            REWARDS_BY_JOB.put(job, rewards);
-        }
-    }
-
-    public void addRewardForJob(String job, int level, List<ItemStack> stacks){
-        this.addRewardForJob(job, new Reward(level, stacks));
-    }
-
+    /**
+     * Adds a reward for a specific job
+     * @param job the job for which the reward is added
+     * @param reward the reward to add
+     */
     public void addRewardForJob(String job, Reward reward){
         if(!REWARDS_BY_JOB.containsKey(job))
             REWARDS_BY_JOB.put(job, new ArrayList<>());
         REWARDS_BY_JOB.get(job).add(reward);
     }
 
+    /**
+     * Gets the list of rewards the player receives when he reaches a new level for a job
+     * @param job the job for which the player should receive rewards
+     * @param level the level reached in the job
+     * @return the list of rewards associated with that job and level
+     */
     public List<ItemStack> getRewards(String job, int level){
         if(!REWARDS_BY_JOB.containsKey(job))
             return new ArrayList<>();
@@ -49,16 +47,9 @@ public class RewardsData {
                 .collect(Collectors.toList());
     }
 
-    public void writeToBytes(PacketBuffer buf){
-        buf.writeInt(REWARDS_BY_JOB.size());
-        for(Map.Entry<String, List<Reward>> e : REWARDS_BY_JOB.entrySet()){
-            JobsUtil.writeString(e.getKey(), buf);
-            buf.writeInt(e.getValue().size());
-            for(Reward r : e.getValue())
-                r.writeToBytes(buf);
-        }
-    }
-
+    /**
+     * Deletes all the rewards data
+     */
     public void clear(){
         this.REWARDS_BY_JOB.clear();
     }
@@ -67,20 +58,14 @@ public class RewardsData {
         private final int level;
         private final List<ItemStack> rewards;
 
+        /**
+         * Creates a Reward list for a specific level
+         * @param level
+         * @param rewards
+         */
         public Reward(int level, List<ItemStack> rewards) {
             this.level = level;
             this.rewards = rewards;
-        }
-
-        public Reward(PacketBuffer buf){
-            this.level = buf.readInt();
-            this.rewards = new ArrayList<>();
-            int size = buf.readInt();
-            for(int i = 0; i < size; i++){
-                Item item = Item.byId(buf.readInt());
-                int count = buf.readInt();
-                this.rewards.add(JobsUtil.itemStack(item, count, 0));
-            }
         }
 
         public int getLevel() {
@@ -91,15 +76,5 @@ public class RewardsData {
             return rewards;
         }
 
-        public void writeToBytes(PacketBuffer buf){
-            buf.writeInt(level);
-            buf.writeInt(rewards.size());
-            for(ItemStack s : rewards){
-                buf.writeInt(Item.getId(s.getItem()));
-                buf.writeInt(s.getCount());
-            }
-        }
     }
-
-
 }

@@ -18,12 +18,20 @@ public class PlayerData {
 	
 	@CapabilityInject(PlayerJobs.class)
 	public static Capability<PlayerJobs> JOBS;
-	
+
+	/**
+	 * Gets the Jobs from a player
+	 * @param player
+	 * @return the jobs of the player
+	 */
 	public static PlayerJobs getPlayerJobs(PlayerEntity player) {
 		Optional<PlayerJobs> capability = player.getCapability(JOBS, null).resolve();
 		return capability.orElse(null);
 	}
-	
+
+	/**
+	 * Registers the capability
+	 */
 	public static void register() {
 		CapabilityManager.INSTANCE.register(PlayerJobs.class, new Capability.IStorage<PlayerJobs>() {
 
@@ -44,6 +52,10 @@ public class PlayerData {
 
 		private final PlayerJobs jobs;
 
+		/**
+		 * Initialise jobs with levels data
+		 * @param levels the levels data
+		 */
 		public JobsDispatcher(LevelData levels){
 			this.jobs = new PlayerJobs(levels);
 		}
@@ -53,11 +65,19 @@ public class PlayerData {
 			return LazyOptional.of(() -> (T)jobs);
 		}
 
+		/**
+		 * Serialize the jobs to NBT
+		 * @return the NBT containing the jobs
+		 */
 		@Override
 		public CompoundNBT serializeNBT() {
 			return this.jobs.toNBT();
 		}
 
+		/**
+		 * Deserialize the jobs from NBT
+		 * @param nbt the nbt from which the jobs are deserialized
+		 */
 		@Override
 		public void deserializeNBT(CompoundNBT nbt) {
 			this.jobs.fromNBT(nbt);

@@ -35,10 +35,17 @@ public class ServerJobsData {
     private static final Set<XPRegistry<? extends XPData>> XP_REGISTRIES = new HashSet<>();
 
 
+    /**
+     * Registers the XP Registry
+     * @param registry the registry to register
+     */
     public static void registerXPRegistry(XPRegistry<? extends XPData> registry){
         XP_REGISTRIES.add(registry);
     }
 
+    /**
+     * Registers the common registries used by the mod
+     */
     public static void registerCommonXPRegistries(){
         registerXPRegistry(CRAFTING_ITEMS_XP);
         registerXPRegistry(SMELTING_ITEMS_XP);
@@ -49,6 +56,10 @@ public class ServerJobsData {
     }
 
 
+    /**
+     * Sends all the data about the jobs to the client
+     * @param player the client who will receive the data
+     */
     public static void sendDataToClient(ServerPlayerEntity player) {
         PacketUpdateClientJobsData packet1 = new PacketUpdateClientJobsData(XP_REGISTRIES,
                 JOBS_LEVELS,
@@ -60,9 +71,4 @@ public class ServerJobsData {
                 player.connection.getConnection(),
                 NetworkDirection.PLAY_TO_CLIENT);
     }
-
-    public static Set<String> getXPRegistriesNames(){
-        return XP_REGISTRIES.stream().map(XPRegistry::getName).collect(Collectors.toSet());
-    }
-
 }

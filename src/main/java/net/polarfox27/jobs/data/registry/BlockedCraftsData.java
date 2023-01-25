@@ -16,9 +16,16 @@ public class BlockedCraftsData {
 
     private final Map<String, List<BlockedCraft>> CRAFTS_BY_JOB = new HashMap<>();
 
+    /**
+     * Empty Constructor
+     */
     public BlockedCraftsData(){
     }
 
+    /**
+     * Reads the blocked crafts data from a byte buffer
+     * @param buf the buffer where to read
+     */
     public BlockedCraftsData(PacketBuffer buf){
         int size = buf.readInt();
         for(int i = 0; i < size; i++){
@@ -31,31 +38,33 @@ public class BlockedCraftsData {
         }
     }
 
-    public void addBlockedCraftForJob(String job, int level, Item craft, int metadata){
-        this.addBlockedCraftForJob(job, new BlockedCraft(level, craft, metadata));
-    }
-
+    /**
+     * Adds a blocked craft for a specific job
+     * @param job the job which will unlock the craft
+     * @param craft the craft to block
+     */
     public void addBlockedCraftForJob(String job, BlockedCraft craft){
         if(!CRAFTS_BY_JOB.containsKey(job))
             CRAFTS_BY_JOB.put(job, new ArrayList<>());
         CRAFTS_BY_JOB.get(job).add(craft);
     }
 
-    public List<ItemStack> getUnlockedCrafts(String job, int level){
-        if(!CRAFTS_BY_JOB.containsKey(job))
-            return new ArrayList<>();
-        return CRAFTS_BY_JOB.get(job).stream()
-                .filter(x -> x.getLevel() == level)
-                .map(x -> JobsUtil.itemStack(x.getCraft(), 1, x.getMetadata()))
-                .collect(Collectors.toList());
-    }
-
+    /**
+     * @param job the job to check
+     * @return the list of blocked crafts for that job
+     */
     public List<BlockedCraft> getBlockedCrafts(String job){
         if(!CRAFTS_BY_JOB.containsKey(job))
             return new ArrayList<>();
         return new ArrayList<>(CRAFTS_BY_JOB.get(job));
     }
 
+    /**
+     * Checks if a player can craft an item stack based on its jobs levels
+     * @param stack the stack to check
+     * @param player the player jobs data
+     * @return true if the player can craft the stack, otherwise false
+     */
     public boolean canCraft(ItemStack stack, PlayerJobs player){
         for(Map.Entry<String, List<BlockedCraft>> e : CRAFTS_BY_JOB.entrySet()){
             BlockedCraft craft = e.getValue().stream().filter(x -> x.getCraft() == stack.getItem()).findFirst().orElse(null);
@@ -66,13 +75,10 @@ public class BlockedCraftsData {
         return true;
     }
 
-    public int getUnlockLevel(String job, ItemStack stack){
-        for(BlockedCraft blockedCraft : this.CRAFTS_BY_JOB.get(job))
-            if(blockedCraft.craft == stack.getItem() && blockedCraft.metadata == stack.getDamageValue())
-                return blockedCraft.level;
-        return -1;
-    }
-
+    /**
+     * Writes the blocked crafts data to a byte buffer
+     * @param buf the buffer where to write
+     */
     public void writeToBytes(PacketBuffer buf){
         buf.writeInt(CRAFTS_BY_JOB.size());
         for(Map.Entry<String, List<BlockedCraft>> e : CRAFTS_BY_JOB.entrySet()){
@@ -83,6 +89,9 @@ public class BlockedCraftsData {
         }
     }
 
+    /**
+     * Clears all the blocked crafts data
+     */
     public void clear(){
         this.CRAFTS_BY_JOB.clear();
     }
@@ -92,13 +101,23 @@ public class BlockedCraftsData {
         private final Item craft;
         private final int metadata;
 
-    public BlockedCraft(int level, Item craft, int metadata) {
+        /**
+         * Creates a blocked craft based on the item, the metadata and the level at which it will be unlocked
+         * @param level the level at which the craft is unlocked
+         * @param craft the blocked item
+         * @param metadata the metadata of the blocked item
+         */
+        public BlockedCraft(int level, Item craft, int metadata) {
             this.level = level;
             this.craft = craft;
             this.metadata = metadata;
         }
 
-    public BlockedCraft(PacketBuffer buf) {
+        /**
+         * Reads the blocked craft from a byte buffer
+         * @param buf the buffer where to read
+         */
+        public BlockedCraft(PacketBuffer buf) {
             this.level = buf.readInt();
             this.craft = Item.byId(buf.readInt());
             this.metadata = buf.readInt();
@@ -116,18 +135,19 @@ public class BlockedCraftsData {
             return metadata;
         }
 
-        public boolean isCraftBlocked(int level, ItemStack stack){
-            return level < this.level &&
-                    this.craft == stack.getItem() &&
-                    (this.metadata == stack.getDamageValue() || this.metadata < 0);
-        }
-
+        /**
+         * Writes the blocked craft to a byte buffer
+         * @param buf the buffer where to write
+         */
         public void writeToBytes(PacketBuffer buf){
             buf.writeInt(level);
             buf.writeInt(Item.getId(craft));
             buf.writeInt(metadata);
         }
 
+        /**
+         * @return the UnlockStack representing the blocked craft, to be displayed in the GUI
+         */
         public UnlockStack getUnlockStack(){
             return new UnlockStack(level, JobsUtil.itemStack(craft, 1, metadata), UnlockStack.Type.CRAFTING);
         }

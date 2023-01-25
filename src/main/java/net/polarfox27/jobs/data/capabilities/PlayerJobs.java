@@ -26,12 +26,20 @@ public class PlayerJobs {
 	private final LevelData levelData;
 	private final Map<String, Long> XP = new HashMap<>();
 
+	/**
+	 * Creates Jobs from levels data
+	 * @param levelData the levels data
+	 */
 	public PlayerJobs(LevelData levelData) {
 		this.levelData = levelData;
 		for(String job : levelData.getJobs())
 			this.XP.put(job, 0L);
 	}
 
+	/**
+	 * Reads Jobs from a buffer
+	 * @param buf the buffer from where to read
+	 */
 	public PlayerJobs(PacketBuffer buf) {
 		this.levelData = new LevelData(buf);
 		int size = buf.readInt();
@@ -42,6 +50,10 @@ public class PlayerJobs {
 		}
 	}
 
+	/**
+	 * Writes the Jobs to a buffer
+	 * @param buf the buffer where to write the Jobs
+	 */
 	public void writeToBytes(PacketBuffer buf){
 		this.levelData.writeToBytes(buf);
 		buf.writeInt(XP.size());
@@ -51,57 +63,92 @@ public class PlayerJobs {
 		}
 	}
 
+	/**
+	 * @return a set of all the job names
+	 */
 	public Set<String> getJobs(){
 		return this.levelData.getJobs();
 	}
 
-
-	public void set(String j, int lvl, long xp) {
-		if(!levelData.exists(j))
-			return;
-		long total = this.levelData.getTotalXPForLevel(j, lvl) + xp;
-		set(j, total);
-	}
-	
+	/**
+	 * Set the total xp of a job
+	 * @param j the job to modify
+	 * @param value the new total xp value
+	 */
 	public void set(String j, long value) {
 		if(!levelData.exists(j))
 			return;
 		long total = JobsUtil.clamp(value, 0, levelData.getTotalXPForLevel(j, levelData.getMaxLevel(j)));
 		this.XP.put(j, total);
 	}
-	
 
+
+	/**
+	 * Get the level the player has in that job
+	 * @param j the job
+	 * @return the player's level
+	 */
 	public int getLevelByJob(String j) {
 		return this.levelData.getLevelFromTotal(j, this.getTotalXPByJob(j));
 	}
-	
+
+	/**
+	 * Get the xp the player has in that job
+	 * @param j the job
+	 * @return the player's xp
+	 */
 	public long getXPByJob(String j) {
 		return this.levelData.getCurrentXPFromTotal(j, this.getTotalXPByJob(j));
 	}
 
+	/**
+	 * Get the total xp the player has in that job
+	 * @param j the job
+	 * @return the player's total xp
+	 */
 	public long getTotalXPByJob(String j) {
 		if(!levelData.exists(j))
 			return 0;
 		return this.XP.getOrDefault(j, 0L);
 	}
-	
+
+
+	/**
+	 * Get the missing xp the player needs in that job to level up
+	 * @param j the job
+	 * @return the player's missing xp
+	 */
 	public long getMissingXPForJob(String j) {
 		return this.levelData.getMissingXPFromTotal(j, this.getTotalXPByJob(j));
 	}
-	
-	//Add XP
+
+	/**
+	 * Adds xp to a job
+	 * @param j the job
+	 * @param xp the xp amount to add
+	 */
 	public void addXP(String j, long xp) {
 		set(j, this.getTotalXPByJob(j)+xp);
 	}
-	
+
+	/**
+	 * checks if a player has reach the maximum level for a job
+	 * @param j the job to check
+	 * @return true if the player has reached the max level
+	 */
 	public boolean isMax(String j) {
 		return levelData.exists(j) && this.getLevelByJob(j) >= levelData.getMaxLevel(j);
 	}
-	
+
+	/**
+	 * Gives xp to a player for a job and updates everything to the client, including level ups and rewards
+	 * @param j the job to which the xp is added
+	 * @param xp the xp amount added
+	 * @param p the player who receives the xp
+	 */
 	public void gainXP(String j, long xp, ServerPlayerEntity p) {
 		if(xp <= 0 || !levelData.exists(j))
 			return;
-		System.out.println("before: " + print(j));
 		int previousLVL = this.getLevelByJob(j);
 		addXP(j, xp);
 		PacketHandler.INSTANCE.sendTo(new PacketUpdateClientJob(this),
@@ -128,9 +175,14 @@ public class PlayerJobs {
 							   mp.getGameProfile().getId());
 			}
 		}
-		System.out.println("after: " + print(j));
 	}
 
+	/**
+	 * Gives the rewards to a player when he reaches a new level
+	 * @param p the player to reward
+	 * @param j the job for which the player has leveled up
+	 * @param lvl the level the player reached
+	 */
 	private void giveReward(ServerPlayerEntity p, String j, int lvl) {
 		if(!levelData.exists(j))
 			return;
@@ -142,25 +194,32 @@ public class PlayerJobs {
 			p.inventory.add(s.copy());
 		p.inventory.setChanged();
 	}
-	
+
+	/**
+	 * Deserialize Jobs from NBT
+	 * @param nbt the nbt to read from
+	 */
 	public void fromNBT(CompoundNBT nbt) {
 		for(String job : nbt.getAllKeys())
 			this.set(job, nbt.getLong(job));
 	}
-	
+
+	/**
+	 * Serialize Jobs to NBT
+	 * @return the serialized NBT
+	 */
 	public CompoundNBT toNBT() {
 		CompoundNBT nbt = new CompoundNBT();
 		for(Map.Entry<String, Long> e : this.XP.entrySet())
 			nbt.putLong(e.getKey(), e.getValue());
 		return nbt;
 	}
-	
+
+	/**
+	 * Copies the values of the other Jobs
+	 * @param other the Jobs to copy
+	 */
 	public void copy(PlayerJobs other) {
 		this.fromNBT(other.toNBT());
 	}
-
-	public String print(String job){
-		return job + " : lvl " + this.getLevelByJob(job) + ", xp " + this.getXPByJob(job) + " (" + this.getTotalXPByJob(job) + " -> " + this.getMissingXPForJob(job) + ")";
-	}
-
 }
