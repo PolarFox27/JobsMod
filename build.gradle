@@ -12,7 +12,7 @@ apply plugin: 'net.minecraftforge.gradle'
 apply plugin: 'eclipse'
 apply plugin: 'maven-publish'
 
-version = '2.0'
+version = '3.0'
 group = 'net.polarfox27.jobs' // http://maven.apache.org/guides/mini/guide-naming-conventions.html
 archivesBaseName = 'jobs'
 

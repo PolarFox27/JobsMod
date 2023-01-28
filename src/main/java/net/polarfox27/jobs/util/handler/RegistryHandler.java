@@ -19,7 +19,7 @@ public class RegistryHandler {
 
 	/**
 	 * Registers the Commands of the mod
-	 * @param event
+	 * @param event the Register Event
 	 */
 	@SubscribeEvent
 	public void onCommandsRegistered(RegisterCommandsEvent event) {

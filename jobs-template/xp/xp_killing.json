@@ -4,5 +4,21 @@
 		{"entity":"minecraft:ghast","xp":[1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20]},
 		{"entity":"minecraft:chicken","xp":[1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20]},
 		{"entity":"minecraft:donkey","xp":[10,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20]}
+	],
+	"hunter":[
+		{"entity":"minecraft:horse","xp":[1]},
+		{"entity":"minecraft:zombie","xp":[1]},
+		{"entity":"minecraft:skeleton","xp":[1]},
+		{"entity":"minecraft:spider","xp":[1]},
+		{"entity":"minecraft:creeper","xp":[1]},
+		{"entity":"minecraft:enderman","xp":[1]},
+		{"entity":"minecraft:player","xp":[10]},
+		{"entity":"minecraft:wither_skeleton","xp":[1]},
+		{"entity":"minecraft:blaze","xp":[1]},
+		{"entity":"minecraft:wither","xp":[1]},
+		{"entity":"minecraft:endermite","xp":[1]},
+		{"entity":"minecraft:villager","xp":[1]},
+		{"entity":"minecraft:pillager","xp":[1]},
+		{"entity":"minecraft:ender_dragon","xp":[1]},
 	]
 }

@@ -23,14 +23,14 @@ public class EntityInteractionEvents {
     @SubscribeEvent
     public void onKill(LivingDeathEvent event) {
     	if(event.getEntityLiving().level.isClientSide() ||
-                !(event.getSource().getDirectEntity() instanceof ServerPlayerEntity))
+                !(event.getSource().getEntity() instanceof ServerPlayerEntity))
             return;
         if(event.getEntityLiving() instanceof PlayerEntity &&
-                event.getSource().getDirectEntity().equals(event.getEntityLiving()))
+                event.getSource().getEntity().equals(event.getEntityLiving()))
             return;
         EntityType<? extends Entity> type = event.getEntityLiving().getType();
 
-        ServerPlayerEntity p = (ServerPlayerEntity)event.getSource().getDirectEntity();
+        ServerPlayerEntity p = (ServerPlayerEntity)event.getSource().getEntity();
         PlayerJobs jobs = PlayerData.getPlayerJobs(p);
 
         for(String job : jobs.getJobs()){
