@@ -22,6 +22,13 @@ public class ButtonXPCategory extends Button {
     private final Type type;
     private final GuiJobInfos parent;
 
+    /**
+     * Creates the button
+     * @param x the x coordinate
+     * @param y the y coordinate
+     * @param type the category type (XP / UNLOCK)
+     * @param parent the parent GUI
+     */
     public ButtonXPCategory(int x, int y, Type type, GuiJobInfos parent) {
         super(x, y, 80, 16, new StringTextComponent(""), new OnPressed());
         this.type = type;
@@ -30,11 +37,13 @@ public class ButtonXPCategory extends Button {
         this.parent = parent;
     }
 
-    public void setPosition(int xPos, int yPos) {
-        this.x = xPos;
-        this.y = yPos;
-    }
-    
+    /**
+     * Renders the widget on the screen
+     * @param mStack
+     * @param mouseX
+     * @param mouseY
+     * @param partialTicks
+     */
     public void renderButton(MatrixStack mStack, int mouseX, int mouseY, float partialTicks) {
     	if (this.visible) {
             boolean hovered = mouseX >= this.x && mouseY >= this.y && mouseX < this.x + this.width && mouseY < this.y + this.height;
@@ -55,7 +64,11 @@ public class ButtonXPCategory extends Button {
     
     public static class OnPressed implements IPressable{
 
-		@Override
+        /**
+         * Opens the How XP GUI or shows the Blocked Stacks when a button is clicked, depending on its type
+         * @param btn the button clicked
+         */
+        @Override
 		public void onPress(Button btn) {
 			if(!(btn instanceof ButtonXPCategory))
                 return;
@@ -72,7 +85,7 @@ public class ButtonXPCategory extends Button {
     }
 
 
-    public static enum Type{
+    public enum Type{
         XP,
         UNLOCK;
     }

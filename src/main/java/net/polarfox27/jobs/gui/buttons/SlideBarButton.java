@@ -19,6 +19,15 @@ public class SlideBarButton extends Button {
     public final int startPos;
     public final int endPos;
 
+
+    /**
+     * Creates a slide bar
+     * @param startPos the first position of the slide bar on its main axis
+     * @param endPos the last position of the slide bar on its main axis
+     * @param otherPos the position of the slide bar on its second axis
+     * @param parent the parent GUI
+     * @param isVertical sets the main axis to be the Y-Axis if this is true, the X-Axis otherwise
+     */
     public SlideBarButton(int startPos, int endPos, int otherPos, SliderParent parent, boolean isVertical) {
         super((isVertical ? otherPos : startPos), (isVertical ? startPos : otherPos),
                 (isVertical ? 12 : 15), (isVertical ? 15 : 12),
@@ -29,6 +38,13 @@ public class SlideBarButton extends Button {
         this.startPos = startPos;
     }
 
+    /**
+     * Renders the widget on the screen
+     * @param mStack
+     * @param mouseX
+     * @param mouseY
+     * @param partialTicks
+     */
     @Override
     public void renderButton(MatrixStack mStack, int mouseX, int mouseY, float partialTicks) {
         if (this.visible) {
@@ -46,6 +62,10 @@ public class SlideBarButton extends Button {
         }
     }
 
+    /**
+     * Updates the position of the slide bar across its axis
+     * @param pos the new position (clamped between startPos and endPos)
+     */
     private void updatePos(int pos){
         int p = JobsUtil.clamp(pos, startPos, endPos);
         if(isVertical)
@@ -54,26 +74,22 @@ public class SlideBarButton extends Button {
             this.x = p;
     }
 
+    /**
+     * Updates the position of the slide bar across its axis based on the page the parent is at
+     */
     public void update(){
         float progress = (float)parent.getPage(isVertical)/(float)parent.getLastPage(isVertical);
         int pos = startPos + (int)((endPos-startPos)*progress);
         updatePos(pos);
     }
 
-    public void update(int mousePos){
-        int pos = JobsUtil.clamp(mousePos - startPos, 0, endPos-startPos);
-        updatePos(startPos+pos);
-        int page = (int)(getProgress()*parent.getLastPage(isVertical));
-        parent.setPage(isVertical, page);
-    }
-
-    public float getProgress(){
-        int pos = isVertical ? y : x;
-        return ((float) (pos - startPos)/ (float) (endPos-startPos));
-    }
-
     public static class OnPressed implements IPressable{
-    	@Override
+
+        /**
+         * Does nothing when pressed
+         * @param btn the button pressed
+         */
+        @Override
 		public void onPress(Button btn) {}    	
     }
 }

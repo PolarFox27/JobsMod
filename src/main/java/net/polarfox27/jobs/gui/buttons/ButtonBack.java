@@ -20,6 +20,12 @@ public class ButtonBack extends Button {
     private final int xDiffText;
     private Screen parent;
 
+    /**
+     * Creates a back arrow button
+     * @param x the x coordinate
+     * @param y the y coordinate
+     * @param parent the parent GUI
+     */
     public ButtonBack(int x, int y, Screen parent) {
         super(x, y, 18, 10, new StringTextComponent(""), new OnPressed());
         this.xTexStart = 0;
@@ -28,11 +34,13 @@ public class ButtonBack extends Button {
         this.parent = parent;
     }
 
-    public void setPosition(int xPos, int yPos) {
-        this.x = xPos;
-        this.y = yPos;
-    }
-
+    /**
+     * Renders the widget on the screen
+     * @param mStack
+     * @param mouseX
+     * @param mouseY
+     * @param partialTicks
+     */
     @Override
     public void renderButton(MatrixStack mStack, int mouseX, int mouseY, float partialTicks) {
         if (this.visible) {
@@ -50,7 +58,11 @@ public class ButtonBack extends Button {
     
     public static class OnPressed implements IPressable{
 
-		@Override
+        /**
+         * Goes back to the previous GUI when the button is clicked
+         * @param btn the button clicked
+         */
+        @Override
 		public void onPress(Button btn) {
 			if(!(btn instanceof ButtonBack))
                 return;

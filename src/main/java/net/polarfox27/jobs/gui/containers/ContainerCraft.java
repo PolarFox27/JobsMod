@@ -29,10 +29,21 @@ public class ContainerCraft extends RecipeBookContainer<CraftingInventory> {
 	private final IWorldPosCallable access;
 	private final PlayerEntity player;
 
+	/**
+	 * Creates a modified crafting container
+	 * @param id the contained id
+	 * @param playerInventory the player who opened the crafting table
+	 */
 	public ContainerCraft(int id, PlayerInventory playerInventory) {
 		this(id, playerInventory, IWorldPosCallable.NULL);
 	}
 
+	/**
+	 * Creates a modified crafting container
+	 * @param id the contained id
+	 * @param playerInventory the player who opened the crafting table
+	 * @param pos the position of the crafting container
+	 */
 	public ContainerCraft(int id, PlayerInventory playerInventory, IWorldPosCallable pos) {
 		super(ContainerType.CRAFTING, id);
 		this.access = pos;
@@ -57,6 +68,14 @@ public class ContainerCraft extends RecipeBookContainer<CraftingInventory> {
 
 	}
 
+	/**
+	 * Updates the crafting result after a slot has been modified in the crafting grid
+	 * @param index the index of the modified slot
+	 * @param world the world the player is in
+	 * @param player the player using the crafting table
+	 * @param craftingInventory the crafting grid
+	 * @param resultInventory the result slot
+	 */
 	protected static void slotChangedCraftingGrid(int index, World world, PlayerEntity player, CraftingInventory craftingInventory, CraftResultInventory resultInventory) {
 		if (!world.isClientSide) {
 			ServerPlayerEntity serverplayerentity = (ServerPlayerEntity)player;
@@ -76,25 +95,45 @@ public class ContainerCraft extends RecipeBookContainer<CraftingInventory> {
 		}
 	}
 
+	/**
+	 * Updates the crafting grid and result slot
+	 * @param inventory the inventory modified
+	 */
 	public void slotsChanged(IInventory inventory) {
 		this.access.execute((world, pos) -> {
 			slotChangedCraftingGrid(this.containerId, world, this.player, this.craftSlots, this.resultSlots);
 		});
 	}
 
+	/**
+	 * Fills the craft slot with a stack
+	 * @param helper the item helper
+	 */
 	public void fillCraftSlotsStackedContents(RecipeItemHelper helper) {
 		this.craftSlots.fillStackedContents(helper);
 	}
 
+	/**
+	 * Empties the crafting grid and result slot
+	 */
 	public void clearCraftingContent() {
 		this.craftSlots.clearContent();
 		this.resultSlots.clearContent();
 	}
 
+	/**
+	 * Checks if a recipe matches the content of the crafting grid and result slot
+	 * @param recipe the recipe to check
+	 * @return true if the recipe matches the content of the crafting grid
+	 */
 	public boolean recipeMatches(IRecipe<? super CraftingInventory> recipe) {
 		return recipe.matches(this.craftSlots, this.player.level);
 	}
 
+	/**
+	 * Empties the container when it should be removed
+	 * @param player the player that was using the crafting container
+	 */
 	public void removed(PlayerEntity player) {
 		super.removed(player);
 		this.access.execute((p_217068_2_, p_217068_3_) -> {
@@ -102,10 +141,20 @@ public class ContainerCraft extends RecipeBookContainer<CraftingInventory> {
 		});
 	}
 
+	/**
+	 * @param player the player using the crafting table
+	 * @return true if the player can still use the crafting table, false otherwise
+	 */
 	public boolean stillValid(PlayerEntity player) {
 		return stillValid(this.access, player, Blocks.CRAFTING_TABLE);
 	}
 
+	/**
+	 * Moves a stack when the player shift-clicks it
+	 * @param player the player using the crafting table
+	 * @param slotIndex the slot that is shift-clicked
+	 * @return the remaining stack after the stack has been moved
+	 */
 	public ItemStack quickMoveStack(PlayerEntity player, int slotIndex) {
 		ItemStack itemstack = ItemStack.EMPTY;
 		Slot slot = this.slots.get(slotIndex);
@@ -154,27 +203,48 @@ public class ContainerCraft extends RecipeBookContainer<CraftingInventory> {
 		return itemstack;
 	}
 
+	/**
+	 * Checks if the player can take all the item of the same type as the stack
+	 * @param stack the item to stack up
+	 * @param slot the slot where the stack should end up
+	 * @return
+	 */
 	public boolean canTakeItemForPickAll(ItemStack stack, Slot slot) {
 		return slot.container != this.resultSlots && super.canTakeItemForPickAll(stack, slot);
 	}
 
+	/**
+	 * @return the index of the result slot
+	 */
 	public int getResultSlotIndex() {
 		return 0;
 	}
 
+	/**
+	 * @return the crafting grid width (3)
+	 */
 	public int getGridWidth() {
 		return this.craftSlots.getWidth();
 	}
 
+	/**
+	 * @return the crafting grid height (3)
+	 */
 	public int getGridHeight() {
 		return this.craftSlots.getHeight();
 	}
 
+	/**
+	 * @return the amount of slots (10)
+	 */
 	@OnlyIn(Dist.CLIENT)
 	public int getSize() {
 		return 10;
 	}
 
+	/**
+	 * @return the Recipe Book category of CRAFTING
+	 */
 	@OnlyIn(Dist.CLIENT)
 	public RecipeBookCategory getRecipeBookType() {
 		return RecipeBookCategory.CRAFTING;

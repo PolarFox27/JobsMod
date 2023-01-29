@@ -17,12 +17,26 @@ public class ButtonArrow extends Button {
     private final boolean isUp;
     private final MainJobsMenu gui;
 
+    /**
+     * Creates a button to move up or down the Main Jobs Menu
+     * @param posX the x coordinate
+     * @param posY the y coordinate
+     * @param gui the Main Jobs Menu GUI
+     * @param isUp sets the direction of the arrow to be up or down
+     */
     public ButtonArrow(int posX, int posY, MainJobsMenu gui, boolean isUp) {
         super(posX, posY, 17, 10, new StringTextComponent(""), new OnPressed());
         this.gui = gui;
         this.isUp = isUp;
     }
 
+    /**
+     * Renders the widget on the screen
+     * @param mStack
+     * @param mouseX
+     * @param mouseY
+     * @param partialTicks
+     */
     @Override
     public void renderButton(MatrixStack mStack, int mouseX, int mouseY, float partialTicks) {
         if (this.visible) {
@@ -36,6 +50,10 @@ public class ButtonArrow extends Button {
 
     public static class OnPressed implements IPressable{
 
+        /**
+         * Scrolls the Main Jobs Menu up or down when the button is clicked, depending on the button's direction
+         * @param btn the button clicked
+         */
         @Override
         public void onPress(Button btn) {
             if(!(btn instanceof ButtonArrow))

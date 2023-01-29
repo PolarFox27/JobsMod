@@ -19,18 +19,26 @@ public class ButtonJob extends Button {
     private final String title;
     private final String job;
 
+    /**
+     * Creates a Job Button
+     * @param posX the x coordinate
+     * @param posY the y coordinate
+     * @param j the job the button is representing
+     */
     public ButtonJob(int posX, int posY, String j) {
         super(posX, posY, 200, 40, new StringTextComponent(""),new OnPressed());
         this.title = ClientJobsData.getJobName(j);
         this.job = j;
     }
 
-    public void setPosition(int x, int y) {
-        this.x = x;
-        this.y = y;
-    }
 
-    
+    /**
+     * Renders the widget on the screen
+     * @param mStack
+     * @param mouseX
+     * @param mouseY
+     * @param partialTicks
+     */
     @Override
     public void renderButton(MatrixStack mStack, int mouseX, int mouseY, float partialTicks) {
     	if (this.visible) {
@@ -46,32 +54,10 @@ public class ButtonJob extends Button {
         }
     }
 
-    private void drawGradient(MatrixStack mStack) {
-        long xp = ClientJobsData.playerJobs.getXPByJob(this.job);
-        int lvl = ClientJobsData.playerJobs.getLevelByJob(this.job);
-        if(lvl < ClientJobsData.JOBS_LEVELS.getMaxLevel(this.job)) {
-            long total = ClientJobsData.JOBS_LEVELS.getXPForLevel(this.job, lvl+1);
-            int size = (int)(150*((double)xp / (double)total));
-            GuiUtil.drawTexture(mStack, this, this.x + 45, this.y + 15, 0, 50, 150, 12); //background
-            GuiUtil.drawTexture(mStack, this, this.x + 45, this.y + 15, 0, 62, size, 12);
-
-            String info = xp + "/" + total;
-            int widthInfo = Minecraft.getInstance().font.width(info);
-            Minecraft.getInstance().font.draw(mStack, info, this.x + 120 - widthInfo/2.0F, this.y + 18,
-                    Color.white.getRGB());
-        }
-        else {
-            int size = 150;
-            this.blit(mStack, this.x + 45, this.y + 15, 0, 50, 150, 12); //background
-            this.blit(mStack, this.x + 45, this.y + 15, 0, 74, size, 12);
-
-            String info = I18n.get("text.level.max");
-            int widthInfo = Minecraft.getInstance().font.width(info);
-            Minecraft.getInstance().font.draw(mStack, info, this.x + 120 - widthInfo/2.0F, this.y + 18,
-                    Color.white.getRGB());
-        }
-    }
-
+    /**
+     * Renders the Job name and level on the screen
+     * @param mStack
+     */
     private void drawName(MatrixStack mStack) {
         int lvl = ClientJobsData.playerJobs.getLevelByJob(this.job);
         String name = this.title + " (" + I18n.get("text.level") + " " + lvl + ")";
@@ -82,7 +68,11 @@ public class ButtonJob extends Button {
     
     public static class OnPressed implements IPressable{
 
-		@Override
+        /**
+         * Opens a Jobs Infos GUI when the button is clicked
+         * @param btn the button clicked
+         */
+        @Override
 		public void onPress(Button btn) {
 			if(!(btn instanceof ButtonJob))
                 return;
