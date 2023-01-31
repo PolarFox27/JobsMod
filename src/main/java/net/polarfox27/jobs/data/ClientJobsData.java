@@ -15,13 +15,6 @@ import java.util.stream.Stream;
 
 public class ClientJobsData {
 
-    public static XPRegistry.ItemXPRegistry CRAFTING_ITEMS_XP = new XPRegistry.ItemXPRegistry("crafting", Items.CRAFTING_TABLE);
-    public static XPRegistry.ItemXPRegistry SMELTING_ITEMS_XP = new XPRegistry.ItemXPRegistry("smelting", Items.FURNACE);
-    public static XPRegistry.BlockXPRegistry BREAKING_BLOCKS_XP = new XPRegistry.BlockXPRegistry("breaking", Items.DIAMOND_PICKAXE);
-    public static XPRegistry.BlockXPRegistry HARVESTING_CROPS_XP = new XPRegistry.BlockXPRegistry("harvesting", Items.IRON_HOE);
-    public static XPRegistry.EntityXPRegistry KILLING_ENTITY_XP = new XPRegistry.EntityXPRegistry("killing", Items.NETHERITE_SWORD);
-    public static XPRegistry.EntityXPRegistry BREEDING_ENTITY_XP = new XPRegistry.EntityXPRegistry( "breeding", Items.WHEAT);
-
     public static LevelData JOBS_LEVELS = new LevelData();
     public static BlockedCraftsData BLOCKED_CRAFTS = new BlockedCraftsData();
     public static BlockedBlocksData BLOCKED_BLOCKS = new BlockedBlocksData();

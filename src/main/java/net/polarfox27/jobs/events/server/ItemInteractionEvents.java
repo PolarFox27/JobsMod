@@ -2,6 +2,7 @@ package net.polarfox27.jobs.events.server;
 
 import net.minecraft.entity.player.ServerPlayerEntity;
 import net.minecraft.item.ItemStack;
+import net.minecraftforge.event.entity.player.ItemFishedEvent;
 import net.minecraftforge.event.entity.player.PlayerEvent.ItemCraftedEvent;
 import net.minecraftforge.event.entity.player.PlayerEvent.ItemSmeltedEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
@@ -47,6 +48,20 @@ public class ItemInteractionEvents {
             int level = jobs.getLevelByJob(job);
             long xp = ServerJobsData.SMELTING_ITEMS_XP.getXPByLevelAndJob(stack, level, job);
             jobs.gainXP(job, xp*stack.getCount(), (ServerPlayerEntity) event.getPlayer());
+        }
+    }
+
+    @SubscribeEvent
+    public void onFished(ItemFishedEvent event) {
+        if(event.getPlayer().level.isClientSide() || !(event.getPlayer() instanceof ServerPlayerEntity))
+            return;
+        PlayerJobs jobs = PlayerData.getPlayerJobs(event.getPlayer());
+        for(ItemStack stack : event.getDrops()){
+            for(String job : jobs.getJobs()){
+                int level = jobs.getLevelByJob(job);
+                long xp = ServerJobsData.FISHING_ITEMS_XP.getXPByLevelAndJob(stack, level, job);
+                jobs.gainXP(job, xp*stack.getCount(), (ServerPlayerEntity) event.getPlayer());
+            }
         }
     }
 

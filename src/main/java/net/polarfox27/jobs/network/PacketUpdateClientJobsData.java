@@ -96,24 +96,6 @@ public class PacketUpdateClientJobsData{
         if(ctx.get().getDirection() == NetworkDirection.PLAY_TO_CLIENT)
         {
             ClientJobsData.XP_REGISTRIES = message.registries;
-            message.registries.stream().filter(x -> x.getName().equals(ClientJobsData.CRAFTING_ITEMS_XP.getName()))
-                                       .findFirst()
-                                       .ifPresent(x -> ClientJobsData.CRAFTING_ITEMS_XP = (XPRegistry.ItemXPRegistry) x);
-            message.registries.stream().filter(x -> x.getName().equals(ClientJobsData.SMELTING_ITEMS_XP.getName()))
-                    .findFirst()
-                    .ifPresent(x -> ClientJobsData.SMELTING_ITEMS_XP = (XPRegistry.ItemXPRegistry) x);
-            message.registries.stream().filter(x -> x.getName().equals(ClientJobsData.BREAKING_BLOCKS_XP.getName()))
-                    .findFirst()
-                    .ifPresent(x -> ClientJobsData.BREAKING_BLOCKS_XP = (XPRegistry.BlockXPRegistry) x);
-            message.registries.stream().filter(x -> x.getName().equals(ClientJobsData.HARVESTING_CROPS_XP.getName()))
-                    .findFirst()
-                    .ifPresent(x -> ClientJobsData.HARVESTING_CROPS_XP = (XPRegistry.BlockXPRegistry) x);
-            message.registries.stream().filter(x -> x.getName().equals(ClientJobsData.KILLING_ENTITY_XP.getName()))
-                    .findFirst()
-                    .ifPresent(x -> ClientJobsData.KILLING_ENTITY_XP = (XPRegistry.EntityXPRegistry) x);
-            message.registries.stream().filter(x -> x.getName().equals(ClientJobsData.BREEDING_ENTITY_XP.getName()))
-                    .findFirst()
-                    .ifPresent(x -> ClientJobsData.BREEDING_ENTITY_XP = (XPRegistry.EntityXPRegistry) x);
             ClientJobsData.JOBS_ICONS = JobsIconUtil.convertToClient(message.JOBS_ICONS);
             ClientJobsData.JOBS_LEVELS = message.JOBS_LEVELS;
             ClientJobsData.TRANSLATIONS = message.TRANSLATIONS;

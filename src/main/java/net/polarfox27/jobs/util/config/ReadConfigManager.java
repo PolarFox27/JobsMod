@@ -47,6 +47,8 @@ public class ReadConfigManager {
                 .ifPresent((obj) -> loadEntityRegistry(obj, ServerJobsData.KILLING_ENTITY_XP));
         FileUtil.safeReadJSONFromFile(FileUtil.join(xpFolder, ServerJobsData.BREEDING_ENTITY_XP.getFileName()))
                 .ifPresent((obj) -> loadEntityRegistry(obj, ServerJobsData.BREEDING_ENTITY_XP));
+        FileUtil.safeReadJSONFromFile(FileUtil.join(xpFolder, ServerJobsData.FISHING_ITEMS_XP.getFileName()))
+                .ifPresent((obj) -> loadItemRegistry(obj, ServerJobsData.FISHING_ITEMS_XP));
         ModJobs.info("Loading jobs icons...", false);
         JobsIconUtil.loadJobsIcon(server);
     }

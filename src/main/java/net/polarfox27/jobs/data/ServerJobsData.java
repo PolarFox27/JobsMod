@@ -24,6 +24,7 @@ public class ServerJobsData {
     public static final BlockXPRegistry HARVESTING_CROPS_XP = new BlockXPRegistry("harvesting", Items.IRON_HOE);
     public static final EntityXPRegistry KILLING_ENTITY_XP = new EntityXPRegistry("killing", Items.NETHERITE_SWORD);
     public static final EntityXPRegistry BREEDING_ENTITY_XP = new EntityXPRegistry("breeding", Items.WHEAT);
+    public static final ItemXPRegistry FISHING_ITEMS_XP = new ItemXPRegistry("fishing", Items.FISHING_ROD);
 
     public static final Map<String, byte[]> JOBS_ICONS = new HashMap<>();
 
@@ -53,6 +54,7 @@ public class ServerJobsData {
         registerXPRegistry(HARVESTING_CROPS_XP);
         registerXPRegistry(KILLING_ENTITY_XP);
         registerXPRegistry(BREEDING_ENTITY_XP);
+        registerXPRegistry(FISHING_ITEMS_XP);
     }
 
 

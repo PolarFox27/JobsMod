@@ -36,6 +36,7 @@ public class WriteConfigManager {
         tryCreateEmptyXPFile(xpFolder, ServerJobsData.HARVESTING_CROPS_XP.getFileName(), 1);
         tryCreateEmptyXPFile(xpFolder, ServerJobsData.KILLING_ENTITY_XP.getFileName(), 2);
         tryCreateEmptyXPFile(xpFolder, ServerJobsData.BREEDING_ENTITY_XP.getFileName(), 2);
+        tryCreateEmptyXPFile(xpFolder, ServerJobsData.FISHING_ITEMS_XP.getFileName(), 0);
         tryCreateEmptyLevelFile(baseFolder, FileUtil.LEVELS_FILE);
         tryCreateEmptyRewardFile(baseFolder, FileUtil.REWARDS_FILE);
         tryCreateEmptyBlockedCraftFile(baseFolder, FileUtil.BLOCKED_CRAFTS_FILE);
