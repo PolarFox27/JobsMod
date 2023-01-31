@@ -43,6 +43,10 @@ public class GuiHowXP extends Screen implements SliderParent {
     private final List<List<XPData>> xpLists = new ArrayList<>();
     private final List<IReorderingProcessor> tooltip = new ArrayList<>();
 
+    /**
+     * Creates the How XP GUI for a job
+     * @param j the job
+     */
     public GuiHowXP(String j) {
     	super(new StringTextComponent(""));
         this.job = j;
@@ -61,6 +65,9 @@ public class GuiHowXP extends Screen implements SliderParent {
         }
     }
 
+    /**
+     * creates the 2 sliders (1 vertical and 1 optional horizontal)
+     */
     @Override
     public void init() {
         this.verticalSlidebar = new SlideBarButton(this.height/2 -45, this.height/2+45, this.width/2 + 65, this, true);
@@ -72,13 +79,23 @@ public class GuiHowXP extends Screen implements SliderParent {
         if(getLastPage(false) > 0)
             this.addButton(horizontalSlidebar);
     }
-    
+
+    /**
+     * @return false, this GUI doesn't pause the game
+     */
     @Override
     public boolean isPauseScreen() 
     {
     	return false;
     }
 
+    /**
+     * Renders the GUI on the screen
+     * @param mStack
+     * @param mouseX
+     * @param mouseY
+     * @param partialTicks
+     */
     @Override
     public void render(MatrixStack mStack, int mouseX, int mouseY, float partialTicks) {
         this.tooltip.clear();
@@ -110,6 +127,12 @@ public class GuiHowXP extends Screen implements SliderParent {
             updateSlider(horizontalSlidebar, mouseX);
     }
 
+    /**
+     * Renders the XP Categories on the screen
+     * @param mStack
+     * @param mouseX the x coordinate of the mouse, used to find the tooltips to render
+     * @param mouseY the y coordinate of the mouse, used to find the tooltips to render
+     */
     private void drawCategories(MatrixStack mStack, int mouseX, int mouseY) {
         Minecraft.getInstance().getTextureManager().bind(BACKGROUND);
         int size = 30*Math.min(this.categories.size(), 5) + Math.min(this.categories.size()-1, 4);
@@ -128,7 +151,13 @@ public class GuiHowXP extends Screen implements SliderParent {
         if(renderIndex != -1)
             this.tooltip.add(new StringTextComponent(I18n.get("category." + this.categories.get(renderIndex).getName())).getVisualOrderText());
     }
-    
+
+    /**
+     * Renders the stacks for the XP Categories on the screen
+     * @param mStack
+     * @param mouseX the x coordinate of the mouse, used to find the tooltips to render
+     * @param mouseY the y coordinate of the mouse, used to find the tooltips to render
+     */
     private void drawCategoriesStacks(MatrixStack mStack, int mouseX, int mouseY) {
         int size = 30*Math.min(this.categories.size(), 5) + Math.min(this.categories.size()-1, 4);
         int p = this.width/2 - 3 - size/2;
@@ -192,6 +221,13 @@ public class GuiHowXP extends Screen implements SliderParent {
         }
     }
 
+    /**
+     * Updates the vertical page when the mouse is scrolled
+     * @param mouseX the x coordinate of the mouse
+     * @param mouseY the y coordinate of the mouse
+     * @param direction the scroll direction
+     * @return true
+     */
     @Override
     public boolean mouseScrolled(double mouseX, double mouseY, double direction) {
         if (direction != 0) {
@@ -202,6 +238,13 @@ public class GuiHowXP extends Screen implements SliderParent {
         return true;
     }
 
+    /**
+     * Checks if the player is dragging the slider
+     * @param btn the slide bar button
+     * @param mouseX the x coordinate of the mouse
+     * @param mouseY the y coordinate of the mouse
+     * @return true if the slide bar is dragged
+     */
     @Override
     public boolean isDragging(SlideBarButton btn, int mouseX, int mouseY){
         return isDragging() && (
@@ -213,6 +256,11 @@ public class GuiHowXP extends Screen implements SliderParent {
                 !btn.isVertical));
     }
 
+    /**
+     * Updates the slider based on its current position
+     * @param btn the slide bar button
+     * @param mousePos the position of mouse on the its main axis
+     */
     @Override
     public void updateSlider(SlideBarButton btn, int mousePos){
         int page;
@@ -228,11 +276,19 @@ public class GuiHowXP extends Screen implements SliderParent {
         btn.update();
     }
 
+    /**
+     * @param isVertical the orientation of the slide bar
+     * @return the current page of the slider of the given orientation
+     */
     @Override
     public int getPage(boolean isVertical) {
         return isVertical ? verticalPage : horizontalPage;
     }
 
+    /**
+     * @param isVertical the orientation of the slide bar
+     * @return the last page of the slider of the given orientation
+     */
     @Override
     public int getLastPage(boolean isVertical) {
         if(isVertical){
@@ -248,6 +304,11 @@ public class GuiHowXP extends Screen implements SliderParent {
             return categories.size() <= 5 ? 0 : categories.size() - 5;
     }
 
+    /**
+     * Sets the slider of the given orientation to a specific page
+     * @param isVertical the orientation of the slide bar
+     * @param page the new page
+     */
     @Override
     public void setPage(boolean isVertical, int page) {
         if(isVertical)

@@ -37,6 +37,11 @@ public class GuiJobInfos extends Screen implements SliderParent{
     private final List<UnlockStack> unlocked_stacks;
 
     private SlideBarButton slidebar;
+
+    /**
+     * Creates a Job Infos GUI
+     * @param job the job
+     */
     public GuiJobInfos(String job) {
     	super(new StringTextComponent(""));
         this.job = job;
@@ -46,6 +51,9 @@ public class GuiJobInfos extends Screen implements SliderParent{
         this.unlocked_stacks = ClientJobsData.getUnlockedStacksSorted(this.job);
     }
 
+    /**
+     * Creates the buttons for XP and Unlock Stacks and the slide bar for the Unlocked Stacks
+     */
     @Override
     public void init() {
         this.slidebar = new SlideBarButton(this.top + 30, this.top+135, this.width/2 + 93, this, true);
@@ -60,13 +68,23 @@ public class GuiJobInfos extends Screen implements SliderParent{
         }
         super.init();
     }
-    
+
+    /**
+     * @return false, this GUI doesn't pause the game
+     */
     @Override
     public boolean isPauseScreen() {
     	return false;
     }
 
-    
+
+    /**
+     * Renders the GUI on the screen
+     * @param mStack
+     * @param mouseX
+     * @param mouseY
+     * @param partialTicks
+     */
     @Override
     public void render(MatrixStack mStack, int mouseX, int mouseY, float partialTicks) {
     	super.render(mStack, mouseX, mouseY, partialTicks);
@@ -90,6 +108,12 @@ public class GuiJobInfos extends Screen implements SliderParent{
             updateSlider(slidebar, mouseY);
     }
 
+    /**
+     * Renders the Unlocked Stacks
+     * @param mStack
+     * @param mouseX the x coordinate of the mouse, used to find the tooltip to render
+     * @param mouseY the y coordinate of the mouse, used to find the tooltip to render
+     */
     private void drawUnlockedItems(MatrixStack mStack, int mouseX, int mouseY) {
         RenderHelper.setupForFlatItems();
         int renderIndex = -1;
@@ -104,6 +128,10 @@ public class GuiJobInfos extends Screen implements SliderParent{
         RenderHelper.setupFor3DItems();
     }
 
+    /**
+     * Renders the progress bars of the Job
+     * @param mStack
+     */
     private void drawGradients(MatrixStack mStack) {
         int lvl = ClientJobsData.playerJobs.getLevelByJob(job);
         boolean isMaxLevel = ClientJobsData.playerJobs.isMax(job);
@@ -127,6 +155,10 @@ public class GuiJobInfos extends Screen implements SliderParent{
     }
 
 
+    /**
+     * @param stack the stack hovered
+     * @return the list of tooltip of the stack
+     */
     public List<IReorderingProcessor> getItemToolTip(UnlockStack stack) {
         List<IReorderingProcessor> tooltip = new ArrayList<>();
         tooltip.add(new StringTextComponent(stack.getStack().getDisplayName().getString()
@@ -145,7 +177,14 @@ public class GuiJobInfos extends Screen implements SliderParent{
                     .getVisualOrderText());
         return tooltip;
     }
-    
+
+    /**
+     * Updates the Unlocked Stacks when the mouse is scrolled
+     * @param mouseX the x coordinate of the mouse
+     * @param mouseY the y coordinate of the mouse
+     * @param direction the scroll direction
+     * @return true
+     */
     @Override
     public boolean mouseScrolled(double mouseX, double mouseY, double direction) {
     	if (direction != 0 && offsetUnlock == -70) {
@@ -156,6 +195,13 @@ public class GuiJobInfos extends Screen implements SliderParent{
     	return true;
     }
 
+    /**
+     * checks if the slide bar is dragged
+     * @param btn the slide bar button
+     * @param mouseX the x coordinate of the mouse
+     * @param mouseY the y coordinate of the mouse
+     * @return true if the slide bar is dragged
+     */
     @Override
     public boolean isDragging(SlideBarButton btn, int mouseX, int mouseY){
         return isDragging() &&
@@ -163,6 +209,11 @@ public class GuiJobInfos extends Screen implements SliderParent{
                 mouseY >= this.top + 30 && mouseY <= this.top + 135;
     }
 
+    /**
+     * Updates the slider based on its current position
+     * @param btn the slide bar button
+     * @param mouseY the position of the mouse on the Y axis
+     */
     @Override
     public void updateSlider(SlideBarButton btn, int mouseY){
         int y = JobsUtil.clamp(mouseY - 30 - this.top, 0, 105);
@@ -170,16 +221,29 @@ public class GuiJobInfos extends Screen implements SliderParent{
         btn.update();
     }
 
+    /**
+     * @param isVertical not used because there is only 1 slider
+     * @return the current page of the slider of the given orientation
+     */
     @Override
     public int getPage(boolean isVertical) {
         return page;
     }
 
+    /**
+     * @param isVertical not used because there is only 1 slider
+     * @return the last page of the slider
+     */
     @Override
     public int getLastPage(boolean isVertical) {
         return unlocked_stacks.size() <= 7 ? 0 : unlocked_stacks.size() - 7;
     }
 
+    /**
+     * Sets the slider to a specific page
+     * @param isVertical not used because there is only 1 slider
+     * @param page the new page
+     */
     @Override
     public void setPage(boolean isVertical, int page) {
         this.page = JobsUtil.clamp(page, 0, getLastPage(true));

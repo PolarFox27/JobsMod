@@ -29,16 +29,30 @@ public class GuiLevelUp extends Screen {
     public static final ResourceLocation TEXTURES = new ResourceLocation(ModJobs.MOD_ID, "textures/gui/gui_level_up.png");
     private final String job;
 
+    /**
+     * Creates a Level Up GUI for a job
+     * @param job the job that leveled up
+     */
     public GuiLevelUp(String job) {
     	super(new StringTextComponent(""));
         this.job = job;
     }
-    
+
+    /**
+     * @return false, this GUI doesn't pause the game
+     */
     @Override
     public boolean isPauseScreen() {
     	return false;
     }
 
+    /**
+     * Renders the GUI on the screen
+     * @param mStack
+     * @param mouseX
+     * @param mouseY
+     * @param partialTicks
+     */
     @Override
     public void render(MatrixStack mStack, int mouseX, int mouseY, float partialTicks) {
         if(this.font == null)
@@ -63,6 +77,12 @@ public class GuiLevelUp extends Screen {
     }
 
 
+    /**
+     * Renders the Unlocked stacks of the screen
+     * @param mStack
+     * @param mouseX the x coordinate of the mouse, used to find the tooltip to render
+     * @param mouseY the y coordinate of the mouse, used to find the tooltip to render
+     */
     private void drawUnlockedStacks(MatrixStack mStack, int mouseX, int mouseY) {
         RenderHelper.setupForFlatItems();
         List<UnlockStack> stacks = ClientJobsData.getUnlockedStacksSorted(this.job);
@@ -88,6 +108,12 @@ public class GuiLevelUp extends Screen {
         RenderHelper.setupFor3DItems();
     }
 
+    /**
+     * Renders the rewards stacks on the screen
+     * @param mStack
+     * @param mouseX the x coordinate of the mouse, used to find the tooltip to render
+     * @param mouseY the y coordinate of the mouse, used to find the tooltip to render
+     */
     private void drawRewardStacks(MatrixStack mStack, int mouseX, int mouseY) {
         RenderHelper.setupForFlatItems();
         List<ItemStack> stacks = ClientJobsData.CURRENT_REWARDS;
@@ -113,6 +139,13 @@ public class GuiLevelUp extends Screen {
     }
 
 
+    /**
+     * Renders the tooltip for the hovered UnlockStack
+     * @param mStack
+     * @param stack the hovered UnlockStack
+     * @param x the x coordinate of the mouse
+     * @param y the y coordinate of the mouse
+     */
     private void renderUnlockedCraftToolTip(MatrixStack mStack, UnlockStack stack, int x, int y) {
         List<IReorderingProcessor> tooltips = new ArrayList<>();
         tooltips.add(new StringTextComponent(stack.getStack().getDisplayName().getString().replace("[", "").replace("]", "")).getVisualOrderText());
@@ -121,9 +154,15 @@ public class GuiLevelUp extends Screen {
         this.renderToolTip(mStack, tooltips, x, y, Minecraft.getInstance().font);
     }
 
+    /**
+     * Renders the tooltip and the count for the hovered reward
+     * @param mStack
+     * @param stack the hovered stack
+     * @param x the x coordinate of the mouse
+     * @param y the y coordinate of the mouse
+     */
     protected void renderToolTipAndCount(MatrixStack mStack, ItemStack stack, int x, int y) {
         List<IReorderingProcessor> tooltips = new ArrayList<>();
-        FontRenderer font = stack.getItem().getFontRenderer(stack);
 
         tooltips.add(new StringTextComponent(stack.getDisplayName().getString().replace("[", "").replace("]", "")).getVisualOrderText());
         tooltips.add(new StringTextComponent(TextFormatting.GREEN + "" + stack.getCount()).getVisualOrderText());

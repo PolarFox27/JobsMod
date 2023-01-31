@@ -26,11 +26,17 @@ public class MainJobsMenu extends Screen {
     public int index = 0;
     private final List<String> jobs;
 
+    /**
+     * Creates the Main Jobs Menu GUI
+     */
     public MainJobsMenu() {
 		super(new TranslationTextComponent("text.jobs.title"));
         this.jobs = new ArrayList<>(ClientJobsData.JOBS_LEVELS.getJobs());
 	}
 
+    /**
+     * Creates all the Jobs Button and up and down arrows if there are more than 4 Jobs
+     */
     @Override
     protected void init() {
         this.buttons.clear();
@@ -47,19 +53,32 @@ public class MainJobsMenu extends Screen {
             this.addButton(new ButtonArrow(this.width/2-9, this.height/2+93, this, false));
         }
     }
-    
+
+    /**
+     * @return false, this GUI doesn't pause the game
+     */
     @Override
     public boolean isPauseScreen() {
     	return false;
     }
 
+    /**
+     * @return the last page of the menu based on the amount of jobs
+     */
     private int lastIndex(){
         int x = this.jobs.size()-4;
         if(x < 0)
             x = 0;
         return x;
     }
-    
+
+    /**
+     * Renders the GUI on the screen
+     * @param mStack
+     * @param mouseX
+     * @param mouseY
+     * @param partialTicks
+     */
     @Override
     public void render(MatrixStack mStack, int mouseX, int mouseY, float partialTicks) {
     	GL11.glColor4f(1.0F, 1.0F, 1.0F, 1.0F);
@@ -69,6 +88,13 @@ public class MainJobsMenu extends Screen {
     	super.render(mStack, mouseX, mouseY, partialTicks);
     }
 
+    /**
+     * Goes one page up or down when the mouse is scrolled
+     * @param mouseX the x coordinate of the mouse
+     * @param mouseY the y coordinate of the mouse
+     * @param direction the direction of the scroll
+     * @return true
+     */
     @Override
     public boolean mouseScrolled(double mouseX, double mouseY, double direction) {
         if (direction != 0) {
