@@ -84,7 +84,7 @@ public class MainJobsMenu extends Screen {
     	GL11.glColor4f(1.0F, 1.0F, 1.0F, 1.0F);
         Minecraft.getInstance().getTextureManager().bind(BACKGROUND);
         this.blit(mStack, this.width/2 - 128, this.height/2 - 110, 0, 0, 256, 220);
-        GuiUtil.renderCenteredString(mStack, I18n.get("text.jobs.title"), Color.black.getRGB(), this.width/2, 30, 2.0f);
+        GuiUtil.renderCenteredString(mStack, I18n.get("text.jobs.title"), Color.black.getRGB(), this.width/2, this.height/2 - 95, 2.0f);
     	super.render(mStack, mouseX, mouseY, partialTicks);
     }
 
