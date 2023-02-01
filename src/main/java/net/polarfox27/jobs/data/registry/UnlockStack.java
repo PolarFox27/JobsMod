@@ -6,7 +6,7 @@ public class UnlockStack implements Comparable<UnlockStack>{
 
     private final int level;
     private final ItemStack stack;
-    private final Type type;
+    private final BlockedData.Type type;
 
     /**
      * Constructs an Unlock Stack to be shown in the GUI
@@ -14,7 +14,7 @@ public class UnlockStack implements Comparable<UnlockStack>{
      * @param stack the stack rendered in the GUI
      * @param type the type of UnlockStack it is
      */
-    public UnlockStack(int level, ItemStack stack, Type type) {
+    public UnlockStack(int level, ItemStack stack, BlockedData.Type type) {
         this.level = level;
         this.stack = stack;
         this.type = type;
@@ -40,10 +40,5 @@ public class UnlockStack implements Comparable<UnlockStack>{
 
     public String getType() {
         return type.name().toLowerCase();
-    }
-
-    public enum Type{
-        CRAFTING,
-        BREAKING;
     }
 }
