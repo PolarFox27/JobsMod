@@ -5,7 +5,9 @@ import com.google.gson.JsonObject;
 import net.minecraft.server.MinecraftServer;
 import net.polarfox27.jobs.ModJobs;
 import net.polarfox27.jobs.data.ServerJobsData;
-import net.polarfox27.jobs.data.registry.XPRegistry;
+import net.polarfox27.jobs.data.registry.unlock.BlockBlockedRegistry;
+import net.polarfox27.jobs.data.registry.unlock.ItemBlockedRegistry;
+import net.polarfox27.jobs.data.registry.xp.XPRegistry;
 
 import java.util.Map;
 
@@ -19,6 +21,7 @@ public class ReadConfigManager {
         WriteConfigManager.tryCreateEmptyConfigFiles(server);
         String baseFolder = FileUtil.getBaseFolder(server);
         String xpFolder = FileUtil.getXPFolder(server);
+        String blockedFolder = FileUtil.getBlockedFolder(server);
         ModJobs.info("Loading jobs levels...", false);
         FileUtil.safeReadJSONFromFile(FileUtil.join(baseFolder, FileUtil.LEVELS_FILE))
                 .ifPresent(ReadConfigManager::loadLevels);
@@ -28,12 +31,23 @@ public class ReadConfigManager {
         ModJobs.info("Loading job rewards...", false);
         FileUtil.safeReadJSONFromFile(FileUtil.join(baseFolder, FileUtil.REWARDS_FILE))
                 .ifPresent(ReadConfigManager::loadRewards);
+
         ModJobs.info("Loading blocked crafts...", false);
-        FileUtil.safeReadJSONFromFile(FileUtil.join(baseFolder, FileUtil.BLOCKED_CRAFTS_FILE))
-                .ifPresent(ReadConfigManager::loadBlockedCrafts);
+        FileUtil.safeReadJSONFromFile(FileUtil.join(blockedFolder, FileUtil.BLOCKED_CRAFTS_FILE))
+                .ifPresent(x -> loadBlockedItems(x, ServerJobsData.BLOCKED_CRAFTS));
+        ModJobs.info("Loading blocked equipments...", false);
+        FileUtil.safeReadJSONFromFile(FileUtil.join(blockedFolder, FileUtil.BLOCKED_EQUIPMENTS_FILE))
+                .ifPresent(x -> loadBlockedItems(x, ServerJobsData.BLOCKED_EQUIPMENTS));
+        ModJobs.info("Loading blocked left clicks...", false);
+        FileUtil.safeReadJSONFromFile(FileUtil.join(blockedFolder, FileUtil.BLOCKED_LEFT_CLICKS_FILE))
+                .ifPresent(x -> loadBlockedItems(x, ServerJobsData.BLOCKED_LEFT_CLICKS));
+        ModJobs.info("Loading blocked right clicks...", false);
+        FileUtil.safeReadJSONFromFile(FileUtil.join(blockedFolder, FileUtil.BLOCKED_RIGHT_CLICKS_FILE))
+                .ifPresent(x -> loadBlockedItems(x, ServerJobsData.BLOCKED_RIGHT_CLICKS));
         ModJobs.info("Loading blocked blocks...", false);
-        FileUtil.safeReadJSONFromFile(FileUtil.join(baseFolder, FileUtil.BLOCKED_BLOCKS_FILE))
-                .ifPresent(ReadConfigManager::loadBlockedBlocks);
+        FileUtil.safeReadJSONFromFile(FileUtil.join(blockedFolder, FileUtil.BLOCKED_BLOCKS_FILE))
+                .ifPresent(x -> loadBlockedBlocks(x, ServerJobsData.BLOCKED_BLOCKS));
+
         ModJobs.info("Loading jobs xp...", false);
         FileUtil.safeReadJSONFromFile(FileUtil.join(xpFolder, ServerJobsData.CRAFTING_ITEMS_XP.getFileName()))
                 .ifPresent((obj) -> loadItemRegistry(obj, ServerJobsData.CRAFTING_ITEMS_XP));
@@ -153,13 +167,13 @@ public class ReadConfigManager {
      * Reads the Blocked Crafts json
      * @param object the json object containing the configuration
      */
-    public static void loadBlockedCrafts(JsonObject object){
+    public static void loadBlockedItems(JsonObject object, ItemBlockedRegistry registry){
         try{
-            ServerJobsData.BLOCKED_CRAFTS.clear();
+            registry.clear();
             for(Map.Entry<String, JsonElement> e : object.entrySet()) {
                 for(JsonElement element : e.getValue().getAsJsonArray())
-                    JsonUtil.blockedCraftFromJSON(element.getAsJsonObject())
-                            .ifPresent(x -> ServerJobsData.BLOCKED_CRAFTS.addBlockedCraftForJob(e.getKey(), x));
+                    JsonUtil.blockedItemFromJSON(element.getAsJsonObject(), registry.getType())
+                            .ifPresent(x -> registry.addBlockedData(e.getKey(), x));
             }
         }
         catch(ClassCastException | IllegalStateException e){
@@ -172,13 +186,13 @@ public class ReadConfigManager {
      * Reads the Blocked Blocks json
      * @param object the json object containing the configuration
      */
-    public static void loadBlockedBlocks(JsonObject object){
+    public static void loadBlockedBlocks(JsonObject object, BlockBlockedRegistry registry){
         try{
-            ServerJobsData.BLOCKED_BLOCKS.clear();
+            registry.clear();
             for(Map.Entry<String, JsonElement> e : object.entrySet()) {
                 for(JsonElement element : e.getValue().getAsJsonArray())
-                    JsonUtil.blockedBlockFromJSON(element.getAsJsonObject())
-                            .ifPresent(x -> ServerJobsData.BLOCKED_BLOCKS.addBlockedBlockForJob(e.getKey(), x));
+                    JsonUtil.blockedBlockFromJSON(element.getAsJsonObject(), registry.getType())
+                            .ifPresent(x -> registry.addBlockedData(e.getKey(), x));
             }
         }
         catch(ClassCastException | IllegalStateException e){

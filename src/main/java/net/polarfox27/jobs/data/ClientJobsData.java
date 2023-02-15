@@ -3,9 +3,15 @@ package net.polarfox27.jobs.data;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.texture.DynamicTexture;
 import net.minecraft.item.ItemStack;
-import net.minecraft.item.Items;
 import net.polarfox27.jobs.data.capabilities.PlayerJobs;
-import net.polarfox27.jobs.data.registry.*;
+import net.polarfox27.jobs.data.registry.LevelData;
+import net.polarfox27.jobs.data.registry.TranslationData;
+import net.polarfox27.jobs.data.registry.unlock.BlockBlockedRegistry;
+import net.polarfox27.jobs.data.registry.unlock.BlockedData;
+import net.polarfox27.jobs.data.registry.unlock.ItemBlockedRegistry;
+import net.polarfox27.jobs.data.registry.unlock.UnlockStack;
+import net.polarfox27.jobs.data.registry.xp.XPData;
+import net.polarfox27.jobs.data.registry.xp.XPRegistry;
 import net.polarfox27.jobs.gui.GuiGainXP;
 import net.polarfox27.jobs.gui.screens.GuiLevelUp;
 
@@ -16,8 +22,8 @@ import java.util.stream.Stream;
 public class ClientJobsData {
 
     public static LevelData JOBS_LEVELS = new LevelData();
-    public static BlockedCraftsData BLOCKED_CRAFTS = new BlockedCraftsData();
-    public static BlockedBlocksData BLOCKED_BLOCKS = new BlockedBlocksData();
+    public static Map<BlockedData.Type, ItemBlockedRegistry> BLOCKED_ITEMS_REGISTRIES = new HashMap<>();
+    public static Map<BlockedData.Type, BlockBlockedRegistry> BLOCKED_BLOCKS_REGISTRIES = new HashMap<>();
 
     public static Set<XPRegistry<? extends XPData>> XP_REGISTRIES = new HashSet<>();
 
@@ -83,8 +89,14 @@ public class ClientJobsData {
      */
     public static List<UnlockStack> getUnlockedStacksSorted(String job){
         return Stream.concat(
-                BLOCKED_CRAFTS.getBlockedCrafts(job).stream().map(BlockedCraftsData.BlockedCraft::getUnlockStack),
-                BLOCKED_BLOCKS.getBlockedBlocks(job).stream().map(BlockedBlocksData.BlockedBlock::getUnlockStack))
+                BLOCKED_ITEMS_REGISTRIES.values()
+                                        .stream()
+                                        .flatMap(r -> r.getBlockedData(job).stream())
+                                        .map(BlockedData.ItemBlockedData::createUnlockStack),
+                BLOCKED_BLOCKS_REGISTRIES.values()
+                                         .stream()
+                                         .flatMap(r -> r.getBlockedData(job).stream())
+                                         .map(BlockedData.BlockBlockedData::createUnlockStack))
                 .sorted()
                 .collect(Collectors.toList());
     }

@@ -1,4 +1,4 @@
-package net.polarfox27.jobs.data.registry;
+package net.polarfox27.jobs.data.registry.unlock;
 
 import net.minecraft.item.ItemStack;
 

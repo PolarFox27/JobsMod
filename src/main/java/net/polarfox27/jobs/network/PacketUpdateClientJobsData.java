@@ -5,7 +5,12 @@ import net.minecraft.network.PacketBuffer;
 import net.minecraftforge.fml.network.NetworkDirection;
 import net.minecraftforge.fml.network.NetworkEvent.Context;
 import net.polarfox27.jobs.data.ClientJobsData;
-import net.polarfox27.jobs.data.registry.*;
+import net.polarfox27.jobs.data.registry.LevelData;
+import net.polarfox27.jobs.data.registry.TranslationData;
+import net.polarfox27.jobs.data.registry.unlock.BlockBlockedRegistry;
+import net.polarfox27.jobs.data.registry.unlock.ItemBlockedRegistry;
+import net.polarfox27.jobs.data.registry.xp.XPData;
+import net.polarfox27.jobs.data.registry.xp.XPRegistry;
 import net.polarfox27.jobs.util.config.JobsIconUtil;
 
 import java.util.HashMap;
@@ -18,8 +23,8 @@ public class PacketUpdateClientJobsData{
 
     public Set<XPRegistry<? extends XPData>> registries = new HashSet<>();
     public LevelData JOBS_LEVELS = null;
-    public BlockedCraftsData BLOCKED_CRAFTS = null;
-    public BlockedBlocksData BLOCKED_BLOCKS = null;
+    public Set<ItemBlockedRegistry> BLOCKED_ITEMS_REGISTRIES = new HashSet<>();
+    public Set<BlockBlockedRegistry> BLOCKED_BLOCKS_REGISTRIES = new HashSet<>();
     Map<String, byte[]> JOBS_ICONS = new HashMap<>();
 
     TranslationData TRANSLATIONS = null;
@@ -30,21 +35,21 @@ public class PacketUpdateClientJobsData{
      * Creates the packet containing all information
      * @param registries
      * @param levelData
-     * @param blockedCraftsData
-     * @param blockedBlocksData
+     * @param blockedItemsRegistries
+     * @param blockedBlocksRegistries
      * @param icons
      * @param translationData
      */
     public PacketUpdateClientJobsData(Set<XPRegistry<? extends XPData>> registries,
                                     LevelData levelData,
-                                      BlockedCraftsData blockedCraftsData,
-                                      BlockedBlocksData blockedBlocksData,
+                                      Set<ItemBlockedRegistry> blockedItemsRegistries,
+                                      Set<BlockBlockedRegistry> blockedBlocksRegistries,
                                       Map<String, byte[]> icons,
                                       TranslationData translationData){
         this.registries = registries;
         this.JOBS_LEVELS = levelData;
-        this.BLOCKED_CRAFTS = blockedCraftsData;
-        this.BLOCKED_BLOCKS = blockedBlocksData;
+        this.BLOCKED_ITEMS_REGISTRIES = blockedItemsRegistries;
+        this.BLOCKED_BLOCKS_REGISTRIES = blockedBlocksRegistries;
         this.JOBS_ICONS = icons;
         this.TRANSLATIONS = translationData;
     }
@@ -61,11 +66,17 @@ public class PacketUpdateClientJobsData{
         for(int i = 0; i < amount; i++)
             registries.add(XPRegistry.fromBytes(buf));
         LevelData levelData = new LevelData(buf);
-        BlockedCraftsData blockedCrafts = new BlockedCraftsData(buf);
-        BlockedBlocksData blockedBlocks = new BlockedBlocksData(buf);
+        Set<ItemBlockedRegistry> blockedItemsRegistries = new HashSet<>();
+        Set<BlockBlockedRegistry> blockedBlocksRegistries = new HashSet<>();
+        int size1 = buf.readInt();
+        for(int i = 0; i < size1; i++)
+            blockedItemsRegistries.add(new ItemBlockedRegistry(buf));
+        int size2 = buf.readInt();
+        for(int i = 0; i < size2; i++)
+            blockedBlocksRegistries.add(new BlockBlockedRegistry(buf));
         Map<String, byte[]> icons = JobsIconUtil.fromBytes(buf);
         TranslationData translationData = new TranslationData(buf);
-    	return new PacketUpdateClientJobsData(registries, levelData, blockedCrafts, blockedBlocks, icons, translationData);
+    	return new PacketUpdateClientJobsData(registries, levelData, blockedItemsRegistries, blockedBlocksRegistries, icons, translationData);
     }
 
 
@@ -79,8 +90,12 @@ public class PacketUpdateClientJobsData{
         for(XPRegistry<? extends XPData> registry : packet.registries)
             registry.writeToBytes(buf);
         packet.JOBS_LEVELS.writeToBytes(buf);
-        packet.BLOCKED_CRAFTS.writeToBytes(buf);
-        packet.BLOCKED_BLOCKS.writeToBytes(buf);
+        buf.writeInt(packet.BLOCKED_ITEMS_REGISTRIES.size());
+        for(ItemBlockedRegistry r : packet.BLOCKED_ITEMS_REGISTRIES)
+            r.writeToBytes(buf);
+        buf.writeInt(packet.BLOCKED_BLOCKS_REGISTRIES.size());
+        for(BlockBlockedRegistry r : packet.BLOCKED_BLOCKS_REGISTRIES)
+            r.writeToBytes(buf);
         JobsIconUtil.toBytes(buf, packet.JOBS_ICONS);
         packet.TRANSLATIONS.writeToBytes(buf);
     }
@@ -99,8 +114,10 @@ public class PacketUpdateClientJobsData{
             ClientJobsData.JOBS_ICONS = JobsIconUtil.convertToClient(message.JOBS_ICONS);
             ClientJobsData.JOBS_LEVELS = message.JOBS_LEVELS;
             ClientJobsData.TRANSLATIONS = message.TRANSLATIONS;
-            ClientJobsData.BLOCKED_CRAFTS = message.BLOCKED_CRAFTS;
-            ClientJobsData.BLOCKED_BLOCKS = message.BLOCKED_BLOCKS;
+            for(ItemBlockedRegistry r : message.BLOCKED_ITEMS_REGISTRIES)
+                ClientJobsData.BLOCKED_ITEMS_REGISTRIES.put(r.getType(), r);
+            for(BlockBlockedRegistry r : message.BLOCKED_BLOCKS_REGISTRIES)
+                ClientJobsData.BLOCKED_BLOCKS_REGISTRIES.put(r.getType(), r);
         }
         ctx.get().setPacketHandled(true);
     }

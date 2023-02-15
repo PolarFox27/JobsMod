@@ -85,7 +85,7 @@ public class ContainerCraft extends RecipeBookContainer<CraftingInventory> {
 				ICraftingRecipe icraftingrecipe = optional.get();
 				if (resultInventory.setRecipeUsed(world, serverplayerentity, icraftingrecipe)) {
 					itemstack = icraftingrecipe.assemble(craftingInventory);
-					if(!ServerJobsData.BLOCKED_CRAFTS.canCraft(itemstack, PlayerData.getPlayerJobs(serverplayerentity)))
+					if(!ServerJobsData.BLOCKED_CRAFTS.isAllowed(PlayerData.getPlayerJobs(serverplayerentity), itemstack))
 						itemstack = ItemStack.EMPTY;
 				}
 			}

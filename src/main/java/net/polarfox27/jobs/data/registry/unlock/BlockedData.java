@@ -1,6 +1,7 @@
-package net.polarfox27.jobs.data.registry;
+package net.polarfox27.jobs.data.registry.unlock;
 
 import net.minecraft.block.Block;
+import net.minecraft.block.BlockState;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.network.PacketBuffer;
@@ -117,21 +118,37 @@ public abstract class BlockedData {
             super.writeToBytes(buf);
             buf.writeInt(Block.getId(this.block.defaultBlockState()));
         }
+
+        public Block getBlock() {
+            return block;
+        }
+
+        /**
+         * Checks if an Block state matches this blocked data
+         * @param state the state to check
+         * @return true if the state matches this blocked block data
+         */
+        public boolean matches(BlockState state){
+            return block == state.getBlock();
+        }
     }
 
     public static class ItemBlockedData extends BlockedData{
 
         private final Item item;
+        private final int metadata;
 
         /**
          * Creates a new Blocked Data unlocked at a specific level
          * @param level the level at which it will be unlocked
          * @param type the Unlock Type
          * @param item the item that is blocked
+         * @param metadata the item metadata
          */
-        public ItemBlockedData(int level, Type type, Item item) {
+        public ItemBlockedData(int level, Type type, Item item, int metadata) {
             super(level, type);
             this.item = item;
+            this.metadata = metadata;
         }
 
         /**
@@ -141,6 +158,7 @@ public abstract class BlockedData {
         public ItemBlockedData(PacketBuffer buf) {
             super(buf);
             this.item = Item.byId(buf.readInt());
+            this.metadata = buf.readInt();
         }
 
         /**
@@ -159,6 +177,24 @@ public abstract class BlockedData {
         public void writeToBytes(PacketBuffer buf) {
             super.writeToBytes(buf);
             buf.writeInt(Item.getId(item));
+            buf.writeInt(this.metadata);
+        }
+
+        public Item getItem() {
+            return item;
+        }
+
+        public int getMetadata() {
+            return metadata;
+        }
+
+        /**
+         * Checks if an Item Stack matches
+         * @param stack the stack to check
+         * @return true if the stacks matches this blocked item data
+         */
+        public boolean matches(ItemStack stack){
+            return item == stack.getItem() && (metadata < 0 || metadata == stack.getDamageValue());
         }
     }
 }

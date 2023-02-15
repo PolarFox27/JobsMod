@@ -14,6 +14,9 @@ public class FileUtil {
     public static final String LEVELS_FILE = "levels.json";
     public static final String TRANSLATIONS_FILE = "translations.json";
     public static final String BLOCKED_CRAFTS_FILE = "blocked_crafts.json";
+    public static final String BLOCKED_EQUIPMENTS_FILE = "blocked_equipments.json";
+    public static final String BLOCKED_LEFT_CLICKS_FILE = "blocked_left_clicks.json";
+    public static final String BLOCKED_RIGHT_CLICKS_FILE = "blocked_right_clicks.json";
     public static final String BLOCKED_BLOCKS_FILE = "blocked_blocks.json";
     public static final String REWARDS_FILE = "rewards.json";
 
@@ -23,6 +26,14 @@ public class FileUtil {
      */
     public static String getXPFolder(MinecraftServer server) {
         return getBaseFolder(server) + "/xp";
+    }
+
+    /**
+     * @param server the server where the config is stored
+     * @return the path to the Blocked Items/Blocks Config Folder
+     */
+    public static String getBlockedFolder(MinecraftServer server) {
+        return getBaseFolder(server) + "/blocked";
     }
 
     /**

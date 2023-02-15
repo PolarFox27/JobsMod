@@ -12,7 +12,7 @@ import net.minecraft.util.text.StringTextComponent;
 import net.minecraft.util.text.TextFormatting;
 import net.polarfox27.jobs.ModJobs;
 import net.polarfox27.jobs.data.ClientJobsData;
-import net.polarfox27.jobs.data.registry.UnlockStack;
+import net.polarfox27.jobs.data.registry.unlock.UnlockStack;
 import net.polarfox27.jobs.gui.buttons.ButtonBack;
 import net.polarfox27.jobs.gui.buttons.ButtonXPCategory;
 import net.polarfox27.jobs.gui.buttons.SlideBarButton;

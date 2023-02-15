@@ -1,8 +1,6 @@
-package net.polarfox27.jobs.data.registry;
+package net.polarfox27.jobs.data.registry.xp;
 
-import net.minecraft.block.Block;
 import net.minecraft.block.BlockState;
-import net.minecraft.block.CropsBlock;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityType;
 import net.minecraft.item.Item;
@@ -12,7 +10,6 @@ import net.minecraftforge.registries.ForgeRegistries;
 import net.polarfox27.jobs.util.JobsUtil;
 
 import java.util.*;
-import java.util.stream.Collectors;
 
 public abstract class XPRegistry <T extends XPData> {
 

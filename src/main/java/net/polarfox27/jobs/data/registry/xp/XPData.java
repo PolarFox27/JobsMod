@@ -1,4 +1,4 @@
-package net.polarfox27.jobs.data.registry;
+package net.polarfox27.jobs.data.registry.xp;
 
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockState;

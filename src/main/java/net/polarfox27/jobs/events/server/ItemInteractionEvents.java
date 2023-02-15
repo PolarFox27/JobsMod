@@ -2,10 +2,14 @@ package net.polarfox27.jobs.events.server;
 
 import net.minecraft.entity.player.ServerPlayerEntity;
 import net.minecraft.item.ItemStack;
+import net.minecraftforge.event.TickEvent;
+import net.minecraftforge.event.entity.player.AttackEntityEvent;
 import net.minecraftforge.event.entity.player.ItemFishedEvent;
 import net.minecraftforge.event.entity.player.PlayerEvent.ItemCraftedEvent;
 import net.minecraftforge.event.entity.player.PlayerEvent.ItemSmeltedEvent;
+import net.minecraftforge.event.entity.player.PlayerInteractEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
+import net.minecraftforge.fml.LogicalSide;
 import net.minecraftforge.fml.common.Mod.EventBusSubscriber;
 import net.polarfox27.jobs.data.ServerJobsData;
 import net.polarfox27.jobs.data.capabilities.PlayerData;
@@ -51,6 +55,10 @@ public class ItemInteractionEvents {
         }
     }
 
+    /**
+     * Gives xp to the players when they fish items
+     * @param event the Fish Event
+     */
     @SubscribeEvent
     public void onFished(ItemFishedEvent event) {
         if(event.getPlayer().level.isClientSide() || !(event.getPlayer() instanceof ServerPlayerEntity))
@@ -65,5 +73,50 @@ public class ItemInteractionEvents {
         }
     }
 
+    /**
+     * Blocks the right click if the player is not allowed
+     * @param event the Right Click Event
+     */
+    @SubscribeEvent
+    public void onRightClick(PlayerInteractEvent.RightClickItem event) {
+        if(event.getPlayer().level.isClientSide() || !(event.getPlayer() instanceof ServerPlayerEntity))
+            return;
+        PlayerJobs jobs = PlayerData.getPlayerJobs(event.getPlayer());
+        if(!ServerJobsData.BLOCKED_RIGHT_CLICKS.isAllowed(jobs, event.getItemStack()))
+            event.setCanceled(true);
+    }
+
+    /**
+     * Blocks the left click if the player is not allowed
+     * @param event the Left Click Event on a block
+     */
+    @SubscribeEvent
+    public void onLeftClickBlock(PlayerInteractEvent.LeftClickBlock event) {
+        if(event.getPlayer().level.isClientSide() || !(event.getPlayer() instanceof ServerPlayerEntity))
+            return;
+        PlayerJobs jobs = PlayerData.getPlayerJobs(event.getPlayer());
+        if(!ServerJobsData.BLOCKED_LEFT_CLICKS.isAllowed(jobs, event.getItemStack()))
+            event.setCanceled(true);
+    }
+
+    /**
+     * Checks if the player is allowed to wear armor every tick. If not, the armor is dropped
+     * @param event the armor tick event
+     */
+    @SubscribeEvent
+    public void checkArmor(TickEvent.PlayerTickEvent event) {
+        if(event.player.level.isClientSide())
+            return;
+        PlayerJobs jobs = PlayerData.getPlayerJobs(event.player);
+        for(int i = 0; i < event.player.inventory.armor.size(); i++) {
+            ItemStack stack = event.player.inventory.armor.get(i);
+            if (!ServerJobsData.BLOCKED_EQUIPMENTS.isAllowed(jobs, stack)) {
+                event.player.drop(stack, true);
+                event.player.inventory.armor.set(i, ItemStack.EMPTY);
+                return;
+            }
+        }
+
+    }
     
 }

@@ -1,7 +1,6 @@
 package net.polarfox27.jobs.gui.screens;
 
 import net.polarfox27.jobs.gui.buttons.SlideBarButton;
-import net.polarfox27.jobs.util.JobsUtil;
 
 public interface SliderParent {
 

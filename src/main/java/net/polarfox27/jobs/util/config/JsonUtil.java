@@ -8,10 +8,9 @@ import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.registries.ForgeRegistries;
-import net.polarfox27.jobs.data.registry.BlockedBlocksData;
-import net.polarfox27.jobs.data.registry.BlockedCraftsData;
 import net.polarfox27.jobs.data.registry.RewardsData;
-import net.polarfox27.jobs.data.registry.XPData;
+import net.polarfox27.jobs.data.registry.unlock.BlockedData;
+import net.polarfox27.jobs.data.registry.xp.XPData;
 import net.polarfox27.jobs.util.JobsUtil;
 
 import java.util.ArrayList;
@@ -189,25 +188,25 @@ public class JsonUtil {
     }
 
     /**
-     * Creates a JSON object representing the Blocked Craft data
-     * @param craft the Blocked Craft data to represent
+     * Creates a JSON object representing the Blocked Item data
+     * @param data the Blocked Item data to represent
      * @return the JSON object representing the Blocked Craft data
      */
-    public static JsonObject blockedCraftToJSON(BlockedCraftsData.BlockedCraft craft){
+    public static JsonObject blockedItemToJSON(BlockedData.ItemBlockedData data){
         JsonObject object = new JsonObject();
-        object.addProperty("item", ForgeRegistries.ITEMS.getKey(craft.getCraft()).toString());
-        if(craft.getMetadata() >= 0)
-            object.addProperty("metadata", craft.getMetadata());
-        object.addProperty("level", craft.getLevel());
+        object.addProperty("item", ForgeRegistries.ITEMS.getKey(data.getItem()).toString());
+        if(data.getMetadata() >= 0)
+            object.addProperty("metadata", data.getMetadata());
+        object.addProperty("level", data.getLevel());
         return object;
     }
 
     /**
-     * Creates the Blocked Craft data represented in the JSON object
-     * @param object the JSON object representing the Blocked Craft XPData
-     * @return the created Block Craft XPData
+     * Creates the Blocked Item data represented in the JSON object
+     * @param object the JSON object representing the Blocked Item data
+     * @return the created Blocked Item data
      */
-    public static Optional<BlockedCraftsData.BlockedCraft> blockedCraftFromJSON(JsonObject object){
+    public static Optional<BlockedData.ItemBlockedData> blockedItemFromJSON(JsonObject object, BlockedData.Type type){
         Item item = ForgeRegistries.ITEMS.getValue(new ResourceLocation(object.get("item").getAsString()));
         if(item == null)
             return Optional.empty();
@@ -215,7 +214,7 @@ public class JsonUtil {
         if(object.has("metadata"))
             metadata = object.get("metadata").getAsInt();
         int level = object.get("level").getAsInt();
-        return Optional.of(new BlockedCraftsData.BlockedCraft(level, item, metadata));
+        return Optional.of(new BlockedData.ItemBlockedData(level, type, item, metadata));
     }
 
     /**
@@ -223,7 +222,7 @@ public class JsonUtil {
      * @param block the Blocked Block data to represent
      * @return the JSON object representing the Blocked Block data
      */
-    public static JsonObject blockedBlockToJSON(BlockedBlocksData.BlockedBlock block){
+    public static JsonObject blockedBlockToJSON(BlockedData.BlockBlockedData block){
         JsonObject object = new JsonObject();
         object.addProperty("block", ForgeRegistries.BLOCKS.getKey(block.getBlock()).toString());
         object.addProperty("level", block.getLevel());
@@ -235,11 +234,11 @@ public class JsonUtil {
      * @param object the JSON object representing the Blocked Block data
      * @return the created Blocked Block data
      */
-    public static Optional<BlockedBlocksData.BlockedBlock> blockedBlockFromJSON(JsonObject object){
+    public static Optional<BlockedData.BlockBlockedData> blockedBlockFromJSON(JsonObject object, BlockedData.Type type){
         Block block = ForgeRegistries.BLOCKS.getValue(new ResourceLocation(object.get("block").getAsString()));
         if(block == null)
             return Optional.empty();
         int level = object.get("level").getAsInt();
-        return Optional.of(new BlockedBlocksData.BlockedBlock(level, block));
+        return Optional.of(new BlockedData.BlockBlockedData(level, type, block));
     }
 }

@@ -6,6 +6,7 @@ import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.entity.player.ServerPlayerEntity;
 import net.minecraftforge.event.entity.living.BabyEntitySpawnEvent;
 import net.minecraftforge.event.entity.living.LivingDeathEvent;
+import net.minecraftforge.event.entity.player.AttackEntityEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.common.Mod.EventBusSubscriber;
 import net.polarfox27.jobs.data.ServerJobsData;
@@ -60,5 +61,18 @@ public class EntityInteractionEvents {
             jobs.gainXP(job, xp, (ServerPlayerEntity) event.getCausedByPlayer());
             System.out.println("gaining " + xp + " xp");
         }
+    }
+
+    /**
+     * Blocks the left click if the player is not allowed
+     * @param event the Left Click Event on a block
+     */
+    @SubscribeEvent
+    public void onLeftClickEntity(AttackEntityEvent event) {
+        if(event.getPlayer().level.isClientSide() || !(event.getPlayer() instanceof ServerPlayerEntity))
+            return;
+        PlayerJobs jobs = PlayerData.getPlayerJobs(event.getPlayer());
+        if(!ServerJobsData.BLOCKED_LEFT_CLICKS.isAllowed(jobs, event.getPlayer().getMainHandItem()))
+            event.setCanceled(true);
     }
 }

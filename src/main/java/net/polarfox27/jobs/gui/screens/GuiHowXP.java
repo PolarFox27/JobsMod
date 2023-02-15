@@ -17,8 +17,8 @@ import net.minecraft.util.text.StringTextComponent;
 import net.minecraft.util.text.TextFormatting;
 import net.polarfox27.jobs.ModJobs;
 import net.polarfox27.jobs.data.ClientJobsData;
-import net.polarfox27.jobs.data.registry.XPData;
-import net.polarfox27.jobs.data.registry.XPRegistry;
+import net.polarfox27.jobs.data.registry.xp.XPData;
+import net.polarfox27.jobs.data.registry.xp.XPRegistry;
 import net.polarfox27.jobs.gui.buttons.ButtonBack;
 import net.polarfox27.jobs.gui.buttons.SlideBarButton;
 import net.polarfox27.jobs.util.GuiUtil;
@@ -26,7 +26,8 @@ import net.polarfox27.jobs.util.JobsUtil;
 import org.lwjgl.opengl.GL11;
 
 import java.awt.*;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Comparator;
 import java.util.List;
 
 public class GuiHowXP extends Screen implements SliderParent {

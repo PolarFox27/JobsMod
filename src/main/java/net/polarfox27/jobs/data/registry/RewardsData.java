@@ -1,9 +1,6 @@
 package net.polarfox27.jobs.data.registry;
 
-import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
-import net.minecraft.network.PacketBuffer;
-import net.polarfox27.jobs.util.JobsUtil;
 
 import java.util.ArrayList;
 import java.util.HashMap;

@@ -6,6 +6,7 @@ import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.AbstractGui;
 import net.minecraft.client.renderer.IRenderTypeBuffer;
 import net.minecraft.client.renderer.entity.EntityRendererManager;
+import net.minecraft.client.renderer.texture.DynamicTexture;
 import net.minecraft.client.resources.I18n;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.util.ResourceLocation;
@@ -23,6 +24,7 @@ import java.awt.*;
 public class GuiUtil {
 
 	private static final ResourceLocation GRADIENT_TEXTURE = new ResourceLocation(ModJobs.MOD_ID + ":textures/gui/gui_gain_xp.png");
+	private static final ResourceLocation DEFAULT_ICON = new ResourceLocation(ModJobs.MOD_ID + ":textures/gui/default_icon.png");
 
 	/**
 	 * Renders a texture on the screen
@@ -66,7 +68,10 @@ public class GuiUtil {
 	 */
 	public static void drawJobIcon(MatrixStack mStack, AbstractGui gui, String job, int centerX, int centerY, int size) {
 		GL11.glColor4f(1.0F, 1.0F, 1.0F, 1.0F);
-		ClientJobsData.JOBS_ICONS.get(job).bind();
+		if(ClientJobsData.JOBS_ICONS.containsKey(job))
+			ClientJobsData.JOBS_ICONS.get(job).bind();
+		else
+			Minecraft.getInstance().getTextureManager().bind(DEFAULT_ICON);
 		GuiUtil.drawScaledTexture(mStack, centerX-size/2, centerY-size/2, 0, 0, size, size, size, size);
 	}
 

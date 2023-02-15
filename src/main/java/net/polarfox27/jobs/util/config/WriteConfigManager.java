@@ -11,10 +11,9 @@ import net.minecraft.server.MinecraftServer;
 import net.minecraft.util.text.TextFormatting;
 import net.polarfox27.jobs.ModJobs;
 import net.polarfox27.jobs.data.ServerJobsData;
-import net.polarfox27.jobs.data.registry.BlockedBlocksData;
-import net.polarfox27.jobs.data.registry.BlockedCraftsData;
 import net.polarfox27.jobs.data.registry.RewardsData;
-import net.polarfox27.jobs.data.registry.XPData;
+import net.polarfox27.jobs.data.registry.unlock.BlockedData;
+import net.polarfox27.jobs.data.registry.xp.XPData;
 
 import java.io.File;
 import java.util.ArrayList;
@@ -30,6 +29,7 @@ public class WriteConfigManager {
     public static void tryCreateEmptyConfigFiles(MinecraftServer server) {
         String baseFolder = FileUtil.getBaseFolder(server);
         String xpFolder = FileUtil.getXPFolder(server);
+        String blockedFolder = FileUtil.getBlockedFolder(server);
         tryCreateEmptyXPFile(xpFolder, ServerJobsData.CRAFTING_ITEMS_XP.getFileName(), 0);
         tryCreateEmptyXPFile(xpFolder, ServerJobsData.SMELTING_ITEMS_XP.getFileName(), 0);
         tryCreateEmptyXPFile(xpFolder, ServerJobsData.BREAKING_BLOCKS_XP.getFileName(), 1);
@@ -39,8 +39,11 @@ public class WriteConfigManager {
         tryCreateEmptyXPFile(xpFolder, ServerJobsData.FISHING_ITEMS_XP.getFileName(), 0);
         tryCreateEmptyLevelFile(baseFolder, FileUtil.LEVELS_FILE);
         tryCreateEmptyRewardFile(baseFolder, FileUtil.REWARDS_FILE);
-        tryCreateEmptyBlockedCraftFile(baseFolder, FileUtil.BLOCKED_CRAFTS_FILE);
-        tryCreateEmptyBlockedBlockFile(baseFolder, FileUtil.BLOCKED_BLOCKS_FILE);
+        tryCreateEmptyBlockedItemsFile(blockedFolder, FileUtil.BLOCKED_CRAFTS_FILE);
+        tryCreateEmptyBlockedItemsFile(blockedFolder, FileUtil.BLOCKED_EQUIPMENTS_FILE);
+        tryCreateEmptyBlockedItemsFile(blockedFolder, FileUtil.BLOCKED_LEFT_CLICKS_FILE);
+        tryCreateEmptyBlockedItemsFile(blockedFolder, FileUtil.BLOCKED_RIGHT_CLICKS_FILE);
+        tryCreateEmptyBlockedBlocksFile(blockedFolder, FileUtil.BLOCKED_BLOCKS_FILE);
         tryCreateEmptyTranslationFile(baseFolder, FileUtil.TRANSLATIONS_FILE);
     }
 
@@ -177,18 +180,18 @@ public class WriteConfigManager {
     }
 
     /**
-     * Creates a template blocked crafts file.
+     * Creates a template blocked items file.
      * @param folder the parent folder in which the file will be created
      * @param name the file name
      */
-    public static void tryCreateEmptyBlockedCraftFile(String folder, String name) {
+    public static void tryCreateEmptyBlockedItemsFile(String folder, String name) {
         new File(folder).mkdirs();
         File f = FileUtil.join(folder, name);
         if(f.exists())
             return;
         JsonObject json = new JsonObject();
-        JsonObject default1 = JsonUtil.blockedCraftToJSON(new BlockedCraftsData.BlockedCraft(2, Items.IRON_BOOTS, -1));
-        JsonObject default2 = JsonUtil.blockedCraftToJSON(new BlockedCraftsData.BlockedCraft(5, Items.DIAMOND_BOOTS, -1));
+        JsonObject default1 = JsonUtil.blockedItemToJSON(new BlockedData.ItemBlockedData(2, null, Items.IRON_BOOTS, -1));
+        JsonObject default2 = JsonUtil.blockedItemToJSON(new BlockedData.ItemBlockedData(5, null, Items.DIAMOND_BOOTS, -1));
         JsonArray array = new JsonArray();
         array.add(default1);
         array.add(default2);
@@ -202,14 +205,14 @@ public class WriteConfigManager {
      * @param folder the parent folder in which the file will be created
      * @param name the file name
      */
-    public static void tryCreateEmptyBlockedBlockFile(String folder, String name) {
+    public static void tryCreateEmptyBlockedBlocksFile(String folder, String name) {
         new File(folder).mkdirs();
         File f = FileUtil.join(folder, name);
         if(f.exists())
             return;
         JsonObject json = new JsonObject();
-        JsonObject default1 = JsonUtil.blockedBlockToJSON(new BlockedBlocksData.BlockedBlock(2, Blocks.IRON_BLOCK));
-        JsonObject default2 = JsonUtil.blockedBlockToJSON(new BlockedBlocksData.BlockedBlock(5, Blocks.DIAMOND_BLOCK));
+        JsonObject default1 = JsonUtil.blockedBlockToJSON(new BlockedData.BlockBlockedData(2, null, Blocks.IRON_BLOCK));
+        JsonObject default2 = JsonUtil.blockedBlockToJSON(new BlockedData.BlockBlockedData(5, null, Blocks.DIAMOND_BLOCK));
         JsonArray array = new JsonArray();
         array.add(default1);
         array.add(default2);

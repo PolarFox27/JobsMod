@@ -3,7 +3,6 @@ package net.polarfox27.jobs.gui.screens;
 
 import com.mojang.blaze3d.matrix.MatrixStack;
 import net.minecraft.client.Minecraft;
-import net.minecraft.client.gui.FontRenderer;
 import net.minecraft.client.gui.screen.Screen;
 import net.minecraft.client.renderer.RenderHelper;
 import net.minecraft.client.resources.I18n;
@@ -14,14 +13,13 @@ import net.minecraft.util.text.StringTextComponent;
 import net.minecraft.util.text.TextFormatting;
 import net.polarfox27.jobs.ModJobs;
 import net.polarfox27.jobs.data.ClientJobsData;
-import net.polarfox27.jobs.data.registry.UnlockStack;
+import net.polarfox27.jobs.data.registry.unlock.UnlockStack;
 import net.polarfox27.jobs.util.GuiUtil;
 import org.lwjgl.opengl.GL11;
 
 import java.awt.*;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.stream.Collectors;
 
 
 public class GuiLevelUp extends Screen {

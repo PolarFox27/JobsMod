@@ -15,7 +15,6 @@ import net.minecraft.util.text.TranslationTextComponent;
 import net.minecraft.world.World;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
-import net.minecraftforge.client.event.GuiOpenEvent;
 import net.minecraftforge.client.event.RenderGameOverlayEvent;
 import net.minecraftforge.event.entity.player.PlayerInteractEvent.RightClickBlock;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
@@ -23,7 +22,6 @@ import net.minecraftforge.fml.common.Mod.EventBusSubscriber;
 import net.polarfox27.jobs.data.ClientJobsData;
 import net.polarfox27.jobs.gui.GuiGainXP;
 import net.polarfox27.jobs.gui.containers.ContainerCraft;
-import net.polarfox27.jobs.gui.screens.GuiLevelUp;
 
 @EventBusSubscriber
 public class GuiEvents {
