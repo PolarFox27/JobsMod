@@ -2,10 +2,12 @@ package net.polarfox27.jobs.util.config;
 
 import com.google.gson.*;
 import net.minecraft.block.Block;
+import net.minecraft.block.Blocks;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityType;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
+import net.minecraft.item.Items;
 import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.registries.ForgeRegistries;
 import net.polarfox27.jobs.data.registry.RewardsData;
@@ -96,7 +98,7 @@ public class JsonUtil {
      */
     public static Optional<XPData.ItemXPData> itemXPDataFromJSON(JsonObject object){
         Item item = ForgeRegistries.ITEMS.getValue(new ResourceLocation(object.get("item").getAsString()));
-        if(item == null)
+        if(item == null || item == Items.AIR)
             return Optional.empty();
         int metadata = -1;
         if(object.has("metadata"))
@@ -126,7 +128,7 @@ public class JsonUtil {
      */
     public static Optional<XPData.BlockXPData> blockXPDataFromJSON(JsonObject object){
         Block block = ForgeRegistries.BLOCKS.getValue(new ResourceLocation(object.get("block").getAsString()));
-        if(block == null)
+        if(block == null || block == Blocks.AIR)
             return Optional.empty();
         JsonArray array = object.getAsJsonArray("xp");
         long[] xp = longArrayFromJSON(array);
