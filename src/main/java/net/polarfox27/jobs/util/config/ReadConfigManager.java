@@ -7,8 +7,10 @@ import net.polarfox27.jobs.ModJobs;
 import net.polarfox27.jobs.data.ServerJobsData;
 import net.polarfox27.jobs.data.registry.unlock.BlockBlockedRegistry;
 import net.polarfox27.jobs.data.registry.unlock.ItemBlockedRegistry;
+import net.polarfox27.jobs.data.registry.xp.XPData;
 import net.polarfox27.jobs.data.registry.xp.XPRegistry;
 
+import java.util.Arrays;
 import java.util.Map;
 
 public class ReadConfigManager {
@@ -78,6 +80,7 @@ public class ReadConfigManager {
             for(Map.Entry<String, JsonElement> e : object.entrySet()) {
                 for(JsonElement element : e.getValue().getAsJsonArray())
                     JsonUtil.itemXPDataFromJSON(element.getAsJsonObject())
+                            .filter(x -> registry.getXPDataByJob(e.getKey()).stream().map(XPData.ItemXPData::getItem).noneMatch(y -> y == x.getItem()))
                             .ifPresent(x -> registry.addDataForJob(e.getKey(), x));
             }
         }
@@ -88,7 +91,7 @@ public class ReadConfigManager {
     }
 
     /**
-     * Reads an Block XP registry json
+     * Reads a Block XP registry json
      * @param object the json object containing the configuration
      * @param registry the registry to configure
      */
@@ -98,6 +101,7 @@ public class ReadConfigManager {
             for(Map.Entry<String, JsonElement> e : object.entrySet()) {
                 for(JsonElement element : e.getValue().getAsJsonArray())
                     JsonUtil.blockXPDataFromJSON(element.getAsJsonObject())
+                            .filter(x -> registry.getXPDataByJob(e.getKey()).stream().map(XPData.BlockXPData::getBlock).noneMatch(y -> y == x.getBlock()))
                             .ifPresent(x -> registry.addDataForJob(e.getKey(), x));
             }
         }
@@ -118,6 +122,7 @@ public class ReadConfigManager {
             for(Map.Entry<String, JsonElement> e : object.entrySet()) {
                 for(JsonElement element : e.getValue().getAsJsonArray())
                     JsonUtil.entityXPDataFromJSON(element.getAsJsonObject())
+                            .filter(x -> registry.getXPDataByJob(e.getKey()).stream().map(XPData.EntityXPData::getEntity).noneMatch(y -> y == x.getEntity()))
                             .ifPresent(x -> registry.addDataForJob(e.getKey(), x));
             }
         }
@@ -153,9 +158,15 @@ public class ReadConfigManager {
     public static void loadLevels(JsonObject object){
         try{
             ServerJobsData.JOBS_LEVELS.clear();
-            for(Map.Entry<String, JsonElement> e : object.entrySet())
-                ServerJobsData.JOBS_LEVELS.addJobLevel(e.getKey(),
-                        JsonUtil.longArrayFromJSON(e.getValue().getAsJsonArray()));
+            for(Map.Entry<String, JsonElement> e : object.entrySet()) {
+                long[] levels = JsonUtil.longArrayFromJSON(e.getValue().getAsJsonArray(), false);
+                if(Arrays.stream(levels).anyMatch(x -> x == 0)){
+                    ModJobs.info("Error while reading file <" + FileUtil.LEVELS_FILE
+                            + "> : invalid value of 0 for job " + e.getKey() + " !", true);
+                    continue;
+                }
+                ServerJobsData.JOBS_LEVELS.addJobLevel(e.getKey(), levels);
+            }
         }
         catch(ClassCastException | IllegalStateException e){
             ModJobs.info("Error while reading file <" + FileUtil.LEVELS_FILE

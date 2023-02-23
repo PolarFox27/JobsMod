@@ -38,12 +38,15 @@ public class JsonUtil {
     /**
      * load a long array from a JSON array
      * @param jsonArray the array to convert
+     * @param allowNegative if false, all negative element will be replaced by zeros.
      * @return the long array
      */
-    public static long[] longArrayFromJSON(JsonArray jsonArray){
+    public static long[] longArrayFromJSON(JsonArray jsonArray, boolean allowNegative){
         long[] array = new long[jsonArray.size()];
-        for(int i = 0; i < array.length; i++)
-            array[i] = jsonArray.get(i).getAsLong();
+        for(int i = 0; i < array.length; i++) {
+            long x = jsonArray.get(i).getAsLong();
+            array[i] = allowNegative || x >= 0 ? x : 0;
+        }
         return array;
     }
 
@@ -104,7 +107,7 @@ public class JsonUtil {
         if(object.has("metadata"))
             metadata = object.get("metadata").getAsInt();
         JsonArray array = object.getAsJsonArray("xp");
-        long[] xp = longArrayFromJSON(array);
+        long[] xp = longArrayFromJSON(array, false);
         return Optional.of(new XPData.ItemXPData(xp, item, metadata));
     }
 
@@ -131,7 +134,7 @@ public class JsonUtil {
         if(block == null || block == Blocks.AIR)
             return Optional.empty();
         JsonArray array = object.getAsJsonArray("xp");
-        long[] xp = longArrayFromJSON(array);
+        long[] xp = longArrayFromJSON(array, false);
         return Optional.of(new XPData.BlockXPData(xp, block));
     }
 
@@ -158,7 +161,7 @@ public class JsonUtil {
         if(entity == null)
             return Optional.empty();
         JsonArray array = object.getAsJsonArray("xp");
-        long[] xp = longArrayFromJSON(array);
+        long[] xp = longArrayFromJSON(array, false);
         return Optional.of(new XPData.EntityXPData(xp, entity));
     }
 
