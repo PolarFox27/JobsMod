@@ -12,6 +12,11 @@
     </facet>
   </component>
   <component name="McpModuleSettings">
-    <option name="srgType" value="SRG" />
+    <option name="mappingFile" value="$MODULE_DIR$/../../build/createMcpToSrg/output.tsrg" />
+    <option name="mcpVersion" value="official_1.18.2" />
+    <option name="minecraftVersion" value="1.18.2" />
+    <option name="platformVersion" value="40.2.0" />
+    <option name="srgType" value="TSRG" />
   </component>
+  <component name="TestModuleProperties" production-module="JobsMod.main" />
 </module>

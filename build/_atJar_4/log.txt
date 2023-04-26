@@ -1,7 +1,0 @@
-Java Launcher: /home/dorian/.jdks/corretto-17.0.6/bin/java
-Arguments: '--inJar, /home/dorian/.gradle/caches/forge_gradle/minecraft_user_repo/net/minecraftforge/forge/1.18.2-40.2.0/forge-1.18.2-40.2.0-injected.jar, --outJar, /home/dorian/.gradle/caches/forge_gradle/minecraft_user_repo/net/minecraftforge/forge/1.18.2-40.2.0_mapped_official_1.18.2/forge-1.18.2-40.2.0_mapped_official_1.18.2.jar, --logFile, accesstransform.log, --atFile, /home/dorian/Desktop/Programmation/Mods/JobsMod/build/_atJar_4/parent_at.cfg'
-Classpath:
- - /home/dorian/.gradle/caches/forge_gradle/maven_downloader/net/minecraftforge/accesstransformers/8.0.7/accesstransformers-8.0.7-fatjar.jar
-Working directory: /home/dorian/Desktop/Programmation/Mods/JobsMod/build/_atJar_4
-Main class: net.minecraftforge.accesstransformer.TransformerProcessor
-====================================

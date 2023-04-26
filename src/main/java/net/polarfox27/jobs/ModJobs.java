@@ -1,24 +1,37 @@
 package net.polarfox27.jobs;
 
+import com.mojang.logging.LogUtils;
 import net.minecraft.ChatFormatting;
+import net.minecraft.world.level.block.Block;
+import net.minecraft.world.level.block.Blocks;
 import net.minecraftforge.common.MinecraftForge;
-import net.minecraftforge.event.server.ServerStartingEvent;
+import net.minecraftforge.event.RegistryEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
+import net.minecraftforge.fml.InterModComms;
 import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.event.lifecycle.FMLClientSetupEvent;
 import net.minecraftforge.fml.event.lifecycle.FMLCommonSetupEvent;
+import net.minecraftforge.fml.event.lifecycle.InterModEnqueueEvent;
+import net.minecraftforge.fml.event.lifecycle.InterModProcessEvent;
+import net.minecraftforge.event.server.ServerStartingEvent;
 import net.minecraftforge.fml.javafmlmod.FMLJavaModLoadingContext;
 import net.polarfox27.jobs.data.ServerJobsData;
 import net.polarfox27.jobs.util.config.ReadConfigManager;
 import net.polarfox27.jobs.util.handler.PacketHandler;
 import net.polarfox27.jobs.util.handler.RegistryHandler;
 import net.polarfox27.jobs.util.keybindings.KeyBindings;
+import org.slf4j.Logger;
 
-@Mod("jobs")
+import java.util.stream.Collectors;
+
+// The value here should match an entry in the META-INF/mods.toml file
+@Mod(ModJobs.MOD_ID)
 public class ModJobs {
-
     public static final String MOD_ID = "jobs";
 
+    /**
+     * Constructor of the Mod. All Event Handlers, Packet Handler and XP Registries are registered.
+     */
     public ModJobs() {
         RegistryHandler.registerListeners();
         info("Event Handlers Registered", false);
