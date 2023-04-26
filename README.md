@@ -3,7 +3,7 @@ Welcome to the Jobs GitHub ! In here you will find the source code of the mod, s
 ***
 Jobs is a mod that adds a jobs system to Minecraft, to give a new dimension of progress to your games. You will have to gain xp for each jobs to unlock items and blocks. The best part is that it is completely customizable ! You can create your own jobs and choose precisely which items you must unlock and how you gain xp for the different jobs.
 
-In the [wiki](https://github.com/PolarFox27/JobsMod/wiki), you will find a complete guide to configure the latest version of the mod for 1.16.5 (v3.0). Other versions are not recommended to use, but you can still find the documentation in the wiki if you really want to use them.
+In the [wiki](https://github.com/PolarFox27/JobsMod/wiki), you will find a complete guide to configure the latest version of the mod for 1.16.5 (v3.0) and 1.18.2 (still in beta). Other versions are not recommended to use, but you can still find the documentation in the wiki if you really want to use them.
 ***
 ### Quick Description:
 You can create jobs in the mod. The players will need to collect xp to level up their jobs. You can fully customize the levels of the jobs and the amount of xp required to level up. You can even choose your own names and icons for the jobs !
