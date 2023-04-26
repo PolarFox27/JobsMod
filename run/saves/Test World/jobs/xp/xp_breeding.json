@@ -1,6 +1,0 @@
-{
-	"hunter":[
-		{"entity":"minecraft:cow","xp":[5, 20, 3]},
-		{"entity":"minecraft:chicken","xp":[5, 0, 3]}
-	]
-}
