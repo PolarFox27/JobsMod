@@ -1,73 +1,59 @@
 package net.polarfox27.jobs;
 
-import com.mojang.logging.LogUtils;
-import net.minecraft.world.level.block.Block;
-import net.minecraft.world.level.block.Blocks;
+import net.minecraft.ChatFormatting;
 import net.minecraftforge.common.MinecraftForge;
-import net.minecraftforge.event.RegistryEvent;
-import net.minecraftforge.eventbus.api.SubscribeEvent;
-import net.minecraftforge.fml.InterModComms;
-import net.minecraftforge.fml.common.Mod;
-import net.minecraftforge.fml.event.lifecycle.FMLCommonSetupEvent;
-import net.minecraftforge.fml.event.lifecycle.InterModEnqueueEvent;
-import net.minecraftforge.fml.event.lifecycle.InterModProcessEvent;
 import net.minecraftforge.event.server.ServerStartingEvent;
+import net.minecraftforge.eventbus.api.SubscribeEvent;
+import net.minecraftforge.fml.common.Mod;
+import net.minecraftforge.fml.event.lifecycle.FMLClientSetupEvent;
+import net.minecraftforge.fml.event.lifecycle.FMLCommonSetupEvent;
 import net.minecraftforge.fml.javafmlmod.FMLJavaModLoadingContext;
-import org.slf4j.Logger;
+import net.polarfox27.jobs.data.ServerJobsData;
+import net.polarfox27.jobs.util.config.ReadConfigManager;
+import net.polarfox27.jobs.util.handler.PacketHandler;
+import net.polarfox27.jobs.util.handler.RegistryHandler;
+import net.polarfox27.jobs.util.keybindings.KeyBindings;
 
-import java.util.stream.Collectors;
-
-// The value here should match an entry in the META-INF/mods.toml file
 @Mod("jobs")
-public class ModJobs
-{
-    // Directly reference a slf4j logger
-    private static final Logger LOGGER = LogUtils.getLogger();
+public class ModJobs {
 
-    public ModJobs()
-    {
-        // Register the setup method for modloading
-        FMLJavaModLoadingContext.get().getModEventBus().addListener(this::setup);
-        // Register the enqueueIMC method for modloading
-        FMLJavaModLoadingContext.get().getModEventBus().addListener(this::enqueueIMC);
-        // Register the processIMC method for modloading
-        FMLJavaModLoadingContext.get().getModEventBus().addListener(this::processIMC);
+    public static final String MOD_ID = "jobs";
 
-        // Register ourselves for server and other game events we are interested in
+    public ModJobs() {
+        RegistryHandler.registerListeners();
+        info("Event Handlers Registered", false);
+        PacketHandler.registerPackets();
+        info("Packets Registered", false);
+        ServerJobsData.registerCommonXPRegistries();
+        info("Common XP Categories Registered", false);
         MinecraftForge.EVENT_BUS.register(this);
+        FMLJavaModLoadingContext.get().getModEventBus().addListener(this::setup);
+        FMLJavaModLoadingContext.get().getModEventBus().addListener(this::clientSetup);
     }
 
-    private void setup(final FMLCommonSetupEvent event)
-    {
-
-    }
-
-    private void enqueueIMC(final InterModEnqueueEvent event)
-    {
-        // Some example code to dispatch IMC to another mod
-    }
-
-    private void processIMC(final InterModProcessEvent event)
-    {
-
-    }
-
-    // You can use SubscribeEvent and let the Event Bus discover methods to call
     @SubscribeEvent
-    public void onServerStarting(ServerStartingEvent event)
-    {
-
+    public void setup(final FMLCommonSetupEvent event) {
     }
 
-    // You can use EventBusSubscriber to automatically subscribe events on the contained class (this is subscribing to the MOD
-    // Event bus for receiving Registry Events)
-    @Mod.EventBusSubscriber(bus = Mod.EventBusSubscriber.Bus.MOD)
-    public static class RegistryEvents
-    {
-        @SubscribeEvent
-        public static void onBlocksRegistry(final RegistryEvent.Register<Block> blockRegistryEvent)
-        {
+    @SubscribeEvent
+    public void clientSetup(final FMLClientSetupEvent event) {
+        KeyBindings.register();
+        info("Keybindings Registered", false);
+    }
 
-        }
+    @SubscribeEvent
+    public void serverStarting(ServerStartingEvent event) {
+        ReadConfigManager.readConfigFiles(event.getServer());
+        info("Configuration Loaded", false);
+    }
+
+    /**
+     * Prints a message to the console with [Jobs] appended in front, with color codes
+     * @param message the message to be printed
+     * @param isError if true, the message will be red
+     */
+    public static void info(String message, boolean isError) {
+        String msg = (isError ? ChatFormatting.RED : ChatFormatting.BLUE) + "[Jobs] ";
+        System.out.println(msg + message);
     }
 }

@@ -1,0 +1,37 @@
+{
+  "keys.jobs.category" : "Métiers",
+  "keys.jobs.open_gui" : "Ouvrir le Menu",
+
+  "text.level" : "niveau",
+  "text.levelup" : "Niveau Superieur",
+  "text.jobs.title" : "Métiers",
+  "text.level.max" : "Niveau Max",
+  "text.unlock_xp_lvl":"Debloqué au niveau",
+  "text.unlocked" : "Items/Blocs/Outils Débloqués",
+  "text.unlock_crafting" : "Craft Débloqué",
+  "text.unlock_breaking" : "Collecte Débloquée",
+  "text.unlock_equip" : "Equipement Débloqué",
+  "text.unlock_left_click" : "Clic Gauche Débloqué",
+  "text.unlock_right_click" : "Clic Droit Débloqué",
+  "text.unlock_crafting_lvl" : "Débloque le craft au niveau",
+  "text.unlock_breaking_lvl" : "Débloque la récolte au niveau",
+  "text.unlock_equip_lvl" : "Débloque l'équipement au niveau",
+  "text.unlock_left_click_lvl" : "Débloque le clic gauche au niveau",
+  "text.unlock_right_click_lvl" : "Débloque le clic droit au niveau",
+  "text.rewards" : "Récompenses",
+  "text.total_progression" : "Progression Totale",
+  "text.no_way_of_gaining_xp" : "Vous ne pouvez pas gagner d'XP pour ce métier",
+  "text.no_unlock": "Rien de debloqué",
+  "text.no_reward": "Pas de Récompenses",
+
+  "category.unlock" : "Items Bloqués",
+  "category.xp" : "Comment XP ?",
+
+  "category.crafting": "Craft",
+  "category.smelting": "Fonte/Cuisson",
+  "category.breaking": "Minage",
+  "category.harvesting": "Récolte",
+  "category.killing": "Chasse",
+  "category.breeding": "Elevage",
+  "category.fishing": "Pêche"
+}

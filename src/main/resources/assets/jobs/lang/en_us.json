@@ -1,0 +1,38 @@
+{
+  "keys.jobs.category" : "Jobs",
+  "keys.jobs.open_gui" : "Open Jobs Menu",
+
+  "text.level" : "level",
+  "text.levelup" : "Level Up",
+  "text.jobs.title" : "Jobs",
+  "text.level.max" : "Level Max",
+  "text.unlock_xp_lvl":"Unlock at lvl",
+  "text.unlocked" : "Unlocked Items/Blocks/Tools",
+  "text.unlock_crafting" : "Craft Unlocked",
+  "text.unlock_breaking" : "Harvest Unlocked",
+  "text.unlock_equip" : "Equipment Unlocked",
+  "text.unlock_left_click" : "Left Click Unlocked",
+  "text.unlock_right_click" : "Right Click Unlocked",
+  "text.unlock_crafting_lvl" : "Unlock crafting at lvl",
+  "text.unlock_breaking_lvl" : "Unlock harvesting at lvl",
+  "text.unlock_equip_lvl" : "Unlock equipment at lvl",
+  "text.unlock_left_click_lvl" : "Unlock left click at lvl",
+  "text.unlock_right_click_lvl" : "Unlock right click at lvl",
+  "text.rewards" : "Rewards",
+  "text.total_progression" : "Total Progression",
+  "text.no_way_of_gaining_xp" : "There is no way of gaining XP for this job",
+  "text.no_unlock": "Nothing Unlocked",
+  "text.no_reward": "No Rewards",
+
+  "category.unlock" : "Locked Items",
+  "category.xp" : "How to XP ?",
+
+  "category.crafting": "Crafting",
+  "category.smelting": "Smelting",
+  "category.breaking": "Mining",
+  "category.harvesting": "Harvesting",
+  "category.killing": "Killing",
+  "category.breeding": "Breeding",
+  "category.fishing": "Fishing"
+}
+
