@@ -6,6 +6,7 @@ import com.mojang.blaze3d.vertex.PoseStack;
 import net.minecraft.ChatFormatting;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.screens.Screen;
+import net.minecraft.client.renderer.GameRenderer;
 import net.minecraft.network.chat.Component;
 import net.minecraft.network.chat.TextComponent;
 import net.minecraft.world.item.ItemStack;
@@ -14,7 +15,6 @@ import net.polarfox27.jobs.ModJobs;
 import net.polarfox27.jobs.data.ClientJobsData;
 import net.polarfox27.jobs.data.registry.unlock.UnlockStack;
 import net.polarfox27.jobs.util.GuiUtil;
-import org.lwjgl.opengl.GL11;
 
 
 import java.awt.Color;
@@ -53,8 +53,9 @@ public class GuiLevelUp extends Screen {
      */
     @Override
     public void render(PoseStack mStack, int mouseX, int mouseY, float partialTicks) {
-        Minecraft.getInstance().getTextureManager().bindForSetup(TEXTURES);
-        GL11.glColor4f(1.0F, 1.0F, 1.0F, 1.0F);
+        RenderSystem.setShader(GameRenderer::getPositionTexShader);
+        RenderSystem.setShaderColor(1.0f, 1.0f, 1.0f, 1.0f);
+        RenderSystem.setShaderTexture(0, TEXTURES);
         this.blit(mStack, this.width/2 - 88, this.height/2 - 75, 0, 0, 176, 150); //background
 
 

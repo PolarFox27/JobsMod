@@ -1,0 +1,7 @@
+{
+  "hunter": [
+    {"item": "minecraft:cod", "xp": [2, 3, 0]},
+    {"item": "minecraft:salmon", "xp": [1, 2, 3]},
+    {"item": "minecraft:fishing_rod", "xp": [10, 20, 30]}
+  ]
+}

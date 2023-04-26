@@ -1,5 +1,6 @@
 package net.polarfox27.jobs.gui.buttons;
 
+import com.mojang.blaze3d.systems.RenderSystem;
 import com.mojang.blaze3d.vertex.PoseStack;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.components.Button;
@@ -8,7 +9,6 @@ import net.minecraft.resources.ResourceLocation;
 import net.polarfox27.jobs.ModJobs;
 import net.polarfox27.jobs.gui.screens.MainJobsMenu;
 import net.polarfox27.jobs.util.GuiUtil;
-import org.lwjgl.opengl.GL11;
 
 public class ButtonArrow extends Button {
 
@@ -40,8 +40,7 @@ public class ButtonArrow extends Button {
     @Override
     public void renderButton(PoseStack mStack, int mouseX, int mouseY, float partialTicks) {
         if (this.visible) {
-            GL11.glColor4f(1.0F, 1.0F, 1.0F, 1.0F);
-            Minecraft.getInstance().getTextureManager().bindForSetup(BACKGROUND);
+            RenderSystem.setShaderTexture(0, BACKGROUND);
             int x = this.isHoveredOrFocused() ? 17 : 0;
             int y = isUp ? 220 : 230;
             GuiUtil.drawTexture(mStack, gui, this.x, this.y, x, y, 17, 10);

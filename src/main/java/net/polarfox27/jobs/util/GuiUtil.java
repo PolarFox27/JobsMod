@@ -7,6 +7,7 @@ import com.mojang.math.Quaternion;
 import com.mojang.math.Vector3f;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.screens.Screen;
+import net.minecraft.client.renderer.GameRenderer;
 import net.minecraft.client.renderer.MultiBufferSource;
 import net.minecraft.client.renderer.entity.EntityRenderDispatcher;
 import net.minecraft.network.chat.TranslatableComponent;
@@ -16,7 +17,6 @@ import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 import net.polarfox27.jobs.ModJobs;
 import net.polarfox27.jobs.data.ClientJobsData;
-import org.lwjgl.opengl.GL11;
 
 import java.awt.Color;
 
@@ -68,11 +68,16 @@ public class GuiUtil {
 	 * @param size
 	 */
 	public static void drawJobIcon(PoseStack mStack, Screen gui, String job, int centerX, int centerY, int size) {
-		GL11.glColor4f(1.0F, 1.0F, 1.0F, 1.0F);
-		if(ClientJobsData.JOBS_ICONS.containsKey(job))
-			ClientJobsData.JOBS_ICONS.get(job).bind();
-		else
-			Minecraft.getInstance().getTextureManager().bindForSetup(DEFAULT_ICON);
+		if(ClientJobsData.JOBS_ICONS.containsKey(job)) {
+			RenderSystem.setShader(GameRenderer::getPositionTexShader);
+			RenderSystem.setShaderColor(1.0f, 1.0f, 1.0f, 1.0f);
+			RenderSystem.setShaderTexture(0, ClientJobsData.JOBS_ICONS.get(job).getId());
+		}
+		else {
+			RenderSystem.setShader(GameRenderer::getPositionTexShader);
+			RenderSystem.setShaderColor(1.0f, 1.0f, 1.0f, 1.0f);
+			RenderSystem.setShaderTexture(0, DEFAULT_ICON);
+		}
 		GuiUtil.drawScaledTexture(mStack, centerX-size/2, centerY-size/2, 0, 0, size, size, size, size);
 	}
 
@@ -142,14 +147,13 @@ public class GuiUtil {
 	 * @param scale
 	 */
 	public static void renderCenteredString(PoseStack mStack, String text, int color, int x, int y, float scale){
-		GL11.glPushMatrix();
-		GL11.glTranslatef(x, y, 0);
-		GL11.glScalef(scale, scale, scale);
-		GL11.glColor4f(1.0F, 1.0F, 1.0F, 1.0F);
+		mStack.pushPose();
+		mStack.translate(x, y, 0);
+		mStack.scale(scale, scale, scale);
 		float xPos = Minecraft.getInstance().font.width(text)/-2.0f;
 		float yPos = -4.5f;
 		Minecraft.getInstance().font.draw(mStack, text, xPos, yPos, color);
-		GL11.glPopMatrix();
+		mStack.popPose();
 	}
 
 	/**
@@ -181,7 +185,9 @@ public class GuiUtil {
 	 * @param text
 	 */
 	public static void renderProgressBarWithText(PoseStack mStack, Screen gui, int x, int y, int width, int height, long progress, long total, String text){
-		Minecraft.getInstance().getTextureManager().bindForSetup(GRADIENT_TEXTURE);
+		RenderSystem.setShader(GameRenderer::getPositionTexShader);
+		RenderSystem.setShaderColor(1.0f, 1.0f, 1.0f, 1.0f);
+		RenderSystem.setShaderTexture(0, GRADIENT_TEXTURE);
 		if(progress >= total)
 			drawTexture(mStack, gui, x, y, 0, 74, width, height); //full
 		else{
@@ -193,7 +199,7 @@ public class GuiUtil {
 	}
 
 	public static String translate(String key){
-		return new TranslatableComponent(key).getContents();
+		return new TranslatableComponent(key).getString();
 	}
 
 }

@@ -1,14 +1,15 @@
 package net.polarfox27.jobs.gui.buttons;
 
+import com.mojang.blaze3d.systems.RenderSystem;
 import com.mojang.blaze3d.vertex.PoseStack;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.components.Button;
+import net.minecraft.client.renderer.GameRenderer;
 import net.minecraft.network.chat.TextComponent;
 import net.minecraft.resources.ResourceLocation;
 import net.polarfox27.jobs.ModJobs;
 import net.polarfox27.jobs.gui.screens.SliderParent;
 import net.polarfox27.jobs.util.JobsUtil;
-import org.lwjgl.opengl.GL11;
 
 public class SlideBarButton extends Button {
 
@@ -49,8 +50,9 @@ public class SlideBarButton extends Button {
     public void renderButton(PoseStack mStack, int mouseX, int mouseY, float partialTicks) {
         if (this.visible) {
             boolean disabled = this.parent.getLastPage(isVertical) == 0;
-            GL11.glColor4f(1.0F, 1.0F, 1.0F, 1.0F);
-            Minecraft.getInstance().getTextureManager().bindForSetup(this.texture);
+            RenderSystem.setShader(GameRenderer::getPositionTexShader);
+            RenderSystem.setShaderColor(1.0F, 1.0F, 1.0F, 1.0F);
+            RenderSystem.setShaderTexture(0, this.texture);
 
             int textY = 0;
             int textX = isVertical ? 177 : 189;

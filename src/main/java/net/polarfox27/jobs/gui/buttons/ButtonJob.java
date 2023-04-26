@@ -1,13 +1,14 @@
 package net.polarfox27.jobs.gui.buttons;
 
+import com.mojang.blaze3d.systems.RenderSystem;
 import com.mojang.blaze3d.vertex.PoseStack;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.components.Button;
+import net.minecraft.client.renderer.GameRenderer;
 import net.minecraft.network.chat.TextComponent;
 import net.polarfox27.jobs.data.ClientJobsData;
 import net.polarfox27.jobs.gui.screens.GuiJobInfos;
 import net.polarfox27.jobs.util.GuiUtil;
-import org.lwjgl.opengl.GL11;
 
 import java.awt.Color;
 
@@ -42,7 +43,9 @@ public class ButtonJob extends Button {
     public void renderButton(PoseStack mStack, int mouseX, int mouseY, float partialTicks) {
     	if (this.visible) {
             float f = 1.0f;
-            GL11.glColor4f(f, f, f, 1.0F);
+
+            RenderSystem.setShader(GameRenderer::getPositionTexShader);
+            RenderSystem.setShaderColor(f, f, f, 1.0F);
             GuiUtil.drawJobIcon(mStack, Minecraft.getInstance().screen,
                     this.job, this.x+20, this.y+20, 32);
             long xp = ClientJobsData.playerJobs.getXPByJob(this.job);

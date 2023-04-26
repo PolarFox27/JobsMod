@@ -1,0 +1,11 @@
+{
+	"miner":[
+		{"block":"minecraft:iron_ore","level":2},
+		{"block":"minecraft:diamond_ore","level":6},
+		{"block":"minecraft:lapis_ore","level":8},
+		{"block":"minecraft:diamond_ore","level":11}
+	],
+	"alchemist":[
+		{"block":"minecraft:obsidian","level":2}
+	]
+}

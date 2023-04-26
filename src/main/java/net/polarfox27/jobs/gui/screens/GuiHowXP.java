@@ -1,10 +1,14 @@
 package net.polarfox27.jobs.gui.screens;
 
 
+import com.mojang.blaze3d.platform.GlStateManager;
+import com.mojang.blaze3d.systems.RenderSystem;
 import com.mojang.blaze3d.vertex.PoseStack;
 import net.minecraft.ChatFormatting;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.screens.Screen;
+import net.minecraft.client.gui.screens.inventory.InventoryScreen;
+import net.minecraft.client.renderer.GameRenderer;
 import net.minecraft.network.chat.Component;
 import net.minecraft.network.chat.TextComponent;
 import net.minecraft.world.entity.Entity;
@@ -21,7 +25,6 @@ import net.polarfox27.jobs.gui.buttons.ButtonBack;
 import net.polarfox27.jobs.gui.buttons.SlideBarButton;
 import net.polarfox27.jobs.util.GuiUtil;
 import net.polarfox27.jobs.util.JobsUtil;
-import org.lwjgl.opengl.GL11;
 
 
 import java.awt.Color;
@@ -100,12 +103,12 @@ public class GuiHowXP extends Screen implements SliderParent {
         this.tooltip.clear();
         this.left = this.width/2 - 88;
         this.top = this.height/2 - 75;
-        Minecraft.getInstance().getTextureManager().bindForSetup(BACKGROUND);
-        GL11.glColor4f(1.0F, 1.0F, 1.0F, 1.0F);
+        RenderSystem.setShader(GameRenderer::getPositionTexShader);
+        RenderSystem.setShaderColor(1.0f, 1.0f, 1.0f, 1.0f);
+        RenderSystem.setShaderTexture(0, BACKGROUND);
         this.blit(mStack, this.left, this.top, 0, 0, 176, 150);//background
         if(getLastPage(false) > 0)
             this.blit(mStack, this.left, this.top + 140, 0, 150, 176, 24);
-
 
         super.render(mStack, mouseX, mouseY, partialTicks);
         if(xpLists.stream().anyMatch(x -> !x.isEmpty())){
@@ -133,7 +136,9 @@ public class GuiHowXP extends Screen implements SliderParent {
      * @param mouseY the y coordinate of the mouse, used to find the tooltips to render
      */
     private void drawCategories(PoseStack mStack, int mouseX, int mouseY) {
-        Minecraft.getInstance().getTextureManager().bindForSetup(BACKGROUND);
+        RenderSystem.setShader(GameRenderer::getPositionTexShader);
+        RenderSystem.setShaderColor(1.0f, 1.0f, 1.0f, 1.0f);
+        RenderSystem.setShaderTexture(0, BACKGROUND);
         int size = 30*Math.min(this.categories.size(), 5) + Math.min(this.categories.size()-1, 4);
         int x = this.width/2 - 10 - size/2;
         int renderIndex = -1;
@@ -142,7 +147,9 @@ public class GuiHowXP extends Screen implements SliderParent {
             if(mouseX >= x + i*31 + 7 && mouseX < x + i*31 + 23 && mouseY >= this.top + 20 && mouseY < this.top + 36)
                 renderIndex = i;
             if(i < Math.min(this.categories.size()-1, 4) && this.categories.size() > 1) {
-                Minecraft.getInstance().getTextureManager().bindForSetup(BACKGROUND);
+                RenderSystem.setShader(GameRenderer::getPositionTexShader);
+                RenderSystem.setShaderColor(1.0f, 1.0f, 1.0f, 1.0f);
+                RenderSystem.setShaderTexture(0, BACKGROUND);
                 this.blit(mStack, x + i * 31 + 30, this.top + 38, 176, 0, 1, 100);
             }
         }

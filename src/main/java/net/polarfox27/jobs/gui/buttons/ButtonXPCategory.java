@@ -1,16 +1,17 @@
 package net.polarfox27.jobs.gui.buttons;
 
 
+import com.mojang.blaze3d.systems.RenderSystem;
 import com.mojang.blaze3d.vertex.PoseStack;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.components.Button;
+import net.minecraft.client.renderer.GameRenderer;
 import net.minecraft.network.chat.TextComponent;
 import net.minecraft.resources.ResourceLocation;
 import net.polarfox27.jobs.ModJobs;
 import net.polarfox27.jobs.gui.screens.GuiHowXP;
 import net.polarfox27.jobs.gui.screens.GuiJobInfos;
 import net.polarfox27.jobs.util.GuiUtil;
-import org.lwjgl.opengl.GL11;
 
 import java.awt.Color;
 
@@ -47,12 +48,16 @@ public class ButtonXPCategory extends Button {
     public void renderButton(PoseStack mStack, int mouseX, int mouseY, float partialTicks) {
     	if (this.visible) {
             boolean hovered = mouseX >= this.x && mouseY >= this.y && mouseX < this.x + this.width && mouseY < this.y + this.height;
-            Minecraft.getInstance().getTextureManager().bindForSetup(BACKGROUND);
+            RenderSystem.setShader(GameRenderer::getPositionTexShader);
+            RenderSystem.setShaderColor(1.0f, 1.0f, 1.0f, 1.0f);
+            RenderSystem.setShaderTexture(0, BACKGROUND);
             int i = this.xTexStart;
             int j = this.yTexStart;
-
-            if(hovered) GL11.glColor4f(0.8F, 0.8F, 0.8F, 1.0F);
-            else GL11.glColor4f(1.0F, 1.0F, 1.0F, 1.0F);
+            RenderSystem.setShader(GameRenderer::getPositionTexShader);
+            if(hovered)
+                RenderSystem.setShaderColor(0.8F, 0.8F, 0.8F, 1.0F);
+            else
+                RenderSystem.setShaderColor(1.0F, 1.0F, 1.0F, 1.0F);
 
             this.blit(mStack, this.x, this.y, i, j, 16, 16);
             String name = "category." + type.name().toLowerCase();

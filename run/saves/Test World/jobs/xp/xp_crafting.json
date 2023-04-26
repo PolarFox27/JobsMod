@@ -1,0 +1,10 @@
+{
+	"miner":[
+		{"item":"minecraft:book","xp":[1,2,3,4,0,0]},
+		{"item":"minecraft:stone_pickaxe","xp":[0,0,0,1,2,30]}
+	],
+	"hunter":[
+		{"item":"minecraft:book","xp":[2,2,2,2,2,2,1,1]},
+		{"item":"minecraft:iron_bars","xp":[0,0,4,2,10,2,0,0]}
+	]
+}

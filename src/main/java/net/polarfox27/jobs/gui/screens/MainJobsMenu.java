@@ -1,8 +1,10 @@
 package net.polarfox27.jobs.gui.screens;
 
+import com.mojang.blaze3d.systems.RenderSystem;
 import com.mojang.blaze3d.vertex.PoseStack;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.screens.Screen;
+import net.minecraft.client.renderer.GameRenderer;
 import net.minecraft.network.chat.TranslatableComponent;
 import net.minecraft.resources.ResourceLocation;
 import net.polarfox27.jobs.ModJobs;
@@ -11,7 +13,6 @@ import net.polarfox27.jobs.gui.buttons.ButtonArrow;
 import net.polarfox27.jobs.gui.buttons.ButtonJob;
 import net.polarfox27.jobs.util.GuiUtil;
 import net.polarfox27.jobs.util.JobsUtil;
-import org.lwjgl.opengl.GL11;
 
 import java.awt.Color;
 import java.util.ArrayList;
@@ -78,8 +79,9 @@ public class MainJobsMenu extends Screen {
      */
     @Override
     public void render(PoseStack mStack, int mouseX, int mouseY, float partialTicks) {
-    	GL11.glColor4f(1.0F, 1.0F, 1.0F, 1.0F);
-        Minecraft.getInstance().getTextureManager().bindForSetup(BACKGROUND);
+        RenderSystem.setShader(GameRenderer::getPositionTexShader);
+        RenderSystem.setShaderColor(1.0f, 1.0f, 1.0f, 1.0f);
+        RenderSystem.setShaderTexture(0, BACKGROUND);
         this.blit(mStack, this.width/2 - 128, this.height/2 - 110, 0, 0, 256, 220);
         GuiUtil.renderCenteredString(mStack, GuiUtil.translate("text.jobs.title"),
                 Color.black.getRGB(), this.width/2, this.height/2 - 95, 2.0f);
