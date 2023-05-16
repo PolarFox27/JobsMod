@@ -2,7 +2,6 @@ package net.polarfox27.jobs.gui.screens;
 
 import com.mojang.blaze3d.systems.RenderSystem;
 import com.mojang.blaze3d.vertex.PoseStack;
-import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.screens.Screen;
 import net.minecraft.client.renderer.GameRenderer;
 import net.minecraft.network.chat.TranslatableComponent;
@@ -72,10 +71,10 @@ public class MainJobsMenu extends Screen {
 
     /**
      * Renders the GUI on the screen
-     * @param mStack
-     * @param mouseX
-     * @param mouseY
-     * @param partialTicks
+     * @param mStack the render stack
+     * @param mouseX the x coordinate of the mouse
+     * @param mouseY the y coordinate of the mouse
+     * @param partialTicks the rendering ticks
      */
     @Override
     public void render(PoseStack mStack, int mouseX, int mouseY, float partialTicks) {

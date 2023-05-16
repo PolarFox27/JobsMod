@@ -65,7 +65,7 @@ public class ClientJobsData {
                 .stream()
                 .map(x -> (XPData)x)
                 .filter(x -> !x.createStack().isEmpty())
-                .collect(Collectors.toList());
+                .toList();
         List<XPData> ordered = new ArrayList<>();
         for(XPData x : unordered){
             boolean flag = true;

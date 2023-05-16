@@ -19,7 +19,7 @@ public class ButtonBack extends Button {
     private final int xTexStart;
     private final int yTexStart;
     private final int xDiffText;
-    private Screen parent;
+    private final Screen parent;
 
     /**
      * Creates a back arrow button
@@ -37,10 +37,10 @@ public class ButtonBack extends Button {
 
     /**
      * Renders the widget on the screen
-     * @param mStack
-     * @param mouseX
-     * @param mouseY
-     * @param partialTicks
+     * @param mStack the render stack
+     * @param mouseX the x coordinate of the mouse
+     * @param mouseY the y coordinate of the mouse
+     * @param partialTicks the rendering ticks
      */
     @Override
     public void renderButton(PoseStack mStack, int mouseX, int mouseY, float partialTicks) {
@@ -50,11 +50,9 @@ public class ButtonBack extends Button {
             RenderSystem.setShaderColor(1.0f, 1.0f, 1.0f, 1.0f);
             RenderSystem.setShaderTexture(0, BACKGROUND);
             int i = this.xTexStart;
-            int j = this.yTexStart;
-
             if (hovered)
                 i += this.xDiffText;
-            this.blit(mStack, this.x, this.y, i, j, this.width, this.height);
+            this.blit(mStack, this.x, this.y, i, this.yTexStart, this.width, this.height);
         }
     }
     
@@ -66,10 +64,9 @@ public class ButtonBack extends Button {
          */
         @Override
 		public void onPress(Button btn) {
-			if(!(btn instanceof ButtonBack))
+			if(!(btn instanceof ButtonBack button))
                 return;
-			ButtonBack button = (ButtonBack)btn;
-			if(button.parent instanceof GuiJobInfos)
+            if(button.parent instanceof GuiJobInfos)
 				Minecraft.getInstance().setScreen(new MainJobsMenu());
 			if(button.parent instanceof GuiHowXP)
 				Minecraft.getInstance().setScreen(new GuiJobInfos(((GuiHowXP)button.parent).job));

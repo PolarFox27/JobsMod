@@ -3,7 +3,6 @@ package net.polarfox27.jobs.commands;
 import com.mojang.brigadier.CommandDispatcher;
 import com.mojang.brigadier.arguments.LongArgumentType;
 import com.mojang.brigadier.arguments.StringArgumentType;
-import net.minecraft.commands.CommandSource;
 import net.minecraft.commands.CommandSourceStack;
 import net.minecraft.commands.Commands;
 import net.minecraft.commands.arguments.EntityArgument;
@@ -50,8 +49,7 @@ public class CommandAdd {
 										  target.connection.getConnection(),
 										  NetworkDirection.PLAY_TO_CLIENT);
         
-        if(source.getEntity() instanceof ServerPlayer) {
-        	ServerPlayer sender = (ServerPlayer)source.getEntity();
+        if(source.getEntity() instanceof ServerPlayer sender) {
 			String message = xp + " xp added to " + target.getName().getString() + " for job " + job;
         	PacketHandler.INSTANCE.sendTo(
 					new PacketSendChatMessage(

@@ -93,7 +93,7 @@ public class FileUtil {
     public static Optional<JsonObject> safeReadJSONFromFile(File f){
         try{
             if(f.exists())
-                return Optional.of(new JsonParser().parse(new FileReader(f)).getAsJsonObject());
+                return Optional.of(JsonParser.parseReader(new FileReader(f)).getAsJsonObject());
         }
         catch (FileNotFoundException e) {
             ModJobs.info("Error while reading file <" + f.getName() + "> : file doesn't exist !", true);

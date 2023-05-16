@@ -1,7 +1,6 @@
 package net.polarfox27.jobs.data.registry.xp;
 
 import net.minecraft.network.FriendlyByteBuf;
-import net.minecraft.network.chat.TranslatableComponent;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.item.Item;
@@ -12,9 +11,9 @@ import net.minecraft.world.level.block.CropBlock;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
-import net.minecraftforge.registries.ForgeRegistries;
 import net.polarfox27.jobs.util.GuiUtil;
 import net.polarfox27.jobs.util.JobsUtil;
+import net.polarfox27.jobs.util.config.JsonUtil;
 
 import java.util.Arrays;
 
@@ -96,9 +95,9 @@ public abstract class  XPData {
 
         /**
          * Constructs an XPData for an Item
-         * @param xp_values
-         * @param item
-         * @param metadata
+         * @param xp_values the amount of xp gained at each level
+         * @param item the item that gives the xp
+         * @param metadata the item metadata
          */
         public ItemXPData(long[] xp_values, Item item, int metadata) {
             super(xp_values);
@@ -159,7 +158,7 @@ public abstract class  XPData {
          */
         @Override
         public String toString() {
-            String s = ForgeRegistries.ITEMS.getKey(item).toString();
+            String s = JsonUtil.getRegistryName(item);
             if(metadata >= 0)
                 s += " (" + metadata + ")";
             return  s + " : " + super.toString();
@@ -173,8 +172,8 @@ public abstract class  XPData {
 
         /**
          * Constructs an XPData for a Block
-         * @param xp_values
-         * @param block
+         * @param xp_values the amount of xp gained at each level
+         * @param block the block that gives the xp
          */
         public BlockXPData(long[] xp_values, Block block) {
             super(xp_values);
@@ -184,9 +183,9 @@ public abstract class  XPData {
 
         /**
          * Constructs an XPData for a Block giving the option to register a Crops Block
-         * @param xp_values
-         * @param block
-         * @param isCrop
+         * @param xp_values the amount of xp gained at each level
+         * @param block the block that gives the xp
+         * @param isCrop whether this block is a crop or not
          */
         public BlockXPData(long[] xp_values, Block block, boolean isCrop) {
             super(xp_values);
@@ -247,8 +246,7 @@ public abstract class  XPData {
          */
         @Override
         public String toString() {
-            String s = ForgeRegistries.BLOCKS.getKey(block).toString();
-            return  s + " : " + super.toString();
+            return JsonUtil.getRegistryName(block) + " : " + super.toString();
         }
     }
 
@@ -258,8 +256,8 @@ public abstract class  XPData {
 
         /**
          * Constructs an XPData for an Entity
-         * @param xp_values
-         * @param type
+         * @param xp_values the amount of xp gained at each level
+         * @param type the entity that gives the xp
          */
         public EntityXPData(long[] xp_values, EntityType<? extends Entity> type) {
             super(xp_values);

@@ -1,13 +1,11 @@
 package net.polarfox27.jobs.gui.screens;
 
 
-import com.mojang.blaze3d.platform.GlStateManager;
 import com.mojang.blaze3d.systems.RenderSystem;
 import com.mojang.blaze3d.vertex.PoseStack;
 import net.minecraft.ChatFormatting;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.screens.Screen;
-import net.minecraft.client.gui.screens.inventory.InventoryScreen;
 import net.minecraft.client.renderer.GameRenderer;
 import net.minecraft.network.chat.Component;
 import net.minecraft.network.chat.TextComponent;
@@ -40,8 +38,8 @@ public class GuiHowXP extends Screen implements SliderParent {
     public final String job;
     public int verticalPage = 0;
     public int horizontalPage = 0;
-    private SlideBarButton verticalSlidebar;
-    private SlideBarButton horizontalSlidebar;
+    private SlideBarButton verticalSlideBar;
+    private SlideBarButton horizontalSlideBar;
     private final List<XPRegistry<? extends XPData>> categories = new ArrayList<>();
     private final List<List<XPData>> xpLists = new ArrayList<>();
     private final List<Component> tooltip = new ArrayList<>();
@@ -73,13 +71,13 @@ public class GuiHowXP extends Screen implements SliderParent {
      */
     @Override
     public void init() {
-        this.verticalSlidebar = new SlideBarButton(this.height/2 -45, this.height/2+45, this.width/2 + 65, this, true);
-        this.horizontalSlidebar = new SlideBarButton(this.width/2-73, this.width/2+44, this.height/2+66, this, false);
+        this.verticalSlideBar = new SlideBarButton(this.height/2 -45, this.height/2+45, this.width/2 + 65, this, true);
+        this.horizontalSlideBar = new SlideBarButton(this.width/2-73, this.width/2+44, this.height/2+66, this, false);
         this.clearWidgets();
         this.addRenderableWidget(new ButtonBack(this.width/2 - 83, this.height/2-70, this));
-        this.addRenderableWidget(verticalSlidebar);
+        this.addRenderableWidget(verticalSlideBar);
         if(getLastPage(false) > 0)
-            this.addRenderableWidget(horizontalSlidebar);
+            this.addRenderableWidget(horizontalSlideBar);
     }
 
     /**
@@ -93,10 +91,10 @@ public class GuiHowXP extends Screen implements SliderParent {
 
     /**
      * Renders the GUI on the screen
-     * @param mStack
-     * @param mouseX
-     * @param mouseY
-     * @param partialTicks
+     * @param mStack the render stack
+     * @param mouseX the x coordinate of the mouse
+     * @param mouseY the y coordinate of the mouse
+     * @param partialTicks the rendering ticks
      */
     @Override
     public void render(PoseStack mStack, int mouseX, int mouseY, float partialTicks) {
@@ -113,7 +111,7 @@ public class GuiHowXP extends Screen implements SliderParent {
         super.render(mStack, mouseX, mouseY, partialTicks);
         if(xpLists.stream().anyMatch(x -> !x.isEmpty())){
             this.drawCategories(mStack, mouseX, mouseY);
-            this.drawCategoriesStacks(mStack, mouseX, mouseY);
+            this.drawCategoriesStacks(mouseX, mouseY);
         }
         else{
             GuiUtil.renderCenteredString(mStack, GuiUtil.translate("text.no_way_of_gaining_xp"), Color.RED.getRGB(), this.width/2-10, this.height/2, 0.65f);
@@ -123,15 +121,15 @@ public class GuiHowXP extends Screen implements SliderParent {
         if(!tooltip.isEmpty())
             this.renderComponentTooltip(mStack, tooltip, mouseX, mouseY, Minecraft.getInstance().font);
 
-        if(isDragging(verticalSlidebar, mouseX, mouseY))
-            updateSlider(verticalSlidebar, mouseY);
-        if(isDragging(horizontalSlidebar, mouseX, mouseY))
-            updateSlider(horizontalSlidebar, mouseX);
+        if(isDragging(verticalSlideBar, mouseX, mouseY))
+            updateSlider(verticalSlideBar, mouseY);
+        if(isDragging(horizontalSlideBar, mouseX, mouseY))
+            updateSlider(horizontalSlideBar, mouseX);
     }
 
     /**
      * Renders the XP Categories on the screen
-     * @param mStack
+     * @param mStack the render stack
      * @param mouseX the x coordinate of the mouse, used to find the tooltips to render
      * @param mouseY the y coordinate of the mouse, used to find the tooltips to render
      */
@@ -159,11 +157,10 @@ public class GuiHowXP extends Screen implements SliderParent {
 
     /**
      * Renders the stacks for the XP Categories on the screen
-     * @param mStack
      * @param mouseX the x coordinate of the mouse, used to find the tooltips to render
      * @param mouseY the y coordinate of the mouse, used to find the tooltips to render
      */
-    private void drawCategoriesStacks(PoseStack mStack, int mouseX, int mouseY) {
+    private void drawCategoriesStacks(int mouseX, int mouseY) {
         int size = 30*Math.min(this.categories.size(), 5) + Math.min(this.categories.size()-1, 4);
         int p = this.width/2 - 3 - size/2;
         for(int i = 0; i < Math.min(this.categories.size(), 5); i++) {
@@ -175,7 +172,7 @@ public class GuiHowXP extends Screen implements SliderParent {
                 int y = this.top + 45 + (j - this.verticalPage)*18;
                 ItemStack stack = xps.get(j).createStack();
                 if(stack.getItem() == Items.BARRIER && stack.hasTag() && Minecraft.getInstance().level != null) {
-                    EntityType type = EntityType.byString(stack.getOrCreateTag().getString("entity"))
+                    EntityType<?> type = EntityType.byString(stack.getOrCreateTag().getString("entity"))
                             .orElse(null);
                     if(type == null)
                         continue;
@@ -183,7 +180,7 @@ public class GuiHowXP extends Screen implements SliderParent {
                             type.create(Minecraft.getInstance().level);
 
                      if(entity instanceof LivingEntity)
-                            GuiUtil.renderEntityInGui(x + 8, y + 16, 10,
+                            GuiUtil.renderEntityInGui(x + 8, y + 16, EntityType.COW,
                                     this.width/2.0F - mouseX, this.height/2.0F - mouseY,
                                     (LivingEntity) entity);
                 }
@@ -202,12 +199,12 @@ public class GuiHowXP extends Screen implements SliderParent {
                             .replace("[", "")
                             .replace("]", ""))
                             );
-                long xp = 0L;
+                long xp;
                 int lvl = ClientJobsData.playerJobs.getLevelByJob(this.job);
                 if (lvl < ClientJobsData.JOBS_LEVELS.getMaxLevel(job)) {
                     xp =  data.getXPByLevel(lvl);
                     if(xp != 0L)
-                        tooltip.add(new TextComponent(ChatFormatting.GREEN + "" + xp + " xp"));
+                        tooltip.add(new TextComponent(ChatFormatting.GREEN + Long.toString(xp) + " xp"));
                     else {
                         int unlockLevel = data.unlockingLevel(lvl);
                         if(unlockLevel > 0)
@@ -236,7 +233,7 @@ public class GuiHowXP extends Screen implements SliderParent {
         if (direction != 0) {
             int x = -1 * Integer.signum((int)direction);
             setPage(true, JobsUtil.clamp(this.verticalPage + x, 0, getLastPage(true)));
-            this.verticalSlidebar.update();
+            this.verticalSlideBar.update();
         }
         return true;
     }
@@ -262,7 +259,7 @@ public class GuiHowXP extends Screen implements SliderParent {
     /**
      * Updates the slider based on its current position
      * @param btn the slide bar button
-     * @param mousePos the position of mouse on the its main axis
+     * @param mousePos the position of mouse on its main axis
      */
     @Override
     public void updateSlider(SlideBarButton btn, int mousePos){
@@ -321,7 +318,7 @@ public class GuiHowXP extends Screen implements SliderParent {
             this.horizontalPage = JobsUtil.clamp(page, 0, getLastPage(false));
             if(prev != horizontalPage){
                 this.verticalPage = JobsUtil.clamp(this.verticalPage, 0, getLastPage(true));
-                this.verticalSlidebar.update();
+                this.verticalSlideBar.update();
             }
         }
     }

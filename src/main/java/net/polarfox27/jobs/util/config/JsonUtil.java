@@ -57,10 +57,52 @@ public class JsonUtil {
      */
     public static JsonObject itemStackToJSON(ItemStack stack){
         JsonObject object = new JsonObject();
-        object.addProperty("item", stack.getItem().getRegistryName().toString());
+        object.addProperty("item", getRegistryName(stack.getItem()));
         object.addProperty("count", stack.getCount());
         object.addProperty("metadata", stack.getDamageValue());
         return object;
+    }
+
+    /**
+     * Gets the registry name of an item
+     * @param item the item
+     * @return the registry name for the item, AIR otherwise
+     */
+    public static String getRegistryName(Item item){
+        if(item == null || item.getRegistryName() == null)
+            return "minecraft:air";
+        return item.getRegistryName().toString();
+    }
+
+    /**
+     * Gets the registry name of a block
+     * @param block the block
+     * @return the registry name for the block, AIR otherwise
+     */
+    public static String getRegistryName(Block block){
+        if(block == null || block.getRegistryName() == null)
+            return "minecraft:air";
+        return block.getRegistryName().toString();
+    }
+
+    /**
+     * Gets an item from its registry name
+     * @param name the item's registry name
+     * @return the item if one was found,  AIR otherwise
+     */
+    public static Item getItemFromRegistryName(String name){
+        Item item = ForgeRegistries.ITEMS.getValue(new ResourceLocation(name));
+        return item != null ? item : Items.AIR;
+    }
+
+    /**
+     * Gets a block from its registry name
+     * @param name the block's registry name
+     * @return the block if one was found,  AIR otherwise
+     */
+    public static Block getBlockFromRegistryName(String name){
+        Block block = ForgeRegistries.BLOCKS.getValue(new ResourceLocation(name));
+        return block != null ? block : Blocks.AIR;
     }
 
     /**
@@ -69,13 +111,11 @@ public class JsonUtil {
      * @return the created Item Stack
      */
     public static Optional<ItemStack> itemStackFromJSON(JsonObject object){
-        Item item = ForgeRegistries.ITEMS.getValue(new ResourceLocation(object.get("item").getAsString()));
-        if(item == null)
+        Item item = getItemFromRegistryName(object.get("item").getAsString());
+        if(item == Items.AIR)
             return Optional.empty();
         int count = object.get("count").getAsInt();
-        int metadata = -1;
-        if(object.has("metadata"))
-            metadata = object.get("metadata").getAsInt();
+        int metadata = object.has("metadata") ? object.get("metadata").getAsInt() : -1;
         return Optional.of(JobsUtil.itemStack(item, count, metadata));
     }
 
@@ -86,7 +126,7 @@ public class JsonUtil {
      */
     public static JsonObject itemXPDataToJSON(XPData.ItemXPData data){
         JsonObject object = new JsonObject();
-        object.addProperty("item", data.getItem().getRegistryName().toString());
+        object.addProperty("item", getRegistryName(data.getItem()));
         if(data.getMetadata() >= 0)
             object.addProperty("metadata", data.getMetadata());
         JsonArray array = longArrayToJSON(data.getXP_values());
@@ -100,8 +140,8 @@ public class JsonUtil {
      * @return the created Item XPData
      */
     public static Optional<XPData.ItemXPData> itemXPDataFromJSON(JsonObject object){
-        Item item = ForgeRegistries.ITEMS.getValue(new ResourceLocation(object.get("item").getAsString()));
-        if(item == null || item == Items.AIR)
+        Item item = getItemFromRegistryName(object.get("item").getAsString());
+        if(item == Items.AIR)
             return Optional.empty();
         int metadata = -1;
         if(object.has("metadata"))
@@ -118,7 +158,7 @@ public class JsonUtil {
      */
     public static JsonObject blockXPDataToJSON(XPData.BlockXPData data){
         JsonObject object = new JsonObject();
-        object.addProperty("block", data.getBlock().getRegistryName().toString());
+        object.addProperty("block", getRegistryName(data.getBlock()));
         JsonArray array = longArrayToJSON(data.getXP_values());
         object.add("xp", array);
         return object;
@@ -129,13 +169,13 @@ public class JsonUtil {
      * @param object the JSON object representing the Block XPData
      * @return the created Block XPData
      */
-    public static Optional<XPData.BlockXPData> blockXPDataFromJSON(JsonObject object){
-        Block block = ForgeRegistries.BLOCKS.getValue(new ResourceLocation(object.get("block").getAsString()));
-        if(block == null || block == Blocks.AIR)
+    public static Optional<XPData.BlockXPData> blockXPDataFromJSON(JsonObject object, boolean isCrop){
+        Block block = getBlockFromRegistryName(object.get("block").getAsString());
+        if(block == Blocks.AIR)
             return Optional.empty();
         JsonArray array = object.getAsJsonArray("xp");
         long[] xp = longArrayFromJSON(array, false);
-        return Optional.of(new XPData.BlockXPData(xp, block));
+        return Optional.of(new XPData.BlockXPData(xp, block, isCrop));
     }
 
     /**
@@ -172,7 +212,7 @@ public class JsonUtil {
      */
     public static JsonArray rewardToJSON(RewardsData.Reward reward){
         JsonArray stacks = new JsonArray();
-        for(ItemStack s : reward.getRewards())
+        for(ItemStack s : reward.rewards())
             stacks.add(itemStackToJSON(s));
         return stacks;
     }
@@ -199,7 +239,7 @@ public class JsonUtil {
      */
     public static JsonObject blockedItemToJSON(BlockedData.ItemBlockedData data){
         JsonObject object = new JsonObject();
-        object.addProperty("item", ForgeRegistries.ITEMS.getKey(data.getItem()).toString());
+        object.addProperty("item", getRegistryName(data.getItem()));
         if(data.getMetadata() >= 0)
             object.addProperty("metadata", data.getMetadata());
         object.addProperty("level", data.getLevel());
@@ -212,8 +252,8 @@ public class JsonUtil {
      * @return the created Blocked Item data
      */
     public static Optional<BlockedData.ItemBlockedData> blockedItemFromJSON(JsonObject object, BlockedData.Type type){
-        Item item = ForgeRegistries.ITEMS.getValue(new ResourceLocation(object.get("item").getAsString()));
-        if(item == null)
+        Item item = getItemFromRegistryName(object.get("item").getAsString());
+        if(item == Items.AIR)
             return Optional.empty();
         int metadata = -1;
         if(object.has("metadata"))
@@ -229,7 +269,7 @@ public class JsonUtil {
      */
     public static JsonObject blockedBlockToJSON(BlockedData.BlockBlockedData block){
         JsonObject object = new JsonObject();
-        object.addProperty("block", ForgeRegistries.BLOCKS.getKey(block.getBlock()).toString());
+        object.addProperty("block", getRegistryName(block.getBlock()));
         object.addProperty("level", block.getLevel());
         return object;
     }
@@ -240,8 +280,8 @@ public class JsonUtil {
      * @return the created Blocked Block data
      */
     public static Optional<BlockedData.BlockBlockedData> blockedBlockFromJSON(JsonObject object, BlockedData.Type type){
-        Block block = ForgeRegistries.BLOCKS.getValue(new ResourceLocation(object.get("block").getAsString()));
-        if(block == null)
+        Block block = getBlockFromRegistryName(object.get("block").getAsString());
+        if(block == Blocks.AIR)
             return Optional.empty();
         int level = object.get("level").getAsInt();
         return Optional.of(new BlockedData.BlockBlockedData(level, type, block));

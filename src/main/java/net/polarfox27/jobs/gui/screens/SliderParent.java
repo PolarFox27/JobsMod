@@ -25,17 +25,17 @@ public interface SliderParent {
 
     /**
      * Updates the slider based on its current position
-     * @param slidebar the slide bar button
+     * @param slideBar the slide bar button
      * @param position the new position of the slide bar on its main axis
      */
-    void updateSlider(SlideBarButton slidebar, int position);
+    void updateSlider(SlideBarButton slideBar, int position);
 
     /**
      * Checks if the player is dragging the slider
-     * @param slidebar the slide bar button
+     * @param slideBar the slide bar button
      * @param mouseX the x coordinate of the mouse
      * @param mouseY the y coordinate of the mouse
      * @return true if the slide bar is dragged
      */
-    boolean isDragging(SlideBarButton slidebar, int mouseX, int mouseY);
+    boolean isDragging(SlideBarButton slideBar, int mouseX, int mouseY);
 }

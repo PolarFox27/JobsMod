@@ -1,6 +1,5 @@
 package net.polarfox27.jobs.gui.screens;
 
-import com.mojang.blaze3d.platform.GlUtil;
 import com.mojang.blaze3d.systems.RenderSystem;
 import com.mojang.blaze3d.vertex.PoseStack;
 import net.minecraft.ChatFormatting;
@@ -36,7 +35,7 @@ public class GuiJobInfos extends Screen implements SliderParent{
     public int page;
     private final List<UnlockStack> unlocked_stacks;
 
-    private SlideBarButton slidebar;
+    private SlideBarButton slideBar;
 
     /**
      * Creates a Job Infos GUI
@@ -56,14 +55,14 @@ public class GuiJobInfos extends Screen implements SliderParent{
      */
     @Override
     public void init() {
-        this.slidebar = new SlideBarButton(this.top + 30, this.top+135, this.width/2 + 93, this, true);
+        this.slideBar = new SlideBarButton(this.top + 30, this.top+135, this.width/2 + 93, this, true);
         this.clearWidgets();
         this.addRenderableWidget(new ButtonBack(this.width/2 - 105 + offsetUnlock, this.height/2-85, this));
         this.addRenderableWidget(new ButtonXPCategory(this.width/2 - 84 + offsetUnlock, this.height/2 + 57, ButtonXPCategory.Type.XP, this));
         this.addRenderableWidget(new ButtonXPCategory(this.width/2 + 4 + offsetUnlock, this.height/2 + 57, ButtonXPCategory.Type.UNLOCK, this));
 
         if(offsetUnlock == -70) {
-            this.addRenderableWidget(slidebar);
+            this.addRenderableWidget(slideBar);
         }
         super.init();
     }
@@ -79,10 +78,10 @@ public class GuiJobInfos extends Screen implements SliderParent{
 
     /**
      * Renders the GUI on the screen
-     * @param mStack
-     * @param mouseX
-     * @param mouseY
-     * @param partialTicks
+     * @param mStack the render stack
+     * @param mouseX the x coordinate of the mouse
+     * @param mouseY the y coordinate of the mouse
+     * @param partialTicks the rendering ticks
      */
     @Override
     public void render(PoseStack mStack, int mouseX, int mouseY, float partialTicks) {
@@ -105,13 +104,13 @@ public class GuiJobInfos extends Screen implements SliderParent{
         if(offsetUnlock != 0)
             this.drawUnlockedItems(mStack, mouseX, mouseY);
 
-        if(isDragging(slidebar, mouseX, mouseY))
-            updateSlider(slidebar, mouseY);
+        if(isDragging(slideBar, mouseX, mouseY))
+            updateSlider(slideBar, mouseY);
     }
 
     /**
      * Renders the Unlocked Stacks
-     * @param mStack
+     * @param mStack the render stack
      * @param mouseX the x coordinate of the mouse, used to find the tooltip to render
      * @param mouseY the y coordinate of the mouse, used to find the tooltip to render
      */
@@ -129,13 +128,13 @@ public class GuiJobInfos extends Screen implements SliderParent{
 
     /**
      * Renders the progress bars of the Job
-     * @param mStack
+     * @param mStack the render stack
      */
     private void drawGradients(PoseStack mStack) {
         int lvl = ClientJobsData.playerJobs.getLevelByJob(job);
         boolean isMaxLevel = ClientJobsData.playerJobs.isMax(job);
         GuiUtil.renderCenteredString(mStack, ClientJobsData.getJobName(job), Color.BLACK.getRGB(), this.width/2 + offsetUnlock, this.top+15, 1.5f);
-        GuiUtil.drawJobIcon(mStack, this, this.job, this.width/2 + offsetUnlock, this.top + 48, 48);
+        GuiUtil.drawJobIcon(mStack, this.job, this.width/2 + offsetUnlock, this.top + 48, 48);
 
         String title1 = GuiUtil.translate("text.level") + " " + lvl;
         long progress1 = ClientJobsData.playerJobs.getXPByJob(job);
@@ -189,7 +188,7 @@ public class GuiJobInfos extends Screen implements SliderParent{
     	if (direction != 0 && offsetUnlock == -70) {
             int x = -1 * Integer.signum((int)direction);
             setPage(true, JobsUtil.clamp(this.page + x, 0, getLastPage(true)));
-            this.slidebar.update();
+            this.slideBar.update();
         }
     	return true;
     }

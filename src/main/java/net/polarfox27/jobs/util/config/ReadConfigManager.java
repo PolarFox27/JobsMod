@@ -56,9 +56,9 @@ public class ReadConfigManager {
         FileUtil.safeReadJSONFromFile(FileUtil.join(xpFolder, ServerJobsData.SMELTING_ITEMS_XP.getFileName()))
                 .ifPresent((obj) -> loadItemRegistry(obj, ServerJobsData.SMELTING_ITEMS_XP));
         FileUtil.safeReadJSONFromFile(FileUtil.join(xpFolder, ServerJobsData.BREAKING_BLOCKS_XP.getFileName()))
-                .ifPresent((obj) -> loadBlockRegistry(obj, ServerJobsData.BREAKING_BLOCKS_XP));
+                .ifPresent((obj) -> loadBlockRegistry(obj, ServerJobsData.BREAKING_BLOCKS_XP, false));
         FileUtil.safeReadJSONFromFile(FileUtil.join(xpFolder, ServerJobsData.HARVESTING_CROPS_XP.getFileName()))
-                .ifPresent((obj) -> loadBlockRegistry(obj, ServerJobsData.HARVESTING_CROPS_XP));
+                .ifPresent((obj) -> loadBlockRegistry(obj, ServerJobsData.HARVESTING_CROPS_XP, true));
         FileUtil.safeReadJSONFromFile(FileUtil.join(xpFolder, ServerJobsData.KILLING_ENTITY_XP.getFileName()))
                 .ifPresent((obj) -> loadEntityRegistry(obj, ServerJobsData.KILLING_ENTITY_XP));
         FileUtil.safeReadJSONFromFile(FileUtil.join(xpFolder, ServerJobsData.BREEDING_ENTITY_XP.getFileName()))
@@ -95,12 +95,12 @@ public class ReadConfigManager {
      * @param object the json object containing the configuration
      * @param registry the registry to configure
      */
-    public static void loadBlockRegistry(JsonObject object, XPRegistry.BlockXPRegistry registry){
+    public static void loadBlockRegistry(JsonObject object, XPRegistry.BlockXPRegistry registry, boolean isCrop){
         try{
             registry.clear();
             for(Map.Entry<String, JsonElement> e : object.entrySet()) {
                 for(JsonElement element : e.getValue().getAsJsonArray())
-                    JsonUtil.blockXPDataFromJSON(element.getAsJsonObject())
+                    JsonUtil.blockXPDataFromJSON(element.getAsJsonObject(), isCrop)
                             .filter(x -> registry.getXPDataByJob(e.getKey()).stream().map(XPData.BlockXPData::getBlock).noneMatch(y -> y == x.getBlock()))
                             .ifPresent(x -> registry.addDataForJob(e.getKey(), x));
             }

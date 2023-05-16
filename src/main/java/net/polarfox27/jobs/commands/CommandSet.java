@@ -70,9 +70,8 @@ public class CommandSet {
 										  target.connection.getConnection(),
 										  NetworkDirection.PLAY_TO_CLIENT);
         
-        if(source.getEntity() instanceof ServerPlayer) {
-        	ServerPlayer sender = (ServerPlayer)source.getEntity();
-        	int lvl = PlayerData.getPlayerJobs(target).getLevelByJob(job);
+        if(source.getEntity() instanceof ServerPlayer sender) {
+			int lvl = PlayerData.getPlayerJobs(target).getLevelByJob(job);
         	long xp = PlayerData.getPlayerJobs(target).getXPByJob(job);
 			String message = "Job " + job + " of " + target.getDisplayName().getString() + " set to lvl " + lvl + ", xp " + xp;
         	PacketHandler.INSTANCE.sendTo(

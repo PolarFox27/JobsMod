@@ -10,9 +10,8 @@ import java.util.function.Supplier;
 
 public class PacketAddXP{
 
-    private String job;
-    private long xpAdded;
-    public PacketAddXP(){}
+    private final String job;
+    private final long xpAdded;
 
     /**
      * Constructs a packet containing the xp added for a job

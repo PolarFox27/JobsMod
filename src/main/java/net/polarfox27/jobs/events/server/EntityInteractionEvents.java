@@ -24,14 +24,13 @@ public class EntityInteractionEvents {
     @SubscribeEvent
     public void onKill(LivingDeathEvent event) {
     	if(event.getEntityLiving().level.isClientSide() ||
-                !(event.getSource().getEntity() instanceof ServerPlayer))
+                !(event.getSource().getEntity() instanceof ServerPlayer p))
             return;
         if(event.getEntityLiving() instanceof Player &&
                 event.getSource().getEntity().equals(event.getEntityLiving()))
             return;
         EntityType<? extends Entity> type = event.getEntityLiving().getType();
 
-        ServerPlayer p = (ServerPlayer)event.getSource().getEntity();
         PlayerJobs jobs = PlayerData.getPlayerJobs(p);
 
         for(String job : jobs.getJobs()){
@@ -48,9 +47,9 @@ public class EntityInteractionEvents {
      */
     @SubscribeEvent
     public void onBreed(BabyEntitySpawnEvent event) {
-        if (event.getCausedByPlayer() == null || event.getCausedByPlayer().level.isClientSide())
+        if (event.getCausedByPlayer() == null || event.getCausedByPlayer().level.isClientSide()
+                || event.getChild() == null)
             return;
-        System.out.println("Breeding");
         EntityType<? extends Entity> type = event.getChild().getType();
 
         PlayerJobs jobs = PlayerData.getPlayerJobs(event.getCausedByPlayer());
@@ -59,7 +58,6 @@ public class EntityInteractionEvents {
             int level = jobs.getLevelByJob(job);
             long xp = ServerJobsData.BREEDING_ENTITY_XP.getXPByLevelAndJob(type, level, job);
             jobs.gainXP(job, xp, (ServerPlayer) event.getCausedByPlayer());
-            System.out.println("gaining " + xp + " xp");
         }
     }
 

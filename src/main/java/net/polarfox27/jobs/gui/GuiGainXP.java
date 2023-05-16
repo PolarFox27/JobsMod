@@ -29,7 +29,6 @@ public class GuiGainXP implements Widget {
      * Creates the GUI
      * @param job the job for which the player gained xp
      * @param xpAdded the amount of xp the player gained
-     * @param xpAdded the amount of xp the player gained
      */
     public GuiGainXP(String job, long xpAdded) {
         this.job = job;
@@ -38,8 +37,8 @@ public class GuiGainXP implements Widget {
 
     /**
      * Renders the GUI on the in-game GUI
-     * @param mStack
-     * @param partialTicks
+     * @param mStack the render stack
+     * @param partialTicks the rendering ticks
      */
     public void render(PoseStack mStack, int mouseX, int mouseY, float partialTicks) {
     	mStack.pushPose();

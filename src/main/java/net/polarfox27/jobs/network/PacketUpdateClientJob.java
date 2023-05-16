@@ -10,9 +10,7 @@ import java.util.function.Supplier;
 
 public class PacketUpdateClientJob{
 
-    private PlayerJobs jobs = null;
-
-    public PacketUpdateClientJob(){}
+    private final PlayerJobs jobs;
 
     /**
      * Constructs a packet containing the Jobs values

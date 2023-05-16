@@ -15,30 +15,28 @@ public class JobsUtil {
 
     /**
      * Clamps the value between the min and max and returns it.
-     * @param value
-     * @param min
-     * @param max
+     * @param value the value to clamp
+     * @param min the minimum allowed value (included)
+     * @param max the minimum allowed value (included)
      * @return the clamped value
      */
     public static long clamp(long value, long min, long max) {
         if(min == max) return min;
         if(value < min) return min;
-        if(value > max) return max;
-        else return value;
+        return Math.min(value, max);
     }
 
     /**
      * Clamps the value between the min and max and returns it.
-     * @param value
-     * @param min
-     * @param max
-     * @return
+     * @param value the value to clamp
+     * @param min the minimum allowed value (included)
+     * @param max the minimum allowed value (included)
+     * @return the clamped value
      */
     public static int clamp(int value, int min, int max) {
         if(min == max) return min;
         if(value < min) return min;
-        if(value > max) return max;
-        else return value;
+        return Math.min(value, max);
     }
 
     /**
@@ -86,10 +84,9 @@ public class JobsUtil {
      * @param length the length of the sub-array
      * @return the sub-array
      */
-    public static byte[] subarray(byte[] array, int index, int length){
+    public static byte[] subArray(byte[] array, int index, int length){
         byte[] result = new byte[length];
-        for(int i = 0; i < length; i++)
-            result[i] = array[index+i];
+        System.arraycopy(array, index, result, 0, length);
         return result;
     }
 
@@ -100,10 +97,9 @@ public class JobsUtil {
      * @param length the length of the sub-array
      * @return the sub-array
      */
-    public static long[] subarray(long[] array, int index, int length){
+    public static long[] subArray(long[] array, int index, int length){
         long[] result = new long[length];
-        for(int i = 0; i < length; i++)
-            result[i] = array[index+i];
+        System.arraycopy(array, index, result, 0, length);
         return result;
     }
 
@@ -114,8 +110,8 @@ public class JobsUtil {
      */
     public static byte[] toBytes(long[] values){
         byte[] result = new byte[0];
-        for(int i = 0; i < values.length; i++)
-            result = concat(result, Longs.toByteArray(values[i]));
+        for (long value : values)
+            result = concat(result, Longs.toByteArray(value));
         return result;
     }
 
@@ -129,7 +125,7 @@ public class JobsUtil {
         while(array.length % 8 != 0)
             array = concat(array, new byte[]{0});
         for(int i = 0; i < bytes.length; i += 8)
-            result = concat(result, new long[]{Longs.fromByteArray(subarray(array, i, 8))});
+            result = concat(result, new long[]{Longs.fromByteArray(subArray(array, i, 8))});
         return result;
     }
 
@@ -146,9 +142,9 @@ public class JobsUtil {
 
     /**
      * Constructs an item stack.
-     * @param item
-     * @param count
-     * @param metadata
+     * @param item the item in the itemStack
+     * @param count the amount of item
+     * @param metadata the metadata of the stack (e.g. item durability)
      * @return the item stack
      */
     public static ItemStack itemStack(Item item, int count, int metadata){

@@ -64,7 +64,8 @@ public class ContainerCraft extends RecipeBookMenu<CraftingContainer> {
 		if (!level.isClientSide) {
 			ServerPlayer serverplayer = (ServerPlayer)player;
 			ItemStack itemstack = ItemStack.EMPTY;
-			Optional<CraftingRecipe> optional = level.getServer().getRecipeManager().getRecipeFor(RecipeType.CRAFTING, craftingGrid, level);
+			Optional<CraftingRecipe> optional = level.getServer() == null ? Optional.empty() :
+					level.getServer().getRecipeManager().getRecipeFor(RecipeType.CRAFTING, craftingGrid, level);
 			if (optional.isPresent()) {
 				CraftingRecipe craftingrecipe = optional.get();
 				if (result.setRecipeUsed(level, serverplayer, craftingrecipe)) {
@@ -113,45 +114,45 @@ public class ContainerCraft extends RecipeBookMenu<CraftingContainer> {
 	public ItemStack quickMoveStack(Player player, int slotIndex) {
 		ItemStack itemstack = ItemStack.EMPTY;
 		Slot slot = this.slots.get(slotIndex);
-		if (slot != null && slot.hasItem()) {
-			ItemStack itemstack1 = slot.getItem();
-			itemstack = itemstack1.copy();
+		if (slot.hasItem()) {
+			ItemStack itemStack1 = slot.getItem();
+			itemstack = itemStack1.copy();
 			if (slotIndex == 0) {
 				this.access.execute((level, pos) -> {
-					itemstack1.getItem().onCraftedBy(itemstack1, level, player);
+					itemStack1.getItem().onCraftedBy(itemStack1, level, player);
 				});
-				if (!this.moveItemStackTo(itemstack1, 10, 46, true)) {
+				if (!this.moveItemStackTo(itemStack1, 10, 46, true)) {
 					return ItemStack.EMPTY;
 				}
 
-				slot.onQuickCraft(itemstack1, itemstack);
+				slot.onQuickCraft(itemStack1, itemstack);
 			} else if (slotIndex >= 10 && slotIndex < 46) {
-				if (!this.moveItemStackTo(itemstack1, 1, 10, false)) {
+				if (!this.moveItemStackTo(itemStack1, 1, 10, false)) {
 					if (slotIndex < 37) {
-						if (!this.moveItemStackTo(itemstack1, 37, 46, false)) {
+						if (!this.moveItemStackTo(itemStack1, 37, 46, false)) {
 							return ItemStack.EMPTY;
 						}
-					} else if (!this.moveItemStackTo(itemstack1, 10, 37, false)) {
+					} else if (!this.moveItemStackTo(itemStack1, 10, 37, false)) {
 						return ItemStack.EMPTY;
 					}
 				}
-			} else if (!this.moveItemStackTo(itemstack1, 10, 46, false)) {
+			} else if (!this.moveItemStackTo(itemStack1, 10, 46, false)) {
 				return ItemStack.EMPTY;
 			}
 
-			if (itemstack1.isEmpty()) {
+			if (itemStack1.isEmpty()) {
 				slot.set(ItemStack.EMPTY);
 			} else {
 				slot.setChanged();
 			}
 
-			if (itemstack1.getCount() == itemstack.getCount()) {
+			if (itemStack1.getCount() == itemstack.getCount()) {
 				return ItemStack.EMPTY;
 			}
 
-			slot.onTake(player, itemstack1);
+			slot.onTake(player, itemStack1);
 			if (slotIndex == 0) {
-				player.drop(itemstack1, false);
+				player.drop(itemStack1, false);
 			}
 		}
 

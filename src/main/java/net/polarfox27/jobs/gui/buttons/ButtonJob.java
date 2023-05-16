@@ -34,10 +34,10 @@ public class ButtonJob extends Button {
 
     /**
      * Renders the widget on the screen
-     * @param mStack
-     * @param mouseX
-     * @param mouseY
-     * @param partialTicks
+     * @param mStack the render stack
+     * @param mouseX the x coordinate of the mouse
+     * @param mouseY the y coordinate of the mouse
+     * @param partialTicks the rendering ticks
      */
     @Override
     public void renderButton(PoseStack mStack, int mouseX, int mouseY, float partialTicks) {
@@ -46,8 +46,7 @@ public class ButtonJob extends Button {
 
             RenderSystem.setShader(GameRenderer::getPositionTexShader);
             RenderSystem.setShaderColor(f, f, f, 1.0F);
-            GuiUtil.drawJobIcon(mStack, Minecraft.getInstance().screen,
-                    this.job, this.x+20, this.y+20, 32);
+            GuiUtil.drawJobIcon(mStack, this.job, this.x+20, this.y+20, 32);
             long xp = ClientJobsData.playerJobs.getXPByJob(this.job);
             int lvl = ClientJobsData.playerJobs.getLevelByJob(this.job);
             long total = lvl >= ClientJobsData.JOBS_LEVELS.getMaxLevel(this.job) ? xp :
@@ -60,7 +59,7 @@ public class ButtonJob extends Button {
 
     /**
      * Renders the Job name and level on the screen
-     * @param mStack
+     * @param mStack the render stack
      */
     private void drawName(PoseStack mStack) {
         int lvl = ClientJobsData.playerJobs.getLevelByJob(this.job);
@@ -78,10 +77,9 @@ public class ButtonJob extends Button {
          */
         @Override
 		public void onPress(Button btn) {
-			if(!(btn instanceof ButtonJob))
+			if(!(btn instanceof ButtonJob b))
                 return;
-            ButtonJob b = (ButtonJob)btn;
-			Minecraft.getInstance().setScreen(new GuiJobInfos(b.job));
+            Minecraft.getInstance().setScreen(new GuiJobInfos(b.job));
 		}
     	
     }

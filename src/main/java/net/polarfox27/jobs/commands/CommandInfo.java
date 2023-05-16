@@ -41,9 +41,8 @@ public class CommandInfo {
 	 * @param target the player whom information will be printed to the source
 	 */
 	private static void showInfos(CommandSourceStack source, ServerPlayer target) {
-		if(!(source.getEntity() instanceof ServerPlayer))
+		if(!(source.getEntity() instanceof ServerPlayer sender))
 			return;
-		ServerPlayer sender = (ServerPlayer)source.getEntity();
 		PlayerJobs infos = PlayerData.getPlayerJobs(target);
 
 		if(sender.getGameProfile().getId().equals(target.getGameProfile().getId()))

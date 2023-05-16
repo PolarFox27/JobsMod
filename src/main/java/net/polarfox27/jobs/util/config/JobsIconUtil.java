@@ -25,8 +25,8 @@ public class JobsIconUtil {
     public static void loadJobsIcon(MinecraftServer server){
         Map<String, byte[]> map = ServerJobsData.JOBS_ICONS;
         File folder = new File(FileUtil.getIconFolder(server));
-        if(!folder.exists())
-            folder.mkdirs();
+        if(folder.mkdirs())
+            ModJobs.warning("Icons folder was created");
         if(folder.isDirectory()){
             for(String job : ServerJobsData.JOBS_LEVELS.getJobs()){
                 File file = FileUtil.join(folder.getAbsolutePath(), job + ".png");

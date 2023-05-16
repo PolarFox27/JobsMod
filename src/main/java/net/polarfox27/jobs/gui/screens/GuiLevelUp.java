@@ -46,10 +46,10 @@ public class GuiLevelUp extends Screen {
 
     /**
      * Renders the GUI on the screen
-     * @param mStack
-     * @param mouseX
-     * @param mouseY
-     * @param partialTicks
+     * @param mStack the render stack
+     * @param mouseX the x coordinate of the mouse
+     * @param mouseY the y coordinate of the mouse
+     * @param partialTicks the rendering ticks
      */
     @Override
     public void render(PoseStack mStack, int mouseX, int mouseY, float partialTicks) {
@@ -60,7 +60,7 @@ public class GuiLevelUp extends Screen {
 
 
         
-        GuiUtil.drawJobIcon(mStack, this, job, this.width/2, this.height/2-47, 40);
+        GuiUtil.drawJobIcon(mStack, job, this.width/2, this.height/2-47, 40);
         String lvl = GuiUtil.translate("text.level") + " " + ClientJobsData.playerJobs.getLevelByJob(job);
         GuiUtil.renderProgressBarWithText(mStack, this, this.width/2 - 75, this.height/2 - 25, 150, 12, 1, 1, lvl);
 
@@ -76,7 +76,7 @@ public class GuiLevelUp extends Screen {
 
     /**
      * Renders the Unlocked stacks of the screen
-     * @param mStack
+     * @param mStack the render stack
      * @param mouseX the x coordinate of the mouse, used to find the tooltip to render
      * @param mouseY the y coordinate of the mouse, used to find the tooltip to render
      */
@@ -105,7 +105,7 @@ public class GuiLevelUp extends Screen {
 
     /**
      * Renders the rewards stacks on the screen
-     * @param mStack
+     * @param mStack the render stack
      * @param mouseX the x coordinate of the mouse, used to find the tooltip to render
      * @param mouseY the y coordinate of the mouse, used to find the tooltip to render
      */
@@ -134,7 +134,7 @@ public class GuiLevelUp extends Screen {
 
     /**
      * Renders the tooltip for the hovered UnlockStack
-     * @param mStack
+     * @param mStack the render stack
      * @param stack the hovered UnlockStack
      * @param x the x coordinate of the mouse
      * @param y the y coordinate of the mouse
@@ -148,7 +148,7 @@ public class GuiLevelUp extends Screen {
 
     /**
      * Renders the tooltip and the count for the hovered reward
-     * @param mStack
+     * @param mStack the render stack
      * @param stack the hovered stack
      * @param x the x coordinate of the mouse
      * @param y the y coordinate of the mouse
@@ -157,7 +157,7 @@ public class GuiLevelUp extends Screen {
         List<Component> tooltips = new ArrayList<>();
 
         tooltips.add(new TextComponent(stack.getDisplayName().getString().replace("[", "").replace("]", "")));
-        tooltips.add(new TextComponent(ChatFormatting.GREEN + "" + stack.getCount()));
+        tooltips.add(new TextComponent(ChatFormatting.GREEN + Integer.toString(stack.getCount())));
 
         this.renderComponentTooltip(mStack, tooltips, x, y, Minecraft.getInstance().font);
     }

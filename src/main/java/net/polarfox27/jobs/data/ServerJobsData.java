@@ -1,9 +1,7 @@
 package net.polarfox27.jobs.data;
 
 import net.minecraft.server.level.ServerPlayer;
-import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.Items;
-import net.minecraftforge.event.entity.player.PlayerEvent;
 import net.minecraftforge.network.NetworkDirection;
 import net.polarfox27.jobs.data.registry.LevelData;
 import net.polarfox27.jobs.data.registry.RewardsData;

@@ -68,25 +68,20 @@ public class WriteConfigManager {
      * @param type the xp registry type (see types above)
      */
     public static void tryCreateEmptyXPFile(String folder, String name, int type) {
-        new File(folder).mkdirs();
+        if(new File(folder).mkdirs())
+            ModJobs.warning("Empty XP folder created");
         File f = FileUtil.join(folder, name);
         if(f.exists())
             return;
         JsonObject json = new JsonObject();
-        JsonObject defaultProperty = new JsonObject();
+        JsonObject defaultProperty;
         long[] base_xp = new long[]{1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20};
-        switch(type){
-            case 0:
-                defaultProperty = JsonUtil.itemXPDataToJSON(new XPData.ItemXPData(base_xp, Items.GOLDEN_APPLE, -1));
-                break;
-            case 1:
-                defaultProperty = JsonUtil.blockXPDataToJSON(new XPData.BlockXPData(base_xp, Blocks.COAL_ORE));
-                break;
-            case 2:
-                defaultProperty = JsonUtil.entityXPDataToJSON(new XPData.EntityXPData(base_xp, EntityType.COW));
-                break;
-            default:
-                return;
+        switch (type) {
+            case 0 -> defaultProperty = JsonUtil.itemXPDataToJSON(new XPData.ItemXPData(base_xp,
+                    Items.GOLDEN_APPLE, -1));
+            case 1 -> defaultProperty = JsonUtil.blockXPDataToJSON(new XPData.BlockXPData(base_xp, Blocks.COAL_ORE));
+            case 2 -> defaultProperty = JsonUtil.entityXPDataToJSON(new XPData.EntityXPData(base_xp, EntityType.COW));
+            default -> defaultProperty = new JsonObject();
         }
         JsonArray array1 = new JsonArray();
         array1.add(defaultProperty);
@@ -101,12 +96,12 @@ public class WriteConfigManager {
      * @param name the file name
      */
     public static void tryCreateEmptyLevelFile(String folder, String name) {
-        new File(folder).mkdirs();
+        if(new File(folder).mkdirs())
+            ModJobs.warning("Base folder created !");
         File f = FileUtil.join(folder, name);
         if(f.exists())
             return;
         JsonObject json = new JsonObject();
-        JsonObject defaultProperty = new JsonObject();
 
         JsonArray array = new JsonArray();
         for(int i = 0; i < 20; i++)
@@ -126,7 +121,8 @@ public class WriteConfigManager {
      * @param name the file name
      */
     public static void tryCreateEmptyTranslationFile(String folder, String name) {
-        new File(folder).mkdirs();
+        if(new File(folder).mkdirs())
+            ModJobs.warning("Base folder created");
         File f = FileUtil.join(folder, name);
         if(f.exists())
             return;
@@ -158,7 +154,8 @@ public class WriteConfigManager {
      * @param name the file name
      */
     public static void tryCreateEmptyRewardFile(String folder, String name) {
-        new File(folder).mkdirs();
+        if(new File(folder).mkdirs())
+            ModJobs.warning("Base folder created");
         File f = FileUtil.join(folder, name);
         if(f.exists())
             return;
@@ -185,7 +182,8 @@ public class WriteConfigManager {
      * @param name the file name
      */
     public static void tryCreateEmptyBlockedItemsFile(String folder, String name) {
-        new File(folder).mkdirs();
+        if(new File(folder).mkdirs())
+            ModJobs.warning("Blocked Items folder created");
         File f = FileUtil.join(folder, name);
         if(f.exists())
             return;
@@ -206,7 +204,8 @@ public class WriteConfigManager {
      * @param name the file name
      */
     public static void tryCreateEmptyBlockedBlocksFile(String folder, String name) {
-        new File(folder).mkdirs();
+        if(new File(folder).mkdirs())
+            ModJobs.warning("Blocked Items folder created");
         File f = FileUtil.join(folder, name);
         if(f.exists())
             return;
