@@ -19,6 +19,6 @@
 		{"entity":"minecraft:endermite","xp":[1]},
 		{"entity":"minecraft:villager","xp":[1]},
 		{"entity":"minecraft:pillager","xp":[1]},
-		{"entity":"minecraft:ender_dragon","xp":[1]},
+		{"entity":"minecraft:ender_dragon","xp":[1]}
 	]
 }

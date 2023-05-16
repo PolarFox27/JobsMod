@@ -2,9 +2,5 @@
 	"job.miner":{"en_us":"Miner","fr_fr":"Mineur"},
 	"job.farmer":{"en_us":"Farmer","fr_fr":"Fermier"},
 	"job.alchemist":{"en_us":"Alchemist","fr_fr":"Alchimiste"},
-	"job.hunter":{"en_us":"Hunter","fr_fr":"Chasseur"},
-	"job.miner2":{"en_us":"Miner v2","fr_fr":"Mineur v2"},
-	"job.farmer2":{"en_us":"Farmer v2","fr_fr":"Fermier v2"},
-	"job.alchemist2":{"en_us":"Alchemist v2","fr_fr":"Alchimiste v2"},
-	"job.hunter2":{"en_us":"Hunter v2","fr_fr":"Chasseur v2"}
+	"job.hunter":{"en_us":"Hunter","fr_fr":"Chasseur"}
 }
