@@ -12,9 +12,9 @@ apply plugin: 'net.minecraftforge.gradle'
 apply plugin: 'eclipse'
 apply plugin: 'maven-publish'
 
-version = '3.0-1.16.5-1.0'
+version = '1.16.5-3.0.1'
 group = 'net.polarfox27.jobs' // http://maven.apache.org/guides/mini/guide-naming-conventions.html
-archivesBaseName = 'jobs'
+archivesBaseName = 'Jobs'
 
 java.toolchain.languageVersion = JavaLanguageVersion.of(8) // Mojang ships Java 8 to end users, so your mod should target Java 8.
 
