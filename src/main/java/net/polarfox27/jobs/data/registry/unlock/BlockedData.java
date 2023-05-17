@@ -124,7 +124,7 @@ public abstract class BlockedData {
         }
 
         /**
-         * Checks if an Block state matches this blocked data
+         * Checks if a Block state matches this blocked data
          * @param state the state to check
          * @return true if the state matches this blocked block data
          */

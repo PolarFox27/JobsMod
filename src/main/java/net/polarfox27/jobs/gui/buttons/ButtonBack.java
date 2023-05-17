@@ -18,7 +18,7 @@ public class ButtonBack extends Button {
     private final int xTexStart;
     private final int yTexStart;
     private final int xDiffText;
-    private Screen parent;
+    private final Screen parent;
 
     /**
      * Creates a back arrow button
@@ -36,10 +36,10 @@ public class ButtonBack extends Button {
 
     /**
      * Renders the widget on the screen
-     * @param mStack
-     * @param mouseX
-     * @param mouseY
-     * @param partialTicks
+     * @param mStack the render stack
+     * @param mouseX the x coordinate of the mouse
+     * @param mouseY the y coordinate of the mouse
+     * @param partialTicks the render ticks
      */
     @Override
     public void renderButton(MatrixStack mStack, int mouseX, int mouseY, float partialTicks) {
@@ -47,12 +47,8 @@ public class ButtonBack extends Button {
             boolean hovered = mouseX >= this.x && mouseY >= this.y && mouseX < this.x + this.width && mouseY < this.y + this.height;
             Minecraft.getInstance().getTextureManager().bind(BACKGROUND);
             GL11.glColor4f(1.0F, 1.0F, 1.0F, 1.0F);
-            int i = this.xTexStart;
-            int j = this.yTexStart;
-
-            if (hovered)
-                i += this.xDiffText;
-            this.blit(mStack, this.x, this.y, i, j, this.width, this.height);
+            int i = hovered ? this.xDiffText + this.xTexStart : this.xTexStart;
+            this.blit(mStack, this.x, this.y, i, yTexStart, this.width, this.height);
         }
     }
     

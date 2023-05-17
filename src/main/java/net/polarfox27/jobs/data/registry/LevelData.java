@@ -59,7 +59,7 @@ public class LevelData {
 
     /**
      * Gets the maximum level a player can reach in a certain job
-     * @param job
+     * @param job the job
      * @return the maximum possible level of that job
      */
     public int getMaxLevel(String job){
@@ -128,18 +128,6 @@ public class LevelData {
         if(!exists(job) || total < 1)
             return 0;
         return this.LEVELS_BY_JOB.get(job).getCurrentXPFromTotal(total);
-    }
-
-    /**
-     * Gets the xp the player needs to level up for a job from its total xp for that job
-     * @param job the current job
-     * @param total the total xp of the player
-     * @return the xp needed to level up for that job
-     */
-    public long getMissingXPFromTotal(String job, long total){
-        if(!exists(job) || total < 1)
-            return 0;
-        return this.LEVELS_BY_JOB.get(job).getMissingXPFromTotal(total);
     }
 
     /**
@@ -218,7 +206,7 @@ public class LevelData {
             if(level < 1)
                 return 0;
             int lvl = JobsUtil.clamp(level, 1, this.getMaxLevel());
-            return Arrays.stream(JobsUtil.subarray(XP_BY_LEVEL, 0, level)).sum();
+            return Arrays.stream(JobsUtil.subArray(XP_BY_LEVEL, 0, lvl)).sum();
         }
 
         /**
@@ -242,18 +230,6 @@ public class LevelData {
             for(int i = getMaxLevel(); i >= 0; i--)
                 if(getTotalXPForLevel(i) <= total)
                     return total - getTotalXPForLevel(i);
-            return 0;
-        }
-
-        /**
-         * Gets the missing xp a player needs to reach the next level from its total xp
-         * @param total the total xp of the player
-         * @return the xp needed to level up
-         */
-        private long getMissingXPFromTotal(long total){
-            for(int i = getMaxLevel()-1; i >= 0; i--)
-                if(getTotalXPForLevel(i) <= total)
-                    return getTotalXPForLevel(i+1) - total;
             return 0;
         }
 

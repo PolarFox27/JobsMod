@@ -57,8 +57,8 @@ public class RewardsData {
 
         /**
          * Creates a Reward list for a specific level
-         * @param level
-         * @param rewards
+         * @param level the level at which the reward will be received
+         * @param rewards the items the player will receive with this reward
          */
         public Reward(int level, List<ItemStack> rewards) {
             this.level = level;

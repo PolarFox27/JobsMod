@@ -43,7 +43,7 @@ public class GuiEvents {
             if(ClientJobsData.playerJobs.isMax(toShow.getFirst()))
                 return;
             GuiGainXP gui = new GuiGainXP(toShow.getFirst(), toShow.getSecond());
-            gui.render(new MatrixStack(), 0.0f);
+            gui.render(new MatrixStack());
         }
     }
 

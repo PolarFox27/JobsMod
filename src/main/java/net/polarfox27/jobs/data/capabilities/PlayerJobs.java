@@ -112,16 +112,6 @@ public class PlayerJobs {
 		return this.XP.getOrDefault(j, 0L);
 	}
 
-
-	/**
-	 * Get the missing xp the player needs in that job to level up
-	 * @param j the job
-	 * @return the player's missing xp
-	 */
-	public long getMissingXPForJob(String j) {
-		return this.levelData.getMissingXPFromTotal(j, this.getTotalXPByJob(j));
-	}
-
 	/**
 	 * Adds xp to a job
 	 * @param j the job
@@ -165,7 +155,7 @@ public class PlayerJobs {
 			giveReward(p, j, LVL);
 		}
 
-		if(LVL == levelData.getMaxLevel(j)) {
+		if(LVL == levelData.getMaxLevel(j) && p.getServer() != null) {
 			for(ServerPlayerEntity mp : p.getServer().getPlayerList().getPlayers()) {
 				String message = TextFormatting.DARK_PURPLE + p.getName().getString() +
 						TextFormatting.BLUE + " has reached level " + levelData.getMaxLevel(j) + "for the job " + j + " !";

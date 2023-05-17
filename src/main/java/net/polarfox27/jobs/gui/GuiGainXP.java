@@ -20,13 +20,12 @@ public class GuiGainXP extends AbstractGui {
 
     public static final ResourceLocation TEXTURE = new ResourceLocation(ModJobs.MOD_ID, "textures/gui/gui_gain_xp.png");
 
-    private String job;
-    private long xp;
+    private final String job;
+    private final long xp;
 
     /**
      * Creates the GUI
      * @param job the job for which the player gained xp
-     * @param xpAdded the amount of xp the player gained
      * @param xpAdded the amount of xp the player gained
      */
     public GuiGainXP(String job, long xpAdded) {
@@ -36,10 +35,9 @@ public class GuiGainXP extends AbstractGui {
 
     /**
      * Renders the GUI on the in-game GUI
-     * @param mStack
-     * @param partialTicks
+     * @param mStack the render stack
      */
-    public void render(MatrixStack mStack, float partialTicks) {
+    public void render(MatrixStack mStack) {
     	GL11.glPushMatrix();
         GL11.glColor4f(1.0F, 1.0F, 1.0F, 1.0F);
         Minecraft.getInstance().getTextureManager().bind(TEXTURE);
@@ -56,7 +54,7 @@ public class GuiGainXP extends AbstractGui {
         int xpTotalWidth = Minecraft.getInstance().font.width(xpTotal);
 
         this.blit(mStack, render_width/2 - 90, 5, 0, 0, 180, 50);//background
-        this.blit(mStack, render_width/2 - 75, 35, 0, 50, 150, 12);//progressbackground
+        this.blit(mStack, render_width/2 - 75, 35, 0, 50, 150, 12);//progress background
         this.blit(mStack, render_width/2 - 75, 35, 0, 62, width, 12);//progressbar
         Minecraft.getInstance().font.draw(mStack, title, render_width/2.0F - titleWidth/2.0F, 15, Color.white.getRGB());
         Minecraft.getInstance().font.draw(mStack, xpTotal, render_width/2.0F - xpTotalWidth/2.0F, 38, Color.black.getRGB());

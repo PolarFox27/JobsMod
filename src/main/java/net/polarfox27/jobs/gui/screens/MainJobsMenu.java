@@ -74,10 +74,10 @@ public class MainJobsMenu extends Screen {
 
     /**
      * Renders the GUI on the screen
-     * @param mStack
-     * @param mouseX
-     * @param mouseY
-     * @param partialTicks
+     * @param mStack the render stack
+     * @param mouseX the x coordinate of the mouse
+     * @param mouseY the y coordinate of the mouse
+     * @param partialTicks the render ticks
      */
     @Override
     public void render(MatrixStack mStack, int mouseX, int mouseY, float partialTicks) {

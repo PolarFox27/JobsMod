@@ -39,22 +39,20 @@ public class ButtonXPCategory extends Button {
 
     /**
      * Renders the widget on the screen
-     * @param mStack
-     * @param mouseX
-     * @param mouseY
-     * @param partialTicks
+     * @param mStack the render stack
+     * @param mouseX the x coordinate of the mouse
+     * @param mouseY the y coordinate of the mouse
+     * @param partialTicks the render ticks
      */
     public void renderButton(MatrixStack mStack, int mouseX, int mouseY, float partialTicks) {
     	if (this.visible) {
             boolean hovered = mouseX >= this.x && mouseY >= this.y && mouseX < this.x + this.width && mouseY < this.y + this.height;
             Minecraft.getInstance().getTextureManager().bind(BACKGROUND);
-            int i = this.xTexStart;
-            int j = this.yTexStart;
 
             if(hovered) GL11.glColor4f(0.8F, 0.8F, 0.8F, 1.0F);
             else GL11.glColor4f(1.0F, 1.0F, 1.0F, 1.0F);
 
-            this.blit(mStack, this.x, this.y, i, j, 16, 16);
+            this.blit(mStack, this.x, this.y, xTexStart, yTexStart, 16, 16);
             String name = "category." + type.name().toLowerCase();
             String txt = I18n.get(name);
             int txtWidth = Minecraft.getInstance().font.width(txt);
@@ -87,6 +85,6 @@ public class ButtonXPCategory extends Button {
 
     public enum Type{
         XP,
-        UNLOCK;
+        UNLOCK
     }
 }

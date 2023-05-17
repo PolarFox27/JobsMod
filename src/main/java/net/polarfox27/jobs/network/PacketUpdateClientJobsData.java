@@ -13,7 +13,6 @@ import net.polarfox27.jobs.data.registry.xp.XPData;
 import net.polarfox27.jobs.data.registry.xp.XPRegistry;
 import net.polarfox27.jobs.util.config.JobsIconUtil;
 
-import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Map;
 import java.util.Set;
@@ -21,24 +20,22 @@ import java.util.function.Supplier;
 
 public class PacketUpdateClientJobsData{
 
-    public Set<XPRegistry<? extends XPData>> registries = new HashSet<>();
-    public LevelData JOBS_LEVELS = null;
-    public Set<ItemBlockedRegistry> BLOCKED_ITEMS_REGISTRIES = new HashSet<>();
-    public Set<BlockBlockedRegistry> BLOCKED_BLOCKS_REGISTRIES = new HashSet<>();
-    Map<String, byte[]> JOBS_ICONS = new HashMap<>();
+    public Set<XPRegistry<? extends XPData>> registries;
+    public LevelData JOBS_LEVELS;
+    public Set<ItemBlockedRegistry> BLOCKED_ITEMS_REGISTRIES;
+    public Set<BlockBlockedRegistry> BLOCKED_BLOCKS_REGISTRIES;
+    Map<String, byte[]> JOBS_ICONS;
 
-    TranslationData TRANSLATIONS = null;
-
-    public PacketUpdateClientJobsData(){}
+    TranslationData TRANSLATIONS;
 
     /**
      * Creates the packet containing all information
-     * @param registries
-     * @param levelData
-     * @param blockedItemsRegistries
-     * @param blockedBlocksRegistries
-     * @param icons
-     * @param translationData
+     * @param registries xp registries
+     * @param levelData levels and xp
+     * @param blockedItemsRegistries blocked items registries
+     * @param blockedBlocksRegistries blocked blocks registries
+     * @param icons jobs icons
+     * @param translationData translations
      */
     public PacketUpdateClientJobsData(Set<XPRegistry<? extends XPData>> registries,
                                     LevelData levelData,
@@ -102,7 +99,7 @@ public class PacketUpdateClientJobsData{
 
 
     /**
-     * Handles the packet on the client side by putting all the information in ClientJobsdata
+     * Handles the packet on the client side by putting all the information in ClientJobsData
      * @param message the packet to handle
      * @param ctx the context of the packet
      */

@@ -21,7 +21,7 @@ public class PlayerData {
 
 	/**
 	 * Gets the Jobs from a player
-	 * @param player
+	 * @param player the player from which we retrieve the jobs
 	 * @return the jobs of the player
 	 */
 	public static PlayerJobs getPlayerJobs(PlayerEntity player) {

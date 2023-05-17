@@ -48,7 +48,8 @@ public class EntityInteractionEvents {
      */
     @SubscribeEvent
     public void onBreed(BabyEntitySpawnEvent event) {
-        if (event.getCausedByPlayer() == null || event.getCausedByPlayer().level.isClientSide())
+        if (event.getCausedByPlayer() == null || event.getCausedByPlayer().level.isClientSide()
+            || event.getChild() == null)
             return;
         System.out.println("Breeding");
         EntityType<? extends Entity> type = event.getChild().getType();
@@ -72,7 +73,7 @@ public class EntityInteractionEvents {
         if(event.getPlayer().level.isClientSide() || !(event.getPlayer() instanceof ServerPlayerEntity))
             return;
         PlayerJobs jobs = PlayerData.getPlayerJobs(event.getPlayer());
-        if(!ServerJobsData.BLOCKED_LEFT_CLICKS.isAllowed(jobs, event.getPlayer().getMainHandItem()))
+        if(ServerJobsData.BLOCKED_LEFT_CLICKS.isBlocked(jobs, event.getPlayer().getMainHandItem()))
             event.setCanceled(true);
     }
 }

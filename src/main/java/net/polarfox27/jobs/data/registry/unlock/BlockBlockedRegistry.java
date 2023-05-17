@@ -1,7 +1,6 @@
 package net.polarfox27.jobs.data.registry.unlock;
 
 import net.minecraft.block.BlockState;
-import net.minecraft.item.ItemStack;
 import net.minecraft.network.PacketBuffer;
 import net.polarfox27.jobs.data.capabilities.PlayerJobs;
 import net.polarfox27.jobs.data.registry.unlock.BlockedData.BlockBlockedData;
@@ -95,13 +94,13 @@ public class BlockBlockedRegistry {
      * @param state the stack to check
      * @return true if the player is allowed the stack
      */
-    public boolean isAllowed(PlayerJobs jobs, BlockState state){
+    public boolean isBlocked(PlayerJobs jobs, BlockState state){
         for(Map.Entry<String, List<BlockedData.BlockBlockedData>> e : this.DATA.entrySet())
             for(BlockedData.BlockBlockedData d : e.getValue()) {
                 if (d.matches(state)) {
-                    return d.getLevel() <= jobs.getLevelByJob(e.getKey());
+                    return d.getLevel() > jobs.getLevelByJob(e.getKey());
                 }
             }
-        return true;
+        return false;
     }
 }

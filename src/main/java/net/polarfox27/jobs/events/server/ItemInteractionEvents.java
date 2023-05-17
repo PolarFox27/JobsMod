@@ -3,13 +3,11 @@ package net.polarfox27.jobs.events.server;
 import net.minecraft.entity.player.ServerPlayerEntity;
 import net.minecraft.item.ItemStack;
 import net.minecraftforge.event.TickEvent;
-import net.minecraftforge.event.entity.player.AttackEntityEvent;
 import net.minecraftforge.event.entity.player.ItemFishedEvent;
 import net.minecraftforge.event.entity.player.PlayerEvent.ItemCraftedEvent;
 import net.minecraftforge.event.entity.player.PlayerEvent.ItemSmeltedEvent;
 import net.minecraftforge.event.entity.player.PlayerInteractEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
-import net.minecraftforge.fml.LogicalSide;
 import net.minecraftforge.fml.common.Mod.EventBusSubscriber;
 import net.polarfox27.jobs.data.ServerJobsData;
 import net.polarfox27.jobs.data.capabilities.PlayerData;
@@ -82,7 +80,7 @@ public class ItemInteractionEvents {
         if(event.getPlayer().level.isClientSide() || !(event.getPlayer() instanceof ServerPlayerEntity))
             return;
         PlayerJobs jobs = PlayerData.getPlayerJobs(event.getPlayer());
-        if(!ServerJobsData.BLOCKED_RIGHT_CLICKS.isAllowed(jobs, event.getItemStack()))
+        if(ServerJobsData.BLOCKED_RIGHT_CLICKS.isBlocked(jobs, event.getItemStack()))
             event.setCanceled(true);
     }
 
@@ -95,7 +93,7 @@ public class ItemInteractionEvents {
         if(event.getPlayer().level.isClientSide() || !(event.getPlayer() instanceof ServerPlayerEntity))
             return;
         PlayerJobs jobs = PlayerData.getPlayerJobs(event.getPlayer());
-        if(!ServerJobsData.BLOCKED_LEFT_CLICKS.isAllowed(jobs, event.getItemStack()))
+        if(ServerJobsData.BLOCKED_LEFT_CLICKS.isBlocked(jobs, event.getItemStack()))
             event.setCanceled(true);
     }
 
@@ -110,7 +108,7 @@ public class ItemInteractionEvents {
         PlayerJobs jobs = PlayerData.getPlayerJobs(event.player);
         for(int i = 0; i < event.player.inventory.armor.size(); i++) {
             ItemStack stack = event.player.inventory.armor.get(i);
-            if (!ServerJobsData.BLOCKED_EQUIPMENTS.isAllowed(jobs, stack)) {
+            if (ServerJobsData.BLOCKED_EQUIPMENTS.isBlocked(jobs, stack)) {
                 event.player.drop(stack, true);
                 event.player.inventory.armor.set(i, ItemStack.EMPTY);
                 return;

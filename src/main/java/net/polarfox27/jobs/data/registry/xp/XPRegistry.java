@@ -6,8 +6,8 @@ import net.minecraft.entity.EntityType;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.network.PacketBuffer;
-import net.minecraftforge.registries.ForgeRegistries;
 import net.polarfox27.jobs.util.JobsUtil;
+import net.polarfox27.jobs.util.config.JsonUtil;
 
 import java.util.*;
 
@@ -31,7 +31,7 @@ public abstract class XPRegistry <T extends XPData> {
     }
 
     /**
-     * Reads a XP Registry from a buffer
+     * Reads an XP Registry from a buffer
      * @param buf the buffer where to read
      * @param type the type of the XP Registry
      */
@@ -69,12 +69,12 @@ public abstract class XPRegistry <T extends XPData> {
     /**
      * Adds an XPData for a specific job
      * @param job the job for which the data is added
-     * @param xpdata the data added
+     * @param xpData the data added
      */
-    public void addDataForJob(String job, T xpdata){
+    public void addDataForJob(String job, T xpData){
         if(!data.containsKey(job))
             data.put(job, new ArrayList<>());
-        data.get(job).add(xpdata);
+        data.get(job).add(xpData);
     }
 
     /**
@@ -89,8 +89,8 @@ public abstract class XPRegistry <T extends XPData> {
         for(Map.Entry<String, List<T>> entry : data.entrySet()){
             JobsUtil.writeString(entry.getKey(), buf);
             buf.writeInt(entry.getValue().size());
-            for(T xpdata : entry.getValue()){
-                xpdata.writeToBytes(buf);
+            for(T xpData : entry.getValue()){
+                xpData.writeToBytes(buf);
             }
         }
     }
@@ -136,7 +136,7 @@ public abstract class XPRegistry <T extends XPData> {
     @Override
     public String toString() {
         StringBuilder s = new StringBuilder(name).append(" XP Registry (icon = ")
-                                                 .append(ForgeRegistries.ITEMS.getKey(icon).toString())
+                                                 .append(JsonUtil.getRegistryName(icon))
                                                  .append(") :\n");
         for(Map.Entry<String, List<T>> e : data.entrySet()){
             s.append(" * ").append(e.getKey()).append(" ->\n");

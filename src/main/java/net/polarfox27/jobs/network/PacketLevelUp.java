@@ -11,9 +11,7 @@ import java.util.function.Supplier;
 
 public class PacketLevelUp{
 
-    private String job;
-
-    public PacketLevelUp(){}
+    private final String job;
 
     /**
      * Constructs a packet

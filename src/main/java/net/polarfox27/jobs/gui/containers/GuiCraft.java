@@ -37,6 +37,8 @@ public class GuiCraft extends ContainerScreen<ContainerCraft> implements IRecipe
      */
     protected void init() {
         super.init();
+        if(this.minecraft == null)
+            return;
         this.widthTooNarrow = this.width < 379;
         this.recipeBookComponent.init(this.width, this.height, this.minecraft, this.widthTooNarrow, this.menu);
         this.leftPos = this.recipeBookComponent.updateScreenPosition(this.widthTooNarrow, this.width, this.imageWidth);
@@ -61,10 +63,10 @@ public class GuiCraft extends ContainerScreen<ContainerCraft> implements IRecipe
 
     /**
      * Renders the GUI on the screen
-     * @param mStack
-     * @param mouseX
-     * @param mouseY
-     * @param partialTicks
+     * @param mStack the render stack
+     * @param mouseX the x coordinate of the mouse
+     * @param mouseY the y coordinate of the mouse
+     * @param partialTicks the render ticks
      */
     public void render(MatrixStack mStack, int mouseX, int mouseY, float partialTicks) {
         this.renderBackground(mStack);
@@ -83,13 +85,15 @@ public class GuiCraft extends ContainerScreen<ContainerCraft> implements IRecipe
 
     /**
      * Renders the background image
-     * @param mStack
-     * @param partialTicks
-     * @param mouseX
-     * @param mouseY
+     * @param mStack the render stack
+     * @param partialTicks the render ticks
+     * @param mouseX the x coordinate of the mouse
+     * @param mouseY the y coordinate of the mouse
      */
     protected void renderBg(MatrixStack mStack, float partialTicks, int mouseX, int mouseY) {
         RenderSystem.color4f(1.0F, 1.0F, 1.0F, 1.0F);
+        if(this.minecraft == null)
+            return;
         this.minecraft.getTextureManager().bind(CRAFTING_TABLE_LOCATION);
         int i = this.leftPos;
         int j = (this.height - this.imageHeight) / 2;
@@ -104,7 +108,7 @@ public class GuiCraft extends ContainerScreen<ContainerCraft> implements IRecipe
      * @param height the box height
      * @param mouseX the x coordinate of the mouse
      * @param mouseY the y coordinate of the mouse
-     * @return
+     * @return true if the mouse is hovering over the specified area
      */
     protected boolean isHovering(int xPos, int yPos, int width, int height, double mouseX, double mouseY) {
         return (!this.widthTooNarrow || !this.recipeBookComponent.isVisible()) && super.isHovering(xPos, yPos, width, height, mouseX, mouseY);
@@ -137,7 +141,7 @@ public class GuiCraft extends ContainerScreen<ContainerCraft> implements IRecipe
      * @param slot the slot clicked
      * @param mouseX the mouse x coordinate
      * @param mouseY the mouse y coordinate
-     * @param clickType
+     * @param clickType the type of mouse click
      */
     protected void slotClicked(Slot slot, int mouseX, int mouseY, ClickType clickType) {
         super.slotClicked(slot, mouseX, mouseY, clickType);

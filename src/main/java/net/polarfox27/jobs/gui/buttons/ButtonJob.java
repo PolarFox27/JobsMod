@@ -34,17 +34,17 @@ public class ButtonJob extends Button {
 
     /**
      * Renders the widget on the screen
-     * @param mStack
-     * @param mouseX
-     * @param mouseY
-     * @param partialTicks
+     * @param mStack the render stack
+     * @param mouseX the x coordinate of the mouse
+     * @param mouseY the y coordinate of the mouse
+     * @param partialTicks the render ticks
      */
     @Override
     public void renderButton(MatrixStack mStack, int mouseX, int mouseY, float partialTicks) {
     	if (this.visible) {
             float f = 1.0f;
             GL11.glColor4f(f, f, f, 1.0F);
-            GuiUtil.drawJobIcon(mStack, this, this.job, this.x+20, this.y+20, 32);
+            GuiUtil.drawJobIcon(mStack, this.job, this.x+20, this.y+20, 32);
             long xp = ClientJobsData.playerJobs.getXPByJob(this.job);
             int lvl = ClientJobsData.playerJobs.getLevelByJob(this.job);
             long total = lvl >= ClientJobsData.JOBS_LEVELS.getMaxLevel(this.job) ? xp :
@@ -56,7 +56,7 @@ public class ButtonJob extends Button {
 
     /**
      * Renders the Job name and level on the screen
-     * @param mStack
+     * @param mStack the render stack
      */
     private void drawName(MatrixStack mStack) {
         int lvl = ClientJobsData.playerJobs.getLevelByJob(this.job);

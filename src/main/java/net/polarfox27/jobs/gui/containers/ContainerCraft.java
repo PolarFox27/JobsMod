@@ -29,14 +29,6 @@ public class ContainerCraft extends RecipeBookContainer<CraftingInventory> {
 	private final IWorldPosCallable access;
 	private final PlayerEntity player;
 
-	/**
-	 * Creates a modified crafting container
-	 * @param id the contained id
-	 * @param playerInventory the player who opened the crafting table
-	 */
-	public ContainerCraft(int id, PlayerInventory playerInventory) {
-		this(id, playerInventory, IWorldPosCallable.NULL);
-	}
 
 	/**
 	 * Creates a modified crafting container
@@ -77,7 +69,7 @@ public class ContainerCraft extends RecipeBookContainer<CraftingInventory> {
 	 * @param resultInventory the result slot
 	 */
 	protected static void slotChangedCraftingGrid(int index, World world, PlayerEntity player, CraftingInventory craftingInventory, CraftResultInventory resultInventory) {
-		if (!world.isClientSide) {
+		if (!world.isClientSide && world.getServer() != null) {
 			ServerPlayerEntity serverplayerentity = (ServerPlayerEntity)player;
 			ItemStack itemstack = ItemStack.EMPTY;
 			Optional<ICraftingRecipe> optional = world.getServer().getRecipeManager().getRecipeFor(IRecipeType.CRAFTING, craftingInventory, world);
@@ -85,7 +77,7 @@ public class ContainerCraft extends RecipeBookContainer<CraftingInventory> {
 				ICraftingRecipe icraftingrecipe = optional.get();
 				if (resultInventory.setRecipeUsed(world, serverplayerentity, icraftingrecipe)) {
 					itemstack = icraftingrecipe.assemble(craftingInventory);
-					if(!ServerJobsData.BLOCKED_CRAFTS.isAllowed(PlayerData.getPlayerJobs(serverplayerentity), itemstack))
+					if(ServerJobsData.BLOCKED_CRAFTS.isBlocked(PlayerData.getPlayerJobs(serverplayerentity), itemstack))
 						itemstack = ItemStack.EMPTY;
 				}
 			}
@@ -159,44 +151,44 @@ public class ContainerCraft extends RecipeBookContainer<CraftingInventory> {
 		ItemStack itemstack = ItemStack.EMPTY;
 		Slot slot = this.slots.get(slotIndex);
 		if (slot != null && slot.hasItem()) {
-			ItemStack itemstack1 = slot.getItem();
-			itemstack = itemstack1.copy();
+			ItemStack itemStack1 = slot.getItem();
+			itemstack = itemStack1.copy();
 			if (slotIndex == 0) {
 				this.access.execute((p_217067_2_, p_217067_3_) -> {
-					itemstack1.getItem().onCraftedBy(itemstack1, p_217067_2_, player);
+					itemStack1.getItem().onCraftedBy(itemStack1, p_217067_2_, player);
 				});
-				if (!this.moveItemStackTo(itemstack1, 10, 46, true)) {
+				if (!this.moveItemStackTo(itemStack1, 10, 46, true)) {
 					return ItemStack.EMPTY;
 				}
 
-				slot.onQuickCraft(itemstack1, itemstack);
+				slot.onQuickCraft(itemStack1, itemstack);
 			} else if (slotIndex >= 10 && slotIndex < 46) {
-				if (!this.moveItemStackTo(itemstack1, 1, 10, false)) {
+				if (!this.moveItemStackTo(itemStack1, 1, 10, false)) {
 					if (slotIndex < 37) {
-						if (!this.moveItemStackTo(itemstack1, 37, 46, false)) {
+						if (!this.moveItemStackTo(itemStack1, 37, 46, false)) {
 							return ItemStack.EMPTY;
 						}
-					} else if (!this.moveItemStackTo(itemstack1, 10, 37, false)) {
+					} else if (!this.moveItemStackTo(itemStack1, 10, 37, false)) {
 						return ItemStack.EMPTY;
 					}
 				}
-			} else if (!this.moveItemStackTo(itemstack1, 10, 46, false)) {
+			} else if (!this.moveItemStackTo(itemStack1, 10, 46, false)) {
 				return ItemStack.EMPTY;
 			}
 
-			if (itemstack1.isEmpty()) {
+			if (itemStack1.isEmpty()) {
 				slot.set(ItemStack.EMPTY);
 			} else {
 				slot.setChanged();
 			}
 
-			if (itemstack1.getCount() == itemstack.getCount()) {
+			if (itemStack1.getCount() == itemstack.getCount()) {
 				return ItemStack.EMPTY;
 			}
 
-			ItemStack itemstack2 = slot.onTake(player, itemstack1);
+			ItemStack itemStack2 = slot.onTake(player, itemStack1);
 			if (slotIndex == 0) {
-				player.drop(itemstack2, false);
+				player.drop(itemStack2, false);
 			}
 		}
 
@@ -207,7 +199,7 @@ public class ContainerCraft extends RecipeBookContainer<CraftingInventory> {
 	 * Checks if the player can take all the item of the same type as the stack
 	 * @param stack the item to stack up
 	 * @param slot the slot where the stack should end up
-	 * @return
+	 * @return true if the player can pick all the items
 	 */
 	public boolean canTakeItemForPickAll(ItemStack stack, Slot slot) {
 		return slot.container != this.resultSlots && super.canTakeItemForPickAll(stack, slot);

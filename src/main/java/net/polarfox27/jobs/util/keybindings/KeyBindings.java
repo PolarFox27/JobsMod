@@ -23,7 +23,7 @@ public class KeyBindings {
 													   CATEGORY);
 
 	public enum Key{
-		NONE, OPEN_GUI;
+		NONE, OPEN_GUI
 	}
 
 

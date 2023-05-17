@@ -1,7 +1,6 @@
 package net.polarfox27.jobs;
 
 
-import net.minecraft.util.text.TextFormatting;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.common.Mod;
@@ -58,7 +57,16 @@ public class ModJobs {
 	 * @param isError if true, the message will be red
 	 */
 	public static void info(String message, boolean isError) {
-		String msg = (isError ? TextFormatting.RED : TextFormatting.BLUE) + "[Jobs] ";
-		System.out.println(msg + message);
+		String msg = (isError ? "\u001B[31m" : "\u001B[34m") + "[Jobs] ";
+		System.out.println(msg + message + "\u001B[0m");
+	}
+
+	/**
+	 * Prints a warning to the console with [Jobs] appended in front, with yellow color
+	 * @param message the message to be printed
+	 */
+	public static void warning(String message) {
+		String msg = "\u001B[33m[Jobs] ";
+		System.out.println(msg + message + "\u001B[0m");
 	}
 }

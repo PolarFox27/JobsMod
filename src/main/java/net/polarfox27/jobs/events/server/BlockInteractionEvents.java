@@ -26,7 +26,7 @@ public class BlockInteractionEvents {
         BlockState state = event.getState();
         PlayerJobs jobs = PlayerData.getPlayerJobs(player);
 
-        if(!ServerJobsData.BLOCKED_BLOCKS.isAllowed(PlayerData.getPlayerJobs(player), state)){
+        if(ServerJobsData.BLOCKED_BLOCKS.isBlocked(PlayerData.getPlayerJobs(player), state)){
             event.setCanceled(true);
             return;
         }
