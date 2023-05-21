@@ -3,8 +3,6 @@ package net.polarfox27.jobs.util.config;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParseException;
 import com.google.gson.JsonParser;
-import net.minecraft.client.gui.screen.CreateWorldScreen;
-import net.minecraft.client.gui.screen.WorldSelectionList;
 import net.minecraft.server.MinecraftServer;
 import net.minecraft.world.storage.FolderName;
 import net.polarfox27.jobs.ModJobs;

@@ -12,6 +12,8 @@ import net.minecraftforge.common.capabilities.ICapabilitySerializable;
 import net.minecraftforge.common.util.LazyOptional;
 import net.polarfox27.jobs.data.registry.LevelData;
 
+import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
 import java.util.Optional;
 
 public class PlayerData {
@@ -61,8 +63,9 @@ public class PlayerData {
 		}
 
 		@Override
-		public <T> LazyOptional<T> getCapability(Capability<T> cap, Direction side) {
-			return LazyOptional.of(() -> (T)jobs);
+		@Nonnull
+		public <T> LazyOptional<T> getCapability(@Nullable Capability<T> cap, Direction side) {
+			return JOBS.orEmpty(cap, LazyOptional.of(() -> jobs));
 		}
 
 		/**

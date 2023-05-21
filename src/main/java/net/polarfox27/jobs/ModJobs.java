@@ -9,6 +9,7 @@ import net.minecraftforge.fml.event.lifecycle.FMLCommonSetupEvent;
 import net.minecraftforge.fml.event.server.FMLServerStartingEvent;
 import net.minecraftforge.fml.javafmlmod.FMLJavaModLoadingContext;
 import net.polarfox27.jobs.data.ServerJobsData;
+import net.polarfox27.jobs.data.capabilities.PlayerData;
 import net.polarfox27.jobs.util.config.ReadConfigManager;
 import net.polarfox27.jobs.util.handler.PacketHandler;
 import net.polarfox27.jobs.util.handler.RegistryHandler;
@@ -37,6 +38,8 @@ public class ModJobs {
 
 	@SubscribeEvent
 	public void setup(final FMLCommonSetupEvent event) {
+		PlayerData.register();
+		info("Jobs Capability Registered", false);
 	}
 
 	@SubscribeEvent
