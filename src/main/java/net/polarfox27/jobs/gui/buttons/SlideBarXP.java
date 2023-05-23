@@ -1,10 +1,10 @@
-package com.dorian2712.jobs.gui.buttons;
+package net.polarfox27.jobs.gui.buttons;
 
+import net.polarfox27.jobs.util.JobsMath;
+import net.polarfox27.jobs.util.Reference;
 import org.lwjgl.input.Mouse;
 
-import com.dorian2712.jobs.gui.screens.GuiHowXP;
-import com.dorian2712.jobs.util.JobsMath;
-import com.dorian2712.jobs.util.Reference;
+import net.polarfox27.jobs.gui.screens.GuiHowXP;
 
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiButton;

@@ -1,10 +1,9 @@
-package com.dorian2712.jobs.util.proxy;
+package net.polarfox27.jobs.util.proxy;
 
 
+import net.polarfox27.jobs.util.keybindings.KeyBindings;
+import net.polarfox27.jobs.util.keybindings.Keys;
 import org.lwjgl.input.Keyboard;
-
-import com.dorian2712.jobs.util.keybindings.KeyBindings;
-import com.dorian2712.jobs.util.keybindings.Keys;
 
 import net.minecraft.client.renderer.block.model.ModelResourceLocation;
 import net.minecraft.client.settings.KeyBinding;

@@ -1,9 +1,9 @@
-package com.dorian2712.jobs.network;
+package net.polarfox27.jobs.network;
 
 import java.util.ArrayList;
 import java.util.List;
 
-import com.dorian2712.jobs.data.ClientInfos;
+import net.polarfox27.jobs.data.ClientInfos;
 
 import io.netty.buffer.ByteBuf;
 import net.minecraft.item.Item;

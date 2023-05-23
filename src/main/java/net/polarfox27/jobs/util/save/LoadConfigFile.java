@@ -1,4 +1,4 @@
-package com.dorian2712.jobs.util.save;
+package net.polarfox27.jobs.util.save;
 
 import java.io.File;
 import java.io.FileNotFoundException;
@@ -6,8 +6,8 @@ import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
 
-import com.dorian2712.jobs.data.GainXPUtil;
-import com.dorian2712.jobs.data.ModConfig;
+import net.polarfox27.jobs.data.GainXPUtil;
+import net.polarfox27.jobs.data.ModConfig;
 import com.google.gson.Gson;
 import com.google.gson.JsonIOException;
 import com.google.gson.JsonObject;

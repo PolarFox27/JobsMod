@@ -1,6 +1,6 @@
-package com.dorian2712.jobs.network;
+package net.polarfox27.jobs.network;
 
-import com.dorian2712.jobs.util.handlers.PacketHandler;
+import net.polarfox27.jobs.util.handlers.PacketHandler;
 import io.netty.buffer.ByteBuf;
 import net.minecraftforge.fml.common.network.simpleimpl.IMessage;
 import net.minecraftforge.fml.common.network.simpleimpl.IMessageHandler;

@@ -1,6 +1,6 @@
-package com.dorian2712.jobs.gui.buttons;
+package net.polarfox27.jobs.gui.buttons;
 
-import com.dorian2712.jobs.util.Reference;
+import net.polarfox27.jobs.util.Reference;
 
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiButton;

@@ -1,15 +1,14 @@
-package com.dorian2712.jobs.data;
+package net.polarfox27.jobs.data;
 
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import com.dorian2712.jobs.network.PacketSendClientConfig;
-import com.dorian2712.jobs.network.PacketUpdateClientInfos;
-import com.dorian2712.jobs.util.Constants.Entities;
-import com.dorian2712.jobs.util.Constants.Job;
-import com.dorian2712.jobs.util.handlers.PacketHandler;
+import net.polarfox27.jobs.network.PacketSendClientConfig;
+import net.polarfox27.jobs.network.PacketUpdateClientInfos;
+import net.polarfox27.jobs.util.handlers.PacketHandler;
 
+import net.polarfox27.jobs.util.Constants;
 import net.minecraft.block.Block;
 import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.item.Item;
@@ -18,23 +17,23 @@ import net.minecraft.item.ItemStack;
 public class GainXPUtil {
 
     public static Map<Block, long[]> BREAK_BLOCK_XP = new HashMap<>();
-    public static Map<Block, Job> BREAK_BLOCK_JOB = new HashMap<>();
+    public static Map<Block, Constants.Job> BREAK_BLOCK_JOB = new HashMap<>();
 
     public static Map<Item, long[]> HARVEST_CROP_XP = new HashMap<>();
-    public static Map<Item, Job> HARVEST_CROP_JOB = new HashMap<>();
+    public static Map<Item, Constants.Job> HARVEST_CROP_JOB = new HashMap<>();
 
     public static Map<Item, long[]> CRAFT_ITEM_XP = new HashMap<>();
-    public static Map<Item, Job> CRAFT_ITEM_JOB = new HashMap<>();
+    public static Map<Item, Constants.Job> CRAFT_ITEM_JOB = new HashMap<>();
 
     public static Map<Item, long[]> SMELT_ITEM_XP = new HashMap<>();
-    public static Map<Item, Job> SMELT_ITEM_JOB = new HashMap<>();
+    public static Map<Item, Constants.Job> SMELT_ITEM_JOB = new HashMap<>();
 
-    public static Map<Entities, long[]> KILL_ENTITY_XP = new HashMap<>();
-    public static Map<Entities, Job> KILL_ENTITY_JOB = new HashMap<>();
+    public static Map<Constants.Entities, long[]> KILL_ENTITY_XP = new HashMap<>();
+    public static Map<Constants.Entities, Constants.Job> KILL_ENTITY_JOB = new HashMap<>();
 
 
     public static Map<Item, Integer> CRAFT_UNLOCK_LVL = new HashMap<>();
-    public static Map<Item, Job> CRAFT_UNLOCK_JOB = new HashMap<>();
+    public static Map<Item, Constants.Job> CRAFT_UNLOCK_JOB = new HashMap<>();
 
     public static Map<Integer, List<ItemStack>> REWARDS_WARRIOR = new HashMap<>();
     public static Map<Integer, List<ItemStack>> REWARDS_WIZARD = new HashMap<>();

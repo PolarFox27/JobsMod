@@ -1,4 +1,4 @@
-package com.dorian2712.jobs.gui.containers;
+package net.polarfox27.jobs.gui.containers;
 
 import java.io.IOException;
 

@@ -1,13 +1,13 @@
-package com.dorian2712.jobs.gui.screens;
+package net.polarfox27.jobs.gui.screens;
 
 import java.awt.Color;
 import java.util.ArrayList;
 import java.util.List;
 
-import com.dorian2712.jobs.data.ClientInfos;
-import com.dorian2712.jobs.util.Constants.Job;
-import com.dorian2712.jobs.util.Reference;
+import net.polarfox27.jobs.data.ClientInfos;
+import net.polarfox27.jobs.util.Reference;
 
+import net.polarfox27.jobs.util.Constants;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.FontRenderer;
 import net.minecraft.client.gui.GuiScreen;
@@ -27,10 +27,10 @@ public class GuiLevelUp extends GuiScreen {
 
     public static final ResourceLocation TEXTURES = new ResourceLocation(Reference.MOD_ID, "textures/gui/gui_level_up.png");
     public static final ResourceLocation ICONS = new ResourceLocation(Reference.MOD_ID, "textures/gui/jobs_icons.png");
-    private final Job job;
+    private final Constants.Job job;
     private final RenderItem renderer;
 
-    public GuiLevelUp(Job job)
+    public GuiLevelUp(Constants.Job job)
     {
         this.job = job;
         this.renderer = Minecraft.getMinecraft().getRenderItem();

@@ -1,7 +1,7 @@
-package com.dorian2712.jobs.gui.buttons;
+package net.polarfox27.jobs.gui.buttons;
 
-import com.dorian2712.jobs.util.Constants.XPCategories;
-import com.dorian2712.jobs.util.Reference;
+import net.polarfox27.jobs.util.Reference;
+import net.polarfox27.jobs.util.Constants;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiButton;
 import net.minecraft.client.renderer.GlStateManager;
@@ -15,9 +15,9 @@ public class ButtonXPCategory extends GuiButton {
     private static final ResourceLocation BACKGROUND = new ResourceLocation(Reference.MOD_ID, "textures/gui/gui_job_infos.png");
     private final int xTexStart;
     private final int yTexStart;
-    private final XPCategories category;
+    private final Constants.XPCategories category;
 
-    public ButtonXPCategory(int index, int x, int y, XPCategories categories)
+    public ButtonXPCategory(int index, int x, int y, Constants.XPCategories categories)
     {
         super(index, x, y, 80, 16, "");
         this.category = categories;

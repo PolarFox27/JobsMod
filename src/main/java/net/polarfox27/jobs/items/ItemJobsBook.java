@@ -1,8 +1,8 @@
-package com.dorian2712.jobs.items;
+package net.polarfox27.jobs.items;
 
-import com.dorian2712.jobs.ModJobs;
-import com.dorian2712.jobs.gui.screens.MainJobsMenu;
-import com.dorian2712.jobs.items.ModItems.IHasModel;
+import net.polarfox27.jobs.ModJobs;
+import net.polarfox27.jobs.gui.screens.MainJobsMenu;
+import net.polarfox27.jobs.items.ModItems.IHasModel;
 
 import net.minecraft.client.Minecraft;
 import net.minecraft.creativetab.CreativeTabs;

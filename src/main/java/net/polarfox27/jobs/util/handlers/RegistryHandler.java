@@ -1,10 +1,10 @@
-package com.dorian2712.jobs.util.handlers;
+package net.polarfox27.jobs.util.handlers;
 
-import com.dorian2712.jobs.commands.CommandAdd;
-import com.dorian2712.jobs.commands.CommandInfo;
-import com.dorian2712.jobs.commands.CommandSet;
-import com.dorian2712.jobs.items.ModItems;
-import com.dorian2712.jobs.items.ModItems.IHasModel;
+import net.polarfox27.jobs.commands.CommandAdd;
+import net.polarfox27.jobs.commands.CommandInfo;
+import net.polarfox27.jobs.commands.CommandSet;
+import net.polarfox27.jobs.items.ModItems;
+import net.polarfox27.jobs.items.ModItems.IHasModel;
 
 import net.minecraft.item.Item;
 import net.minecraft.util.text.TextFormatting;

@@ -1,10 +1,10 @@
-package com.dorian2712.jobs.data;
+package net.polarfox27.jobs.data;
 
-import com.dorian2712.jobs.gui.GuiGainXP;
-import com.dorian2712.jobs.gui.screens.GuiLevelUp;
-import com.dorian2712.jobs.util.Constants;
-import com.dorian2712.jobs.util.Constants.Entities;
-import com.dorian2712.jobs.util.Constants.Job;
+import net.polarfox27.jobs.gui.GuiGainXP;
+import net.polarfox27.jobs.gui.screens.GuiLevelUp;
+import net.polarfox27.jobs.util.Constants;
+import net.polarfox27.jobs.util.Constants.Entities;
+import net.polarfox27.jobs.util.Constants.Job;
 import net.minecraft.block.Block;
 import net.minecraft.client.Minecraft;
 import net.minecraft.init.Items;

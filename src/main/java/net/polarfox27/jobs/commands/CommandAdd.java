@@ -1,9 +1,9 @@
-package com.dorian2712.jobs.commands;
+package net.polarfox27.jobs.commands;
 
-import com.dorian2712.jobs.network.PacketUpdateClientJob;
-import com.dorian2712.jobs.data.PlayerData;
-import com.dorian2712.jobs.util.Constants.Job;
-import com.dorian2712.jobs.util.handlers.PacketHandler;
+import net.polarfox27.jobs.network.PacketUpdateClientJob;
+import net.polarfox27.jobs.data.PlayerData;
+import net.polarfox27.jobs.util.Constants.Job;
+import net.polarfox27.jobs.util.handlers.PacketHandler;
 import net.minecraft.command.CommandBase;
 import net.minecraft.command.CommandException;
 import net.minecraft.command.ICommandSender;

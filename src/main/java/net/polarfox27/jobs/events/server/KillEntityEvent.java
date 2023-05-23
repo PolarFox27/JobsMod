@@ -1,11 +1,11 @@
-package com.dorian2712.jobs.events.server;
+package net.polarfox27.jobs.events.server;
 
-import com.dorian2712.jobs.data.GainXPUtil;
-import com.dorian2712.jobs.data.JobsInfo;
-import com.dorian2712.jobs.data.PlayerData;
-import com.dorian2712.jobs.util.Constants;
-import com.dorian2712.jobs.util.Constants.Entities;
-import com.dorian2712.jobs.util.Constants.Job;
+import net.polarfox27.jobs.data.GainXPUtil;
+import net.polarfox27.jobs.data.JobsInfo;
+import net.polarfox27.jobs.data.PlayerData;
+import net.polarfox27.jobs.util.Constants;
+import net.polarfox27.jobs.util.Constants.Entities;
+import net.polarfox27.jobs.util.Constants.Job;
 
 import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraftforge.event.entity.living.LivingDeathEvent;

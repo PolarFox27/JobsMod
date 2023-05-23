@@ -1,10 +1,10 @@
-package com.dorian2712.jobs.events.client;
+package net.polarfox27.jobs.events.client;
 
-import com.dorian2712.jobs.ModJobs;
-import com.dorian2712.jobs.gui.GuiGainXP;
-import com.dorian2712.jobs.data.ClientInfos;
-import com.dorian2712.jobs.gui.screens.GuiLevelUp;
-import com.dorian2712.jobs.util.Reference;
+import net.polarfox27.jobs.ModJobs;
+import net.polarfox27.jobs.gui.GuiGainXP;
+import net.polarfox27.jobs.data.ClientInfos;
+import net.polarfox27.jobs.gui.screens.GuiLevelUp;
+import net.polarfox27.jobs.util.Reference;
 import net.minecraft.client.Minecraft;
 import net.minecraft.init.Blocks;
 import net.minecraftforge.client.event.GuiOpenEvent;

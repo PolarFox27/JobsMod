@@ -1,4 +1,4 @@
-package com.dorian2712.jobs.util.keybindings;
+package net.polarfox27.jobs.util.keybindings;
 
 public class Keys {
 

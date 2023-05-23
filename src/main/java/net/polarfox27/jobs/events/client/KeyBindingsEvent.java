@@ -1,12 +1,12 @@
-package com.dorian2712.jobs.events.client;
+package net.polarfox27.jobs.events.client;
 
-import com.dorian2712.jobs.data.ClientInfos;
-import com.dorian2712.jobs.gui.screens.MainJobsMenu;
-import com.dorian2712.jobs.items.ModItems;
-import com.dorian2712.jobs.util.keybindings.KeyBindings;
-import com.dorian2712.jobs.util.keybindings.Keys.Key;
-import com.dorian2712.jobs.network.PacketAskClientUpdate;
-import com.dorian2712.jobs.util.handlers.PacketHandler;
+import net.polarfox27.jobs.data.ClientInfos;
+import net.polarfox27.jobs.gui.screens.MainJobsMenu;
+import net.polarfox27.jobs.items.ModItems;
+import net.polarfox27.jobs.util.keybindings.KeyBindings;
+import net.polarfox27.jobs.util.keybindings.Keys.Key;
+import net.polarfox27.jobs.network.PacketAskClientUpdate;
+import net.polarfox27.jobs.util.handlers.PacketHandler;
 import net.minecraft.client.Minecraft;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.text.TextComponentString;

@@ -1,8 +1,8 @@
-package com.dorian2712.jobs.util.handlers;
+package net.polarfox27.jobs.util.handlers;
 
-import com.dorian2712.jobs.gui.containers.ContainerCraft;
-import com.dorian2712.jobs.gui.containers.GuiCraft;
-import com.dorian2712.jobs.util.Reference;
+import net.polarfox27.jobs.gui.containers.ContainerCraft;
+import net.polarfox27.jobs.gui.containers.GuiCraft;
+import net.polarfox27.jobs.util.Reference;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;

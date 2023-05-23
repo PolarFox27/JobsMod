@@ -1,10 +1,12 @@
-package com.dorian2712.jobs.util.handlers;
+package net.polarfox27.jobs.util.handlers;
 
 import com.dorian2712.jobs.network.*;
-import com.dorian2712.jobs.util.Reference;
+import net.polarfox27.jobs.util.Reference;
+import net.dorian2712.jobs.network.*;
 import net.minecraftforge.fml.common.network.NetworkRegistry;
 import net.minecraftforge.fml.common.network.simpleimpl.SimpleNetworkWrapper;
 import net.minecraftforge.fml.relauncher.Side;
+import net.polarfox27.jobs.network.*;
 
 public class PacketHandler {
 

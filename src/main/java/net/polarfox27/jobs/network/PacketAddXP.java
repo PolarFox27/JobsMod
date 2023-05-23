@@ -1,7 +1,7 @@
-package com.dorian2712.jobs.network;
+package net.polarfox27.jobs.network;
 
-import com.dorian2712.jobs.data.ClientInfos;
-import com.dorian2712.jobs.util.Constants.Job;
+import net.polarfox27.jobs.data.ClientInfos;
+import net.polarfox27.jobs.util.Constants.Job;
 import io.netty.buffer.ByteBuf;
 import net.minecraftforge.fml.common.network.simpleimpl.IMessage;
 import net.minecraftforge.fml.common.network.simpleimpl.IMessageHandler;

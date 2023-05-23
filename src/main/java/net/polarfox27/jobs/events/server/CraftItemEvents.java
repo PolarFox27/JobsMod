@@ -1,9 +1,9 @@
-package com.dorian2712.jobs.events.server;
+package net.polarfox27.jobs.events.server;
 
-import com.dorian2712.jobs.data.JobsInfo;
-import com.dorian2712.jobs.data.PlayerData;
-import com.dorian2712.jobs.util.Constants.Job;
-import com.dorian2712.jobs.data.GainXPUtil;
+import net.polarfox27.jobs.data.JobsInfo;
+import net.polarfox27.jobs.data.PlayerData;
+import net.polarfox27.jobs.util.Constants.Job;
+import net.polarfox27.jobs.data.GainXPUtil;
 import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.item.Item;
 import net.minecraftforge.fml.common.Mod.EventBusSubscriber;

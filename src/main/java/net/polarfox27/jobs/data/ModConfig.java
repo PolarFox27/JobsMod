@@ -1,4 +1,4 @@
-package com.dorian2712.jobs.data;
+package net.polarfox27.jobs.data;
 
 public class ModConfig {
 	

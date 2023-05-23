@@ -1,9 +1,9 @@
-package com.dorian2712.jobs.events.server;
+package net.polarfox27.jobs.events.server;
 
-import com.dorian2712.jobs.data.GainXPUtil;
-import com.dorian2712.jobs.data.JobsInfo;
-import com.dorian2712.jobs.data.PlayerData;
-import com.dorian2712.jobs.util.Reference;
+import net.polarfox27.jobs.data.GainXPUtil;
+import net.polarfox27.jobs.data.JobsInfo;
+import net.polarfox27.jobs.data.PlayerData;
+import net.polarfox27.jobs.util.Reference;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.EntityPlayerMP;

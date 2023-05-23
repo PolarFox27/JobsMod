@@ -1,4 +1,4 @@
-package com.dorian2712.jobs.items;
+package net.polarfox27.jobs.items;
 
 import java.util.ArrayList;
 import java.util.List;

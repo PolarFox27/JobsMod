@@ -1,8 +1,8 @@
-package com.dorian2712.jobs.gui.screens;
+package net.polarfox27.jobs.gui.screens;
 
-import com.dorian2712.jobs.gui.buttons.ButtonJob;
-import com.dorian2712.jobs.util.Constants.Job;
-import com.dorian2712.jobs.util.Reference;
+import net.polarfox27.jobs.gui.buttons.ButtonJob;
+import net.polarfox27.jobs.util.Reference;
+import net.polarfox27.jobs.util.Constants;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiButton;
 import net.minecraft.client.gui.GuiScreen;
@@ -22,10 +22,10 @@ public class MainJobsMenu extends GuiScreen {
     @Override
     public void initGui()
     {
-        this.addButton(new ButtonJob(0, this.width/2 - 100, this.height/2 - 70, Job.byIndex(0)));
-        this.addButton(new ButtonJob(1, this.width/2 - 100, this.height/2 - 30, Job.byIndex(1)));
-        this.addButton(new ButtonJob(2, this.width/2 - 100, this.height/2 + 10, Job.byIndex(2)));
-        this.addButton(new ButtonJob(3, this.width/2 - 100, this.height/2 + 50, Job.byIndex(3)));
+        this.addButton(new ButtonJob(0, this.width/2 - 100, this.height/2 - 70, Constants.Job.byIndex(0)));
+        this.addButton(new ButtonJob(1, this.width/2 - 100, this.height/2 - 30, Constants.Job.byIndex(1)));
+        this.addButton(new ButtonJob(2, this.width/2 - 100, this.height/2 + 10, Constants.Job.byIndex(2)));
+        this.addButton(new ButtonJob(3, this.width/2 - 100, this.height/2 + 50, Constants.Job.byIndex(3)));
         super.initGui();
      }
     
@@ -60,8 +60,8 @@ public class MainJobsMenu extends GuiScreen {
     @Override
     protected void actionPerformed(GuiButton button) throws IOException
     {
-        Job j = Job.byIndex(button.id);
-        if(j != Job.NONE)
+        Constants.Job j = Constants.Job.byIndex(button.id);
+        if(j != Constants.Job.NONE)
             Minecraft.getMinecraft().displayGuiScreen(new GuiJobInfos(j));
         super.actionPerformed(button);
     }

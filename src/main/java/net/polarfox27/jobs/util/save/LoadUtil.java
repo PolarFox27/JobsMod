@@ -1,4 +1,4 @@
-package com.dorian2712.jobs.util.save;
+package net.polarfox27.jobs.util.save;
 
 import java.io.File;
 import java.io.FileReader;
@@ -8,9 +8,9 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
-import com.dorian2712.jobs.data.GainXPUtil;
-import com.dorian2712.jobs.util.Constants;
-import com.dorian2712.jobs.util.Constants.Job;
+import net.polarfox27.jobs.data.GainXPUtil;
+import net.polarfox27.jobs.util.Constants;
+import net.polarfox27.jobs.util.Constants.Job;
 import com.google.gson.Gson;
 import com.google.gson.JsonArray;
 import com.google.gson.JsonElement;

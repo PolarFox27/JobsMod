@@ -1,4 +1,4 @@
-package com.dorian2712.jobs.gui.screens;
+package net.polarfox27.jobs.gui.screens;
 
 import java.io.IOException;
 import java.util.ArrayList;
@@ -6,17 +6,13 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import net.polarfox27.jobs.data.ClientInfos;
+import net.polarfox27.jobs.gui.buttons.ButtonBack;
+import net.polarfox27.jobs.gui.buttons.SlideBarXP;
+import net.polarfox27.jobs.util.Constants;
+import net.polarfox27.jobs.util.JobsMath;
+import net.polarfox27.jobs.util.Reference;
 import org.lwjgl.input.Mouse;
-
-import com.dorian2712.jobs.data.ClientInfos;
-import com.dorian2712.jobs.gui.buttons.ButtonBack;
-import com.dorian2712.jobs.gui.buttons.SlideBarXP;
-import com.dorian2712.jobs.util.Constants;
-import com.dorian2712.jobs.util.Constants.Entities;
-import com.dorian2712.jobs.util.Constants.Job;
-import com.dorian2712.jobs.util.Constants.XPCategories;
-import com.dorian2712.jobs.util.JobsMath;
-import com.dorian2712.jobs.util.Reference;
 
 import net.minecraft.block.Block;
 import net.minecraft.client.Minecraft;
@@ -35,18 +31,18 @@ public class GuiHowXP extends GuiScreen {
     private static final ResourceLocation BACKGROUND = new ResourceLocation(Reference.MOD_ID, "textures/gui/gui_how_xp.png");
     public int left;
     public int top;
-    private Job job;
+    private Constants.Job job;
     public int page = 0;
     public int pageNumber = 0;
-    private List<XPCategories> categories = new ArrayList<>();
+    private List<Constants.XPCategories> categories = new ArrayList<>();
     private Map<Integer, List<ItemStack>> itemLists = new HashMap<>();
     private List<String> tooltip = new ArrayList<>();
 
-    public GuiHowXP(Job j)
+    public GuiHowXP(Constants.Job j)
     {
         this.job = j;
         this.page = 0;
-        for(XPCategories c : XPCategories.getXPValues())
+        for(Constants.XPCategories c : Constants.XPCategories.getXPValues())
         {
         	if(!ClientInfos.getStacksFromCategories(c, this.job).isEmpty())
         	{
@@ -157,7 +153,7 @@ public class GuiHowXP extends GuiScreen {
                 ItemStack stack = stacks.get(j);
                 if(stack.getItem() == Items.DIAMOND_SWORD && stack.hasTagCompound())
                 {
-                	Entities entity = Constants.Entities.byName(stack.getTagCompound().getString("class"));
+                	Constants.Entities entity = Constants.Entities.byName(stack.getTagCompound().getString("class"));
                     GuiJobInfos.drawEntityOnScreen(x + 8, y + 16, entity.scale/2, this.width/2 - mouseX, this.height/2 - mouseY,
                             Constants.getEntityInstance(entity, Minecraft.getMinecraft().player.world));
                 }
@@ -194,8 +190,8 @@ public class GuiHowXP extends GuiScreen {
                     }
                     else if(s.hasTagCompound() && s.getItem() == Items.DIAMOND_SWORD)
                     {
-                        if(ClientInfos.KILL_ENTITY_JOB.containsKey(Entities.byName(s.getTagCompound().getString("class"))))
-                            xp = ClientInfos.KILL_ENTITY_XP.get(Entities.byName(s.getTagCompound().getString("class")))[lvl];
+                        if(ClientInfos.KILL_ENTITY_JOB.containsKey(Constants.Entities.byName(s.getTagCompound().getString("class"))))
+                            xp = ClientInfos.KILL_ENTITY_XP.get(Constants.Entities.byName(s.getTagCompound().getString("class")))[lvl];
                     }
                     if(xp != 0L) tooltip.add(TextFormatting.GREEN + "" + xp + " xp");
                     else
@@ -233,8 +229,8 @@ public class GuiHowXP extends GuiScreen {
                                 }
                             if(s.getItem() == Items.DIAMOND_SWORD && s.hasTagCompound())
                             {
-                            	if(ClientInfos.KILL_ENTITY_XP.containsKey(Entities.byName(s.getTagCompound().getString("class"))))
-                            		if(ClientInfos.KILL_ENTITY_XP.get(Entities.byName(s.getTagCompound().getString("class")))[j] > 0)
+                            	if(ClientInfos.KILL_ENTITY_XP.containsKey(Constants.Entities.byName(s.getTagCompound().getString("class"))))
+                            		if(ClientInfos.KILL_ENTITY_XP.get(Constants.Entities.byName(s.getTagCompound().getString("class")))[j] > 0)
                             		{
                             			toUnlock = true;
                             			tooltip.add(TextFormatting.RED + I18n.translateToLocal("text.unlock_lvl") + " " + j);

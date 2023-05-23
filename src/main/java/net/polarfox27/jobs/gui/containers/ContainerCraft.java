@@ -1,9 +1,9 @@
-package com.dorian2712.jobs.gui.containers;
+package net.polarfox27.jobs.gui.containers;
 
-import com.dorian2712.jobs.data.GainXPUtil;
-import com.dorian2712.jobs.data.JobsInfo;
-import com.dorian2712.jobs.data.PlayerData;
-import com.dorian2712.jobs.util.Constants.Job;
+import net.polarfox27.jobs.data.GainXPUtil;
+import net.polarfox27.jobs.data.JobsInfo;
+import net.polarfox27.jobs.data.PlayerData;
+import net.polarfox27.jobs.util.Constants;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.entity.player.InventoryPlayer;
@@ -186,7 +186,7 @@ public class ContainerCraft extends Container {
 
             if(GainXPUtil.CRAFT_UNLOCK_JOB.containsKey(itemstack.getItem()))
             {
-                Job j = GainXPUtil.CRAFT_UNLOCK_JOB.get(itemstack.getItem());
+                Constants.Job j = GainXPUtil.CRAFT_UNLOCK_JOB.get(itemstack.getItem());
                 int lvl = GainXPUtil.CRAFT_UNLOCK_LVL.get(itemstack.getItem());
                 if(lvl > infos.getLevelByJob(j))
                     itemstack = ItemStack.EMPTY;

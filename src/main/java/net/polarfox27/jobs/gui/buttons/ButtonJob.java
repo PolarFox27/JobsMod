@@ -1,14 +1,14 @@
-package com.dorian2712.jobs.gui.buttons;
+package net.polarfox27.jobs.gui.buttons;
 
-import com.dorian2712.jobs.data.ClientInfos;
-import com.dorian2712.jobs.util.Constants;
-import com.dorian2712.jobs.util.Constants.Job;
-import com.dorian2712.jobs.util.Reference;
+import net.polarfox27.jobs.data.ClientInfos;
+import net.polarfox27.jobs.util.Constants;
+import net.polarfox27.jobs.util.Reference;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiButton;
 import net.minecraft.client.renderer.GlStateManager;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.text.translation.I18n;
+
 import java.awt.Color;
 
 public class ButtonJob extends GuiButton {
@@ -17,9 +17,9 @@ public class ButtonJob extends GuiButton {
     private final int xTexStart;
     private final int yTexStart;
     private final String title;
-    private final Job job;
+    private final Constants.Job job;
 
-    public ButtonJob(int index, int posX, int posY, Job j)
+    public ButtonJob(int index, int posX, int posY, Constants.Job j)
     {
         super(index, posX, posY, 200, 30, "");
         this.xTexStart = 40 * j.index;

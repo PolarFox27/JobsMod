@@ -1,8 +1,8 @@
-package com.dorian2712.jobs.network;
+package net.polarfox27.jobs.network;
 
-import com.dorian2712.jobs.data.ClientInfos;
-import com.dorian2712.jobs.data.JobsInfo;
-import com.dorian2712.jobs.data.PlayerData;
+import net.polarfox27.jobs.data.ClientInfos;
+import net.polarfox27.jobs.data.JobsInfo;
+import net.polarfox27.jobs.data.PlayerData;
 import io.netty.buffer.ByteBuf;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraftforge.fml.common.network.simpleimpl.IMessage;

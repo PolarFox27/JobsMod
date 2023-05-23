@@ -1,14 +1,13 @@
-package com.dorian2712.jobs.data;
+package net.polarfox27.jobs.data;
 
 
-import com.dorian2712.jobs.network.PacketAddXP;
-import com.dorian2712.jobs.network.PacketLevelUp;
-import com.dorian2712.jobs.network.PacketSendRewardsClient;
-import com.dorian2712.jobs.network.PacketUpdateClientJob;
-import com.dorian2712.jobs.util.Constants;
-import com.dorian2712.jobs.util.Constants.Job;
-import com.dorian2712.jobs.util.JobsMath;
-import com.dorian2712.jobs.util.handlers.PacketHandler;
+import net.polarfox27.jobs.network.PacketAddXP;
+import net.polarfox27.jobs.network.PacketLevelUp;
+import net.polarfox27.jobs.network.PacketSendRewardsClient;
+import net.polarfox27.jobs.network.PacketUpdateClientJob;
+import net.polarfox27.jobs.util.Constants;
+import net.polarfox27.jobs.util.JobsMath;
+import net.polarfox27.jobs.util.handlers.PacketHandler;
 import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
@@ -27,13 +26,13 @@ public class JobsInfo {
 	
 	
 	//Set Values
-	public void set(Job j, int lvl, long xp)
+	public void set(Constants.Job j, int lvl, long xp)
 	{
 		long total = Constants.TOTAL_XP_BY_LEVEL[lvl] + xp;
 		set(j, total);
 	}
 	
-	public void set(Job j, long value)
+	public void set(Constants.Job j, long value)
 	{
 		long total = JobsMath.clamp(value, 0, Constants.TOTAL_XP_BY_LEVEL[25]);
 		int lvl = 0;
@@ -54,17 +53,17 @@ public class JobsInfo {
 	
 	
 	//Get Values
-	public int getLevelByJob(Job j)
+	public int getLevelByJob(Constants.Job j)
 	{
 		return this.levels[j.index];
 	}
 	
-	public long getXPByJob(Job j)
+	public long getXPByJob(Constants.Job j)
 	{
 		return this.XPs[j.index];
 	}
 	
-	public long getMissingXPForJob(Job j)
+	public long getMissingXPForJob(Constants.Job j)
 	{
 		if(this.levels[j.index] >= 25) return 0;
 		
@@ -80,7 +79,7 @@ public class JobsInfo {
 		for(int i = 0; i < 4; i++)
 		{
 			long l = total[i];
-			Job j = Job.byIndex(i);
+			Constants.Job j = Constants.Job.byIndex(i);
 			set(j, l);
 		}
 		return this;
@@ -101,18 +100,18 @@ public class JobsInfo {
 	
 	
 	//Add XP
-	public void addXP(Job j, long xp)
+	public void addXP(Constants.Job j, long xp)
 	{
 		long total = Constants.TOTAL_XP_BY_LEVEL[this.levels[j.index]] + this.XPs[j.index] + xp;
 		set(j, total);
 	}
 	
-	public boolean isMax(Job j)
+	public boolean isMax(Constants.Job j)
 	{
 		return this.levels[j.index] >= 25;
 	}
 	
-	public void gainXP(Job j, long xp, EntityPlayerMP p)
+	public void gainXP(Constants.Job j, long xp, EntityPlayerMP p)
 	{
 		if(xp <= 0) return;
 
@@ -139,7 +138,7 @@ public class JobsInfo {
 		}
 	}
 
-	private void giveReward(EntityPlayerMP p, Job j, int lvl)
+	private void giveReward(EntityPlayerMP p, Constants.Job j, int lvl)
 	{
 		List<ItemStack> list = new ArrayList<>();
 		System.out.println(j + " : " + lvl);

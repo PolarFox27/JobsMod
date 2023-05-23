@@ -1,12 +1,12 @@
-package com.dorian2712.jobs;
+package net.polarfox27.jobs;
 
-import com.dorian2712.jobs.data.PlayerData;
-import com.dorian2712.jobs.util.Reference;
-import com.dorian2712.jobs.util.handlers.GuiHandler;
-import com.dorian2712.jobs.util.handlers.PacketHandler;
-import com.dorian2712.jobs.util.handlers.RegistryHandler;
-import com.dorian2712.jobs.util.proxy.CommonProxy;
-import com.dorian2712.jobs.util.save.LoadUtil;
+import net.polarfox27.jobs.data.PlayerData;
+import net.polarfox27.jobs.util.Reference;
+import net.polarfox27.jobs.util.handlers.GuiHandler;
+import net.polarfox27.jobs.util.handlers.PacketHandler;
+import net.polarfox27.jobs.util.handlers.RegistryHandler;
+import net.polarfox27.jobs.util.proxy.CommonProxy;
+import net.polarfox27.jobs.util.save.LoadUtil;
 
 import net.minecraft.util.text.TextFormatting;
 import net.minecraftforge.fml.common.Mod;

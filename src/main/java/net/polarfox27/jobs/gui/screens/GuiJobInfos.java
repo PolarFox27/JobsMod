@@ -1,21 +1,19 @@
-package com.dorian2712.jobs.gui.screens;
+package net.polarfox27.jobs.gui.screens;
 
 import java.awt.Color;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
+import net.polarfox27.jobs.data.ClientInfos;
+import net.polarfox27.jobs.util.Constants;
+import net.polarfox27.jobs.util.JobsMath;
+import net.polarfox27.jobs.util.Reference;
 import org.lwjgl.input.Mouse;
 
-import com.dorian2712.jobs.data.ClientInfos;
-import com.dorian2712.jobs.gui.buttons.ButtonBack;
-import com.dorian2712.jobs.gui.buttons.ButtonXPCategory;
-import com.dorian2712.jobs.gui.buttons.SlideBarUnlock;
-import com.dorian2712.jobs.util.Constants;
-import com.dorian2712.jobs.util.Constants.Job;
-import com.dorian2712.jobs.util.Constants.XPCategories;
-import com.dorian2712.jobs.util.JobsMath;
-import com.dorian2712.jobs.util.Reference;
+import net.polarfox27.jobs.gui.buttons.ButtonBack;
+import net.polarfox27.jobs.gui.buttons.ButtonXPCategory;
+import net.polarfox27.jobs.gui.buttons.SlideBarUnlock;
 
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiButton;
@@ -37,7 +35,7 @@ public class GuiJobInfos extends GuiScreen {
     private static final ResourceLocation BACKGROUND = new ResourceLocation(Reference.MOD_ID, "textures/gui/gui_job_infos.png");
     private static final ResourceLocation ICONES = new ResourceLocation(Reference.MOD_ID, "textures/gui/jobs_icons.png");
     private static final ResourceLocation UNLOCK_BACKGROUND = new ResourceLocation(Reference.MOD_ID, "textures/gui/gui_unlocked_items.png");
-    private final Job job;
+    private final Constants.Job job;
     public int left;
     public int top;
     private int offsetUnlock;
@@ -45,7 +43,7 @@ public class GuiJobInfos extends GuiScreen {
     public int page;
     public final int pageNumber;
     private List<Item> unlocked_items = new ArrayList<>();
-    public GuiJobInfos(Job job)
+    public GuiJobInfos(Constants.Job job)
     {
         this.left = this.width/2 - 110;
         this.top = this.height/2 - 90;
@@ -62,8 +60,8 @@ public class GuiJobInfos extends GuiScreen {
     {
         this.buttonList.clear();
         this.addButton(new ButtonBack(0, this.width/2 - 105 + offsetUnlock, this.height/2-85));
-        this.addButton(new ButtonXPCategory(1, this.width/2 - 84 + offsetUnlock, this.height/2 + 40, XPCategories.XP));
-        this.addButton(new ButtonXPCategory(2, this.width/2 + 4 + offsetUnlock, this.height/2 + 40, XPCategories.UNLOCK));
+        this.addButton(new ButtonXPCategory(1, this.width/2 - 84 + offsetUnlock, this.height/2 + 40, Constants.XPCategories.XP));
+        this.addButton(new ButtonXPCategory(2, this.width/2 + 4 + offsetUnlock, this.height/2 + 40, Constants.XPCategories.UNLOCK));
 
         if(offsetUnlock == -70)
         {

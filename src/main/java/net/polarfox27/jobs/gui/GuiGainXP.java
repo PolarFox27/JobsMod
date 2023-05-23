@@ -1,9 +1,9 @@
-package com.dorian2712.jobs.gui;
+package net.polarfox27.jobs.gui;
 
-import com.dorian2712.jobs.data.ClientInfos;
-import com.dorian2712.jobs.util.Constants;
-import com.dorian2712.jobs.util.Constants.Job;
-import com.dorian2712.jobs.util.Reference;
+import net.polarfox27.jobs.data.ClientInfos;
+import net.polarfox27.jobs.util.Constants;
+import net.polarfox27.jobs.util.Constants.Job;
+import net.polarfox27.jobs.util.Reference;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.Gui;
 import net.minecraft.client.gui.ScaledResolution;
