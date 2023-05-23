@@ -7,6 +7,7 @@ import net.minecraft.nbt.CompoundTag;
 import net.minecraftforge.common.capabilities.*;
 import net.minecraftforge.common.util.LazyOptional;
 import net.polarfox27.jobs.data.registry.LevelData;
+import org.jetbrains.annotations.NotNull;
 
 import java.util.Optional;
 
@@ -37,8 +38,8 @@ public class PlayerData {
 		}
 
 		@Override
-		public <T> LazyOptional<T> getCapability(Capability<T> cap, Direction side) {
-			return LazyOptional.of(() -> (T)jobs);
+		public <T> @NotNull LazyOptional<T> getCapability(@NotNull Capability<T> cap, Direction side) {
+			return JOBS.orEmpty(cap, LazyOptional.of(() -> jobs));
 		}
 
 		/**

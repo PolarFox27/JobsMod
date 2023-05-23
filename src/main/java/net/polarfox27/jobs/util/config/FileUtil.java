@@ -4,6 +4,7 @@ import com.google.gson.JsonObject;
 import com.google.gson.JsonParseException;
 import com.google.gson.JsonParser;
 import net.minecraft.server.MinecraftServer;
+import net.minecraft.world.level.storage.LevelResource;
 import net.polarfox27.jobs.ModJobs;
 
 import java.io.*;
@@ -49,11 +50,7 @@ public class FileUtil {
      * @return the path to the Base Config Folder
      */
     public static String getBaseFolder(MinecraftServer server) {
-        String name = server.getMotd().substring(server.getMotd().indexOf(" - ")+3);
-        if(server.isSingleplayer())
-            return server.getServerDirectory().getAbsolutePath() + "/saves/" + name + "/jobs";
-        else
-            return server.getServerDirectory().getAbsolutePath() + "/jobs";
+        return server.getWorldPath(LevelResource.ROOT).getParent().toAbsolutePath() + "/jobs";
     }
 
     /**

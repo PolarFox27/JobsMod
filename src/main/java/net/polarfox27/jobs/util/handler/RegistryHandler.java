@@ -1,6 +1,7 @@
 package net.polarfox27.jobs.util.handler;
 
 import net.minecraftforge.common.MinecraftForge;
+import net.minecraftforge.common.capabilities.RegisterCapabilitiesEvent;
 import net.minecraftforge.event.RegisterCommandsEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.common.Mod.EventBusSubscriber;
@@ -8,6 +9,7 @@ import net.polarfox27.jobs.ModJobs;
 import net.polarfox27.jobs.commands.CommandAdd;
 import net.polarfox27.jobs.commands.CommandInfo;
 import net.polarfox27.jobs.commands.CommandSet;
+import net.polarfox27.jobs.data.capabilities.PlayerJobs;
 import net.polarfox27.jobs.events.CommonEvents;
 import net.polarfox27.jobs.events.client.GuiEvents;
 import net.polarfox27.jobs.events.server.BlockInteractionEvents;
@@ -39,6 +41,15 @@ public class RegistryHandler {
 		MinecraftForge.EVENT_BUS.register(new BlockInteractionEvents());
 		MinecraftForge.EVENT_BUS.register(new EntityInteractionEvents());
 		MinecraftForge.EVENT_BUS.register(new ItemInteractionEvents());
+	}
+
+	/**
+	 * Registers the jobs capabilities
+	 * @param event the register capabilities event
+	 */
+	@SubscribeEvent
+	public void registerCapabilities(RegisterCapabilitiesEvent event) {
+		event.register(PlayerJobs.class);
 	}
 
 }

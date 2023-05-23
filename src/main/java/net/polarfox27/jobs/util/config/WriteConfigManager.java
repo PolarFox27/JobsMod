@@ -52,9 +52,7 @@ public class WriteConfigManager {
      * @param file the file created.
      */
     public static void showFileCreated(String file){
-        ModJobs.info(ChatFormatting.YELLOW +  "Warning : File <" +
-                        file + "> not found. An empty file was created",
-                        false);
+        ModJobs.warning("File <" + file + "> not found. An empty file was created");
     }
 
 
