@@ -70,7 +70,7 @@ public class EntityInteractionEvents {
         if(event.getPlayer().level.isClientSide() || !(event.getPlayer() instanceof ServerPlayer))
             return;
         PlayerJobs jobs = PlayerData.getPlayerJobs(event.getPlayer());
-        if(!ServerJobsData.BLOCKED_LEFT_CLICKS.isAllowed(jobs, event.getPlayer().getMainHandItem()))
+        if(ServerJobsData.BLOCKED_LEFT_CLICKS.isBlocked(jobs, event.getPlayer().getMainHandItem()))
             event.setCanceled(true);
     }
 }

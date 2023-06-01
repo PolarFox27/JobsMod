@@ -94,13 +94,13 @@ public class ItemBlockedRegistry {
      * @param stack the stack to check
      * @return true if the player is allowed the stack
      */
-    public boolean isAllowed(PlayerJobs jobs, ItemStack stack){
+    public boolean isBlocked(PlayerJobs jobs, ItemStack stack){
         for(Map.Entry<String, List<ItemBlockedData>> e : this.DATA.entrySet())
             for(ItemBlockedData d : e.getValue()) {
                 if (d.matches(stack)) {
-                    return d.getLevel() <= jobs.getLevelByJob(e.getKey());
+                    return d.getLevel() > jobs.getLevelByJob(e.getKey());
                 }
             }
-        return true;
+        return false;
     }
 }

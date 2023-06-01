@@ -1,5 +1,6 @@
 package net.polarfox27.jobs;
 
+import net.minecraft.client.gui.screens.MenuScreens;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.event.server.ServerStartingEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
@@ -8,12 +9,12 @@ import net.minecraftforge.fml.event.lifecycle.FMLClientSetupEvent;
 import net.minecraftforge.fml.event.lifecycle.FMLCommonSetupEvent;
 import net.minecraftforge.fml.javafmlmod.FMLJavaModLoadingContext;
 import net.polarfox27.jobs.data.ServerJobsData;
+import net.polarfox27.jobs.gui.containers.GuiCraft;
 import net.polarfox27.jobs.util.config.ReadConfigManager;
 import net.polarfox27.jobs.util.handler.PacketHandler;
 import net.polarfox27.jobs.util.handler.RegistryHandler;
 import net.polarfox27.jobs.util.keybindings.KeyBindings;
 
-// The value here should match an entry in the META-INF/mods.toml file
 @Mod(ModJobs.MOD_ID)
 public class ModJobs {
     public static final String MOD_ID = "jobs";
@@ -28,6 +29,8 @@ public class ModJobs {
         info("Packets Registered", false);
         ServerJobsData.registerCommonXPRegistries();
         info("Common XP Categories Registered", false);
+        RegistryHandler.registerContainers();
+        info("Containers Registered", false);
         MinecraftForge.EVENT_BUS.register(this);
         FMLJavaModLoadingContext.get().getModEventBus().addListener(this::setup);
         FMLJavaModLoadingContext.get().getModEventBus().addListener(this::clientSetup);
@@ -41,6 +44,8 @@ public class ModJobs {
     public void clientSetup(final FMLClientSetupEvent event) {
         KeyBindings.register();
         info("Keybindings Registered", false);
+        MenuScreens.register(RegistryHandler.JOBS_CRAFT.get(), GuiCraft::new);
+        info("Container GUIs Registered", false);
     }
 
     @SubscribeEvent

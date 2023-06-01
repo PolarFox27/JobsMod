@@ -2,12 +2,14 @@ package net.polarfox27.jobs.events.client;
 
 import com.mojang.datafixers.util.Pair;
 import net.minecraft.client.Minecraft;
-import net.minecraft.network.chat.Component;
+import net.minecraft.core.BlockPos;
 import net.minecraft.network.chat.TranslatableComponent;
+import net.minecraft.stats.Stats;
 import net.minecraft.world.MenuProvider;
-import net.minecraft.world.entity.player.Inventory;
+import net.minecraft.world.SimpleMenuProvider;
 import net.minecraft.world.entity.player.Player;
-import net.minecraft.world.inventory.AbstractContainerMenu;
+import net.minecraft.world.inventory.ContainerLevelAccess;
+import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.Blocks;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
@@ -17,7 +19,7 @@ import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.common.Mod.EventBusSubscriber;
 import net.polarfox27.jobs.data.ClientJobsData;
 import net.polarfox27.jobs.gui.GuiGainXP;
-import net.polarfox27.jobs.gui.containers.ContainerCraft;
+import net.polarfox27.jobs.gui.containers.JobsCraftingMenu;
 
 @EventBusSubscriber
 public class GuiEvents {
@@ -52,7 +54,7 @@ public class GuiEvents {
         if(e.getWorld().getBlockState(e.getPos()).getBlock() == Blocks.CRAFTING_TABLE) {
             e.setCanceled(true);
             if(!e.getWorld().isClientSide) {
-                openUpdatedCraftingTable(e.getPlayer());
+                openUpdatedCraftingTable(e.getPlayer(), e.getWorld(), e.getPos());
             }
         }
     }
@@ -62,18 +64,11 @@ public class GuiEvents {
      * Opens the custom crafting interface of the Jobs mod.
      * @param player the player opening the interface
      */
-    private void openUpdatedCraftingTable(Player player){
-        player.openMenu(new MenuProvider() {
-
-            @Override
-            public AbstractContainerMenu createMenu(int index, Inventory inventory, Player player) {
-                return new ContainerCraft(index, inventory);
-            }
-
-            @Override
-            public Component getDisplayName() {
-                return new TranslatableComponent("container.crafting");
-            }
-        });
+    private void openUpdatedCraftingTable(Player player, Level level, BlockPos pos){
+        MenuProvider provider = new SimpleMenuProvider((id, inv, p_52231_) ->
+                new JobsCraftingMenu(id, inv, ContainerLevelAccess.create(level, pos)),
+                new TranslatableComponent("container.crafting"));
+        player.openMenu(provider);
+        player.awardStat(Stats.INTERACT_WITH_CRAFTING_TABLE);
     }
 }

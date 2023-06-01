@@ -158,7 +158,7 @@ public class PlayerJobs {
 		if(LVL == levelData.getMaxLevel(j) && p.getServer() != null) {
 			for(ServerPlayer mp : p.getServer().getPlayerList().getPlayers()) {
 				String message = ChatFormatting.DARK_PURPLE + p.getName().getString() +
-						ChatFormatting.BLUE + " has reached level " + levelData.getMaxLevel(j) + "for the job " + j + " !";
+						ChatFormatting.BLUE + " has reached level " + levelData.getMaxLevel(j) + " for the job " + j + " !";
 				mp.sendMessage(new TextComponent(message),
 							   mp.getGameProfile().getId());
 				p.getServer().sendMessage(new TextComponent(message),

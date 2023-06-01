@@ -80,7 +80,7 @@ public class ItemInteractionEvents {
         if(event.getPlayer().level.isClientSide() || !(event.getPlayer() instanceof ServerPlayer))
             return;
         PlayerJobs jobs = PlayerData.getPlayerJobs(event.getPlayer());
-        if(!ServerJobsData.BLOCKED_RIGHT_CLICKS.isAllowed(jobs, event.getItemStack()))
+        if(ServerJobsData.BLOCKED_RIGHT_CLICKS.isBlocked(jobs, event.getItemStack()))
             event.setCanceled(true);
     }
 
@@ -93,7 +93,7 @@ public class ItemInteractionEvents {
         if(event.getPlayer().level.isClientSide() || !(event.getPlayer() instanceof ServerPlayer))
             return;
         PlayerJobs jobs = PlayerData.getPlayerJobs(event.getPlayer());
-        if(!ServerJobsData.BLOCKED_LEFT_CLICKS.isAllowed(jobs, event.getItemStack()))
+        if(ServerJobsData.BLOCKED_LEFT_CLICKS.isBlocked(jobs, event.getItemStack()))
             event.setCanceled(true);
     }
 
@@ -108,7 +108,7 @@ public class ItemInteractionEvents {
         PlayerJobs jobs = PlayerData.getPlayerJobs(event.player);
         for(int i = 0; i < event.player.getInventory().armor.size(); i++) {
             ItemStack stack = event.player.getInventory().armor.get(i);
-            if (!ServerJobsData.BLOCKED_EQUIPMENTS.isAllowed(jobs, stack)) {
+            if (ServerJobsData.BLOCKED_EQUIPMENTS.isBlocked(jobs, stack)) {
                 event.player.drop(stack, true);
                 event.player.getInventory().armor.set(i, ItemStack.EMPTY);
                 return;
