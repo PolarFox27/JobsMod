@@ -1,5 +1,7 @@
 package net.polarfox27.jobs.network;
 
+import net.minecraft.entity.player.EntityPlayerMP;
+import net.polarfox27.jobs.data.capabilities.PlayerData;
 import net.polarfox27.jobs.util.handlers.PacketHandler;
 import io.netty.buffer.ByteBuf;
 import net.minecraftforge.fml.common.network.simpleimpl.IMessage;
@@ -24,7 +26,8 @@ public class PacketAskClientUpdate implements IMessage {
         @Override
         public IMessage onMessage(PacketAskClientUpdate message, MessageContext ctx) {
             if (ctx.side == Side.SERVER) {
-                PacketHandler.INSTANCE.sendTo(new PacketUpdateClientJob(ctx.getServerHandler().player), ctx.getServerHandler().player);
+                EntityPlayerMP player = ctx.getServerHandler().player;
+                PacketHandler.INSTANCE.sendTo(new PacketUpdateClientJob(PlayerData.getPlayerJobs(player)), player);
             }
 
             return null;

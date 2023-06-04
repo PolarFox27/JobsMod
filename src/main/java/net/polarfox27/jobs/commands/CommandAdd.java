@@ -1,8 +1,7 @@
 package net.polarfox27.jobs.commands;
 
 import net.polarfox27.jobs.network.PacketUpdateClientJob;
-import net.polarfox27.jobs.data.PlayerData;
-import net.polarfox27.jobs.util.Constants.Job;
+import net.polarfox27.jobs.data.capabilities.PlayerData;
 import net.polarfox27.jobs.util.handlers.PacketHandler;
 import net.minecraft.command.CommandBase;
 import net.minecraft.command.CommandException;
@@ -24,8 +23,7 @@ public class CommandAdd extends CommandBase {
     }
 
     @Override
-    public String getUsage(ICommandSender sender)
-    {
+    public String getUsage(ICommandSender sender) {
         return "/jobs-add [player] [job] [xp]";
     }
 
@@ -33,8 +31,7 @@ public class CommandAdd extends CommandBase {
     public int getRequiredPermissionLevel() {return 2; }
 
     @Override
-    public void execute(MinecraftServer server, ICommandSender sender, String[] args) throws CommandException
-    {
+    public void execute(MinecraftServer server, ICommandSender sender, String[] args) throws CommandException {
         if(args.length != 3)
         {
             sendError(sender);
@@ -60,14 +57,12 @@ public class CommandAdd extends CommandBase {
     }
 
 
-    private void sendError(ICommandSender sender)
-    {
+    private void sendError(ICommandSender sender) {
         sender.sendMessage(new TextComponentString(TextFormatting.RED + this.getUsage(sender)));
     }
 
     @Override
-    public List<String> getTabCompletions(MinecraftServer server, ICommandSender sender, String[] args, @Nullable BlockPos targetPos)
-    {
+    public List<String> getTabCompletions(MinecraftServer server, ICommandSender sender, String[] args, @Nullable BlockPos targetPos) {
         List<String> completions = new ArrayList<String>();
         if(args.length == 1)
         {

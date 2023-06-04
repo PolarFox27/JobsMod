@@ -1,8 +1,6 @@
 package net.polarfox27.jobs.commands;
 
-import net.polarfox27.jobs.data.JobsInfo;
-import net.polarfox27.jobs.data.PlayerData;
-import net.polarfox27.jobs.util.Constants.Job;
+import net.polarfox27.jobs.data.capabilities.PlayerData;
 import net.minecraft.command.CommandBase;
 import net.minecraft.command.CommandException;
 import net.minecraft.command.ICommandSender;
@@ -19,14 +17,12 @@ import java.util.List;
 public class CommandInfo extends CommandBase {
 
     @Override
-    public String getName()
-    {
+    public String getName() {
         return "jobs-info";
     }
 
     @Override
-    public String getUsage(ICommandSender sender)
-    {
+    public String getUsage(ICommandSender sender) {
         return "/jobs-info [player]";
     }
 
@@ -34,8 +30,7 @@ public class CommandInfo extends CommandBase {
     public int getRequiredPermissionLevel() {return 2;}
 
     @Override
-    public void execute(MinecraftServer server, ICommandSender sender, String[] args) throws CommandException
-    {
+    public void execute(MinecraftServer server, ICommandSender sender, String[] args) throws CommandException {
         if(sender instanceof EntityPlayerMP)
         {
             if(args.length == 0)
@@ -68,9 +63,8 @@ public class CommandInfo extends CommandBase {
         }
     }
 
-    private void printInfoOfPlayer(ICommandSender sender, EntityPlayerMP target)
-    {
-        JobsInfo infos = PlayerData.getPlayerJobs(target);
+    private void printInfoOfPlayer(ICommandSender sender, EntityPlayerMP target) {
+        PlayerJobs infos = PlayerData.getPlayerJobs(target);
         sender.sendMessage(new TextComponentString(TextFormatting.LIGHT_PURPLE + "Stats of " + TextFormatting.BLUE + target.getName()));
 
         for(int i = 0; i < 4; i++)
@@ -82,14 +76,12 @@ public class CommandInfo extends CommandBase {
         }
     }
 
-    private void sendError(ICommandSender sender)
-    {
+    private void sendError(ICommandSender sender) {
         sender.sendMessage(new TextComponentString(TextFormatting.RED + this.getUsage(sender)));
     }
 
     @Override
-    public List<String> getTabCompletions(MinecraftServer server, ICommandSender sender, String[] args, @Nullable BlockPos targetPos)
-    {
+    public List<String> getTabCompletions(MinecraftServer server, ICommandSender sender, String[] args, @Nullable BlockPos targetPos) {
         List<String> completions = new ArrayList<>();
         if(args.length == 1)
         {

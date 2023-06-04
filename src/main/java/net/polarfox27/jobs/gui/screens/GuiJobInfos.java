@@ -1,239 +1,246 @@
 package net.polarfox27.jobs.gui.screens;
 
-import java.awt.Color;
+import net.minecraft.client.Minecraft;
+import net.minecraft.client.gui.GuiButton;
+import net.minecraft.client.gui.GuiScreen;
+import net.minecraft.client.renderer.RenderHelper;
+import net.minecraft.client.resources.I18n;
+import net.minecraft.util.ResourceLocation;
+import net.minecraft.util.text.TextFormatting;
+import net.polarfox27.jobs.ModJobs;
+import net.polarfox27.jobs.data.ClientJobsData;
+import net.polarfox27.jobs.data.registry.unlock.UnlockStack;
+import net.polarfox27.jobs.gui.buttons.ButtonBack;
+import net.polarfox27.jobs.gui.buttons.ButtonXPCategory;
+import net.polarfox27.jobs.gui.buttons.SlideBarButton;
+import net.polarfox27.jobs.util.GuiUtil;
+import net.polarfox27.jobs.util.JobsUtil;
+import org.lwjgl.input.Mouse;
+import org.lwjgl.opengl.GL11;
+
+import javax.annotation.Nonnull;
+import java.awt.*;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
-import net.polarfox27.jobs.data.ClientInfos;
-import net.polarfox27.jobs.util.Constants;
-import net.polarfox27.jobs.util.JobsMath;
-import net.polarfox27.jobs.util.Reference;
-import org.lwjgl.input.Mouse;
+public class GuiJobInfos extends GuiScreen implements SliderParent{
 
-import net.polarfox27.jobs.gui.buttons.ButtonBack;
-import net.polarfox27.jobs.gui.buttons.ButtonXPCategory;
-import net.polarfox27.jobs.gui.buttons.SlideBarUnlock;
-
-import net.minecraft.client.Minecraft;
-import net.minecraft.client.gui.GuiButton;
-import net.minecraft.client.gui.GuiScreen;
-import net.minecraft.client.renderer.GlStateManager;
-import net.minecraft.client.renderer.OpenGlHelper;
-import net.minecraft.client.renderer.RenderHelper;
-import net.minecraft.client.renderer.RenderItem;
-import net.minecraft.client.renderer.entity.RenderManager;
-import net.minecraft.entity.EntityLivingBase;
-import net.minecraft.item.Item;
-import net.minecraft.item.ItemStack;
-import net.minecraft.util.ResourceLocation;
-import net.minecraft.util.text.TextFormatting;
-import net.minecraft.util.text.translation.I18n;
-
-public class GuiJobInfos extends GuiScreen {
-
-    private static final ResourceLocation BACKGROUND = new ResourceLocation(Reference.MOD_ID, "textures/gui/gui_job_infos.png");
-    private static final ResourceLocation ICONES = new ResourceLocation(Reference.MOD_ID, "textures/gui/jobs_icons.png");
-    private static final ResourceLocation UNLOCK_BACKGROUND = new ResourceLocation(Reference.MOD_ID, "textures/gui/gui_unlocked_items.png");
-    private final Constants.Job job;
+    private static final ResourceLocation BACKGROUND = new ResourceLocation(ModJobs.MOD_ID, "textures/gui/gui_job_infos.png");
+    private static final ResourceLocation UNLOCK_BACKGROUND = new ResourceLocation(ModJobs.MOD_ID, "textures/gui/gui_unlocked_stacks.png");
+    public final String job;
     public int left;
     public int top;
-    private int offsetUnlock;
-    private RenderItem renderItem;
+    public int offsetUnlock;
     public int page;
-    public final int pageNumber;
-    private List<Item> unlocked_items = new ArrayList<>();
-    public GuiJobInfos(Constants.Job job)
-    {
-        this.left = this.width/2 - 110;
-        this.top = this.height/2 - 90;
+    private final List<UnlockStack> unlocked_stacks;
+
+    private SlideBarButton slideBar;
+
+    /**
+     * Creates a Job Infos GUI
+     * @param job the job
+     */
+    public GuiJobInfos(String job) {
         this.job = job;
         this.offsetUnlock = 0;
-        this.renderItem = Minecraft.getMinecraft().getRenderItem();
         this.page = 0;
-        this.unlocked_items = ClientInfos.getClassedUnlockedItems(this.job);
-        this.pageNumber = unlocked_items.size() <= 7 ? 1 : unlocked_items.size() - 6;
+        this.unlocked_stacks = ClientJobsData.getUnlockedStacksSorted(this.job);
     }
 
+    /**
+     * Creates the buttons for XP and Unlock Stacks and the slide bar for the Unlocked Stacks
+     */
     @Override
-    public void initGui()
-    {
+    public void initGui() {
+        this.slideBar = new SlideBarButton(0, this.top + 30, this.top+135, this.width/2 + 93, this, true);
         this.buttonList.clear();
-        this.addButton(new ButtonBack(0, this.width/2 - 105 + offsetUnlock, this.height/2-85));
-        this.addButton(new ButtonXPCategory(1, this.width/2 - 84 + offsetUnlock, this.height/2 + 40, Constants.XPCategories.XP));
-        this.addButton(new ButtonXPCategory(2, this.width/2 + 4 + offsetUnlock, this.height/2 + 40, Constants.XPCategories.UNLOCK));
+        this.addButton(new ButtonBack(1, this.width/2 - 105 + offsetUnlock, this.height/2-85, this));
+        this.addButton(new ButtonXPCategory(2, this, this.width/2 - 84 + offsetUnlock, this.height/2 + 57, ButtonXPCategory.Type.XP));
+        this.addButton(new ButtonXPCategory(3, this, this.width/2 + 4 + offsetUnlock, this.height/2 + 57, ButtonXPCategory.Type.UNLOCK));
 
-        if(offsetUnlock == -70)
-        {
-            this.addButton(new SlideBarUnlock(3, this.width/2 + offsetUnlock + 115 + 48, this.top + 14 + 16, this));
+        if(offsetUnlock == -70) {
+            this.addButton(slideBar);
         }
         super.initGui();
     }
-    
+
+    /**
+     * @return false, this GUI doesn't pause the game
+     */
     @Override
-    public boolean doesGuiPauseGame() 
-    {
+    public boolean doesGuiPauseGame() {
     	return false;
     }
 
+
+    /**
+     * Renders the GUI on the screen
+     * @param mouseX the x coordinate of the mouse
+     * @param mouseY the y coordinate of the mouse
+     * @param partialTicks the render ticks
+     */
     @Override
-    public void drawScreen(int mouseX, int mouseY, float partialTicks)
-    {
-        this.left = this.width/2 - 110 + offsetUnlock;
+    public void drawScreen(int mouseX, int mouseY, float partialTicks) {
+    	super.drawScreen(mouseX, mouseY, partialTicks);
+    	this.left = this.width/2 - 110 + offsetUnlock;
         this.top = this.height/2 - 90;
         Minecraft.getMinecraft().getTextureManager().bindTexture(BACKGROUND);
-        GlStateManager.color(1.0F, 1.0F, 1.0F, 1.0F);
+        GL11.glColor4f(1.0F, 1.0F, 1.0F, 1.0F);
         this.drawTexturedModalRect(this.left, this.top, 0, 0, 220, 180);//background
         this.drawGradients();
 
-        if(offsetUnlock != 0)
-        {
+        if(offsetUnlock != 0) {
             Minecraft.getMinecraft().getTextureManager().bindTexture(UNLOCK_BACKGROUND);
-            GlStateManager.color(1.0F, 1.0F, 1.0F, 1.0F);
+            GL11.glColor4f(1.0F, 1.0F, 1.0F, 1.0F);
             this.drawTexturedModalRect(this.left + 225, this.top + 14, 0, 0, 70, 152);
         }
         super.drawScreen(mouseX, mouseY, partialTicks);
         if(offsetUnlock != 0)
             this.drawUnlockedItems(mouseX, mouseY);
 
+        if(isDragging(slideBar, mouseX, mouseY))
+            updateSlider(slideBar, mouseY);
     }
 
-    private void drawUnlockedItems( int mouseX, int mouseY)
-    {
+    /**
+     * Renders the Unlocked Stacks
+     * @param mouseX the x coordinate of the mouse, used to find the tooltip to render
+     * @param mouseY the y coordinate of the mouse, used to find the tooltip to render
+     */
+    private void drawUnlockedItems(int mouseX, int mouseY) {
         RenderHelper.disableStandardItemLighting();
         RenderHelper.enableGUIStandardItemLighting();
         int renderIndex = -1;
-        for(int i = 0; i < (unlocked_items.size() >= 7 ? 7 : unlocked_items.size() - page); i++)
-        {
-            renderItem.renderItemAndEffectIntoGUI(new ItemStack(unlocked_items.get(i + page)), this.left + 242, this.top + 27 + i*18);
+        for(int i = 0; i < (unlocked_stacks.size() >= 7 ? 7 : unlocked_stacks.size() - page); i++) {
+            itemRender.renderItemIntoGUI(unlocked_stacks.get(i + page).getStack(), this.left + 242, this.top + 27 + i*18);
             if(mouseX >= this.left + 242      && mouseX < this.left + 258 &&
                mouseY >= this.top + 27 + i*18 && mouseY < this.top + 27 + 16 + i*18)
                 renderIndex = i;
         }
-        if(renderIndex != -1) renderToolTip(new ItemStack(unlocked_items.get(renderIndex + page)), mouseX, mouseY);
+        if(renderIndex != -1)
+            drawHoveringText(getItemToolTip(unlocked_stacks.get(renderIndex + page)), mouseX, mouseY);
         RenderHelper.enableStandardItemLighting();
     }
 
-    private void drawGradients()
-    {
-        int lvl = ClientInfos.job.getLevelByJob(job);
-        Minecraft.getMinecraft().getTextureManager().bindTexture(ICONES);
-        this.drawTexturedModalRect(this.width/2 - 20 + offsetUnlock, this.top + 7, 40*this.job.index, 0, 40, 40);//icon
-        this.drawTexturedModalRect(this.width/2 - 20 + offsetUnlock, this.top + 7, 0, 40, 40, 40);//icon
-        this.drawTexturedModalRect(this.width/2 - 75 + offsetUnlock, this.top + 65, 0, 80, 150, 12); //background1
-        if(lvl < 25)
-            this.drawTexturedModalRect(this.width/2 - 75 + offsetUnlock, this.top + 90, 0, 80, 150, 12);//background2
+    /**
+     * Renders the progress bars of the Job
+     */
+    private void drawGradients() {
+        int lvl = ClientJobsData.playerJobs.getLevelByJob(job);
+        boolean isMaxLevel = ClientJobsData.playerJobs.isMax(job);
+        GuiUtil.renderCenteredString(ClientJobsData.getJobName(job), Color.BLACK.getRGB(), this.width/2 + offsetUnlock, this.top+15, 1.5f);
+        GuiUtil.drawJobIcon(this.job, this.width/2 + offsetUnlock, this.top + 48, 48);
 
-        int y = lvl < 25 ? 92 : 104;
-        int size1 = lvl < 25 ? (int) (((double)ClientInfos.job.getXPByJob(job)/ (double)Constants.XP_BY_LEVEL[lvl + 1]) * 150) : 150;
-        int size2 = lvl < 25 ? (int) (((double)ClientInfos.job.toTotalXPs()[job.index]/ (double)Constants.TOTAL_XP_BY_LEVEL[25]) * 150) : 0;
-        String text1 = lvl < 25 ? ClientInfos.job.getXPByJob(job) + "/" + Constants.XP_BY_LEVEL[lvl + 1] : I18n.translateToLocal("text.level.max");;
-        String text2 = lvl < 25 ? ClientInfos.job.toTotalXPs()[job.index] + "/" + Constants.TOTAL_XP_BY_LEVEL[25] : "";
-        String title1 = I18n.translateToLocal("text.level") + " " + lvl;
-        String title2 = lvl < 25 ? I18n.translateToLocal("text.total_progression") : "";
+        String title1 = I18n.format("text.level") + " " + lvl;
+        long progress1 = ClientJobsData.playerJobs.getXPByJob(job);
+        long total1 = ClientJobsData.JOBS_LEVELS.getXPForLevel(job, lvl+1);
+        GuiUtil.renderProgressBar(this, this.width/2 - 75 + offsetUnlock, this.top + 90, 150, 12, progress1, total1);
+        GuiUtil.renderCenteredString(title1, Color.BLACK.getRGB(), this.width/2 + offsetUnlock, this.top + 86, 1.0f);
 
-        this.drawTexturedModalRect(this.width/2 - 75 + offsetUnlock, this.top + 65, 0, y, size1, 12);//gradient1
-        this.drawTexturedModalRect(this.width/2 - 75 + offsetUnlock, this.top + 90, 0, y, size2, 12);//gradient2
-        this.fontRenderer.drawString(text1, this.width/2 + offsetUnlock - this.fontRenderer.getStringWidth(text1)/2, this.top + 67, Color.WHITE.getRGB());
-        this.fontRenderer.drawString(text2, this.width/2 + offsetUnlock - this.fontRenderer.getStringWidth(text2)/2, this.top + 92, Color.WHITE.getRGB());
-        this.fontRenderer.drawString(title1, this.width/2 + offsetUnlock - this.fontRenderer.getStringWidth(title1)/2, this.top + 56, Color.BLACK.getRGB());
-        this.fontRenderer.drawString(title2, this.width/2 + offsetUnlock - this.fontRenderer.getStringWidth(title2)/2, this.top + 81, Color.BLACK.getRGB());
+        if(isMaxLevel)
+            return;
 
-    }
-
-    @Override
-    protected void actionPerformed(GuiButton button) throws IOException
-    {
-        switch(button.id)
-        {
-            case 0:
-                Minecraft.getMinecraft().displayGuiScreen(new MainJobsMenu());
-                break;
-            case 1:
-                Minecraft.getMinecraft().displayGuiScreen(new GuiHowXP(this.job));
-                break;
-            case 2:
-                if(offsetUnlock == 0)
-                {
-                    offsetUnlock = -70;
-                }
-                else if(offsetUnlock == -70)
-                {
-                    offsetUnlock = 0;
-                }
-                initGui();
-                break;
-            default:
-                break;
-        }
-        super.actionPerformed(button);
-    }
-
-    public static void drawEntityOnScreen(int posX, int posY, int scale, float mouseX, float mouseY, EntityLivingBase ent)
-    {
-        GlStateManager.enableColorMaterial();
-        GlStateManager.pushMatrix();
-        GlStateManager.translate((float)posX, (float)posY, 50.0F);
-        GlStateManager.scale((float)(-scale), (float)scale, (float)scale);
-        GlStateManager.rotate(180.0F, 0.0F, 0.0F, 1.0F);
-        float f = ent.renderYawOffset;
-        float f1 = ent.rotationYaw;
-        float f2 = ent.rotationPitch;
-        float f3 = ent.prevRotationYawHead;
-        float f4 = ent.rotationYawHead;
-        GlStateManager.rotate(135.0F, 0.0F, 1.0F, 0.0F);
-        RenderHelper.enableStandardItemLighting();
-        GlStateManager.rotate(-135.0F, 0.0F, 1.0F, 0.0F);
-        GlStateManager.rotate(-((float)Math.atan((double)(mouseY / 40.0F))) * 20.0F, 1.0F, 0.0F, 0.0F);
-        ent.renderYawOffset = (float)Math.atan((double)(mouseX / 40.0F)) * 20.0F;
-        ent.rotationYaw = (float)Math.atan((double)(mouseX / 40.0F)) * 40.0F;
-        ent.rotationPitch = -((float)Math.atan((double)(mouseY / 40.0F))) * 20.0F;
-        ent.rotationYawHead = ent.rotationYaw;
-        ent.prevRotationYawHead = ent.rotationYaw;
-        GlStateManager.translate(0.0F, 0.0F, 0.0F);
-        RenderManager rendermanager = Minecraft.getMinecraft().getRenderManager();
-        rendermanager.setPlayerViewY(180.0F);
-        rendermanager.setRenderShadow(false);
-        rendermanager.renderEntity(ent, 0.0D, 0.0D, 0.0D, 0.0F, 1.0F, false);
-        rendermanager.setRenderShadow(true);
-        ent.renderYawOffset = f;
-        ent.rotationYaw = f1;
-        ent.rotationPitch = f2;
-        ent.prevRotationYawHead = f3;
-        ent.rotationYawHead = f4;
-        GlStateManager.popMatrix();
-        RenderHelper.disableStandardItemLighting();
-        GlStateManager.disableRescaleNormal();
-        GlStateManager.setActiveTexture(OpenGlHelper.lightmapTexUnit);
-        GlStateManager.disableTexture2D();
-        GlStateManager.setActiveTexture(OpenGlHelper.defaultTexUnit);
+        long progress2 = ClientJobsData.playerJobs.getTotalXPByJob(job);
+        long total2 = ClientJobsData.JOBS_LEVELS.getTotalXPForJob(job);
+        String title2 = lvl < ClientJobsData.JOBS_LEVELS.getMaxLevel(job) ? I18n.format("text.total_progression") : "";
+        GuiUtil.renderProgressBar(this, this.width / 2 - 75 + offsetUnlock, this.top + 115, 150, 12, progress2, total2);
+        GuiUtil.renderCenteredString(title2, Color.BLACK.getRGB(), this.width/2 + offsetUnlock, this.top + 111, 1.0f);
     }
 
 
-    @Override
-    public List<String> getItemToolTip(ItemStack stack)
-    {
+    /**
+     * @param stack the stack hovered
+     * @return the list of tooltip of the stack
+     */
+    public List<String> getItemToolTip(UnlockStack stack) {
         List<String> tooltip = new ArrayList<>();
-        tooltip.add(stack.getDisplayName());
-        if(ClientInfos.CRAFT_UNLOCK_LVL.get(stack.getItem()) > ClientInfos.job.getLevelByJob(this.job))
-        {
-            tooltip.add(TextFormatting.RED  + I18n.translateToLocal("text.unlock_lvl") + " " + ClientInfos.CRAFT_UNLOCK_LVL.get(stack.getItem()));
+        tooltip.add(stack.getStack().getDisplayName());
+        if(stack.getLevel() > ClientJobsData.playerJobs.getLevelByJob(this.job)) {
+            tooltip.add(TextFormatting.RED  + I18n.format("text.unlock_" + stack.getType() + "_lvl")
+                            + " " + stack.getLevel());
         }
-        else tooltip.add(TextFormatting.GREEN  + I18n.translateToLocal("text.unlock_craft"));
-
+        else
+            tooltip.add(TextFormatting.GREEN  + I18n.format("text.unlock_" + stack.getType()));
         return tooltip;
     }
 
+    /**
+     * Goes one page up or down when the mouse is scrolled
+     */
     @Override
-    public void handleMouseInput() throws IOException
-    {
+    public void handleMouseInput() throws IOException {
         super.handleMouseInput();
-        int x;
-        if (Mouse.getEventDWheel() != 0 && offsetUnlock == -70)
-        {
-            x = -1 * Integer.signum(Mouse.getEventDWheel());
-            this.page = JobsMath.clamp(this.page + x, 0, this.pageNumber-1);
-            this.buttonList.get(3).y = this.top + 30 + (int)(((double)this.page/(double) (this.pageNumber - 1))*105);
+        if (Mouse.getEventDWheel() != 0 && offsetUnlock == -70) {
+            int x = -1 * Integer.signum(Mouse.getEventDWheel());
+            setPage(true, JobsUtil.clamp(this.page + x, 0, getLastPage(true)));
+            this.slideBar.update();
         }
+    }
+
+    /**
+     * Performs the action of clicking on the button
+     * @param button the button clicked
+     */
+    @Override
+    protected void actionPerformed(@Nonnull GuiButton button) {
+        if(button instanceof ButtonXPCategory)
+            ((ButtonXPCategory)button).onPress();
+        else if(button instanceof ButtonBack)
+            Minecraft.getMinecraft().displayGuiScreen(new MainJobsMenu());
+    }
+
+    /**
+     * checks if the slide bar is dragged
+     * @param btn the slide bar button
+     * @param mouseX the x coordinate of the mouse
+     * @param mouseY the y coordinate of the mouse
+     * @return true if the slide bar is dragged
+     */
+    @Override
+    public boolean isDragging(SlideBarButton btn, int mouseX, int mouseY){
+        return Mouse.isGrabbed() &&
+                mouseX >= this.width/2 + offsetUnlock + 163 && mouseX <= this.width/2 + offsetUnlock + 175 &&
+                mouseY >= this.top + 30 && mouseY <= this.top + 135;
+    }
+
+    /**
+     * Updates the slider based on its current position
+     * @param btn the slide bar button
+     * @param mouseY the position of the mouse on the Y axis
+     */
+    @Override
+    public void updateSlider(SlideBarButton btn, int mouseY){
+        int y = JobsUtil.clamp(mouseY - 30 - this.top, 0, 105);
+        setPage(true, (int)Math.round((y/105.0d)*(double)getLastPage(true)));
+        btn.update();
+    }
+
+    /**
+     * @param isVertical not used because there is only 1 slider
+     * @return the current page of the slider of the given orientation
+     */
+    @Override
+    public int getPage(boolean isVertical) {
+        return page;
+    }
+
+    /**
+     * @param isVertical not used because there is only 1 slider
+     * @return the last page of the slider
+     */
+    @Override
+    public int getLastPage(boolean isVertical) {
+        return unlocked_stacks.size() <= 7 ? 0 : unlocked_stacks.size() - 7;
+    }
+
+    /**
+     * Sets the slider to a specific page
+     * @param isVertical not used because there is only 1 slider
+     * @param page the new page
+     */
+    @Override
+    public void setPage(boolean isVertical, int page) {
+        this.page = JobsUtil.clamp(page, 0, getLastPage(true));
     }
 }

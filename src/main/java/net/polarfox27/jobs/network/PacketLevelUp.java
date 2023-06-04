@@ -1,38 +1,33 @@
 package net.polarfox27.jobs.network;
 
-import net.polarfox27.jobs.data.ClientInfos;
-import net.polarfox27.jobs.util.Constants.Job;
 import io.netty.buffer.ByteBuf;
 import net.minecraft.client.Minecraft;
 import net.minecraftforge.fml.common.network.simpleimpl.IMessage;
 import net.minecraftforge.fml.common.network.simpleimpl.IMessageHandler;
 import net.minecraftforge.fml.common.network.simpleimpl.MessageContext;
 import net.minecraftforge.fml.relauncher.Side;
+import net.polarfox27.jobs.util.JobsUtil;
 
 public class PacketLevelUp implements IMessage {
 
-    private Job job = Job.NONE;
+    private String job = "";
 
     public PacketLevelUp(){}
-    public PacketLevelUp(Job j)
-    {
+    public PacketLevelUp(String j) {
         this.job = j;
     }
 
     @Override
-    public void fromBytes(ByteBuf buf)
-    {
-        this.job = Job.byIndex(buf.readInt());
+    public void fromBytes(ByteBuf buf) {
+        this.job = JobsUtil.readFromBuf(buf);
     }
 
     @Override
-    public void toBytes(ByteBuf buf)
-    {
-        buf.writeInt(job.index);
+    public void toBytes(ByteBuf buf) {
+        JobsUtil.writeToBuf(this.job, buf);
     }
 
-    public static class MessageHandler implements IMessageHandler<PacketLevelUp, IMessage>
-    {
+    public static class MessageHandler implements IMessageHandler<PacketLevelUp, IMessage> {
 
         @Override
         public IMessage onMessage(PacketLevelUp message, MessageContext ctx)

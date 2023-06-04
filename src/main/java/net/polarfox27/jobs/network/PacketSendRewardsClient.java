@@ -3,8 +3,6 @@ package net.polarfox27.jobs.network;
 import java.util.ArrayList;
 import java.util.List;
 
-import net.polarfox27.jobs.data.ClientInfos;
-
 import io.netty.buffer.ByteBuf;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
@@ -18,15 +16,13 @@ public class PacketSendRewardsClient implements IMessage {
     private List<ItemStack> stacks = new ArrayList<>();
 
     public PacketSendRewardsClient(){}
-    public PacketSendRewardsClient(List<ItemStack> rewards)
-    {
+    public PacketSendRewardsClient(List<ItemStack> rewards) {
         for(ItemStack s : rewards)
             stacks.add(s.copy());
     }
 
     @Override
-    public void fromBytes(ByteBuf buf)
-    {
+    public void fromBytes(ByteBuf buf) {
         int size = buf.readInt();
         for(int i = 0; i < size; i++)
         {
@@ -37,8 +33,7 @@ public class PacketSendRewardsClient implements IMessage {
     }
 
     @Override
-    public void toBytes(ByteBuf buf)
-    {
+    public void toBytes(ByteBuf buf) {
         buf.writeInt(stacks.size());
         for(ItemStack s : stacks)
         {
@@ -48,8 +43,7 @@ public class PacketSendRewardsClient implements IMessage {
 
     }
 
-    public static class MessageHandler implements IMessageHandler<PacketSendRewardsClient, IMessage>
-    {
+    public static class MessageHandler implements IMessageHandler<PacketSendRewardsClient, IMessage> {
 
         @Override
         public IMessage onMessage(PacketSendRewardsClient m, MessageContext ctx)

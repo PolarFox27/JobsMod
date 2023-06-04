@@ -1,35 +1,32 @@
 package net.polarfox27.jobs.network;
 
-import net.polarfox27.jobs.data.ClientInfos;
-import net.polarfox27.jobs.util.Constants.Job;
 import io.netty.buffer.ByteBuf;
 import net.minecraftforge.fml.common.network.simpleimpl.IMessage;
 import net.minecraftforge.fml.common.network.simpleimpl.IMessageHandler;
 import net.minecraftforge.fml.common.network.simpleimpl.MessageContext;
 import net.minecraftforge.fml.relauncher.Side;
+import net.polarfox27.jobs.data.ClientJobsData;
+import net.polarfox27.jobs.util.JobsUtil;
 
 public class PacketAddXP implements IMessage {
 
-    private int job;
+    private String job;
     private long xpAdded;
     public PacketAddXP(){}
-    public PacketAddXP(Job j, long xp)
-    {
-        this.job = j.index;
+    public PacketAddXP(String j, long xp) {
+        this.job = j;
         this.xpAdded = xp;
     }
 
     @Override
-    public void fromBytes(ByteBuf buf)
-    {
-        this.job = buf.readInt();
+    public void fromBytes(ByteBuf buf) {
+        this.job = JobsUtil.readFromBuf(buf);
         this.xpAdded = buf.readLong();
     }
 
     @Override
-    public void toBytes(ByteBuf buf)
-    {
-        buf.writeInt(this.job);
+    public void toBytes(ByteBuf buf) {
+        JobsUtil.writeToBuf(this.job, buf);
         buf.writeLong(this.xpAdded);
     }
 
@@ -40,7 +37,7 @@ public class PacketAddXP implements IMessage {
         {
             if(ctx.side == Side.CLIENT)
             {
-                ClientInfos.showAddGui(Job.byIndex(message.job), message.xpAdded);
+                ClientJobsData.showAddGui(message.job, message.xpAdded);
             }
             return null;
         }

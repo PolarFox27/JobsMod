@@ -1,96 +1,74 @@
 package net.polarfox27.jobs.gui.buttons;
 
-import net.polarfox27.jobs.data.ClientInfos;
-import net.polarfox27.jobs.util.Constants;
-import net.polarfox27.jobs.util.Reference;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiButton;
-import net.minecraft.client.renderer.GlStateManager;
-import net.minecraft.util.ResourceLocation;
-import net.minecraft.util.text.translation.I18n;
+import net.minecraft.client.resources.I18n;
+import net.polarfox27.jobs.data.ClientJobsData;
+import net.polarfox27.jobs.gui.screens.GuiJobInfos;
+import net.polarfox27.jobs.util.GuiUtil;
+import net.polarfox27.jobs.util.handlers.GuiHandler;
+import org.lwjgl.opengl.GL11;
 
-import java.awt.Color;
+import java.awt.*;
 
 public class ButtonJob extends GuiButton {
 
-    private final ResourceLocation texture = new ResourceLocation(Reference.MOD_ID + ":textures/gui/jobs_icons.png");
-    private final int xTexStart;
-    private final int yTexStart;
-    private final String title;
-    private final Constants.Job job;
 
-    public ButtonJob(int index, int posX, int posY, Constants.Job j)
-    {
-        super(index, posX, posY, 200, 30, "");
-        this.xTexStart = 40 * j.index;
-        this.yTexStart = 0;
-        this.title = I18n.translateToLocal("jobs." + j.name);
+
+    private final String title;
+    private final String job;
+
+    /**
+     * Creates a Job Button
+     * @param id the button id
+     * @param posX the x coordinate
+     * @param posY the y coordinate
+     * @param j the job the button is representing
+     */
+    public ButtonJob(int id, int posX, int posY, String j) {
+        super(id, posX, posY, 200, 40, "");
+        this.title = ClientJobsData.getJobName(j);
         this.job = j;
     }
 
-    public void setPosition(int x, int y)
-    {
-        this.x = x;
-        this.y = y;
-    }
 
-    public void drawButton(Minecraft mc, int mouseX, int mouseY, float partialTicks)
-    {
-        if (this.visible)
-        {
-            this.hovered = mouseX >= this.x && mouseY >= this.y && mouseX < this.x + this.width && mouseY < this.y + this.height;
-            GlStateManager.color(1.0F, 1.0F, 1.0F, 1.0F);
-            mc.getTextureManager().bindTexture(this.texture);
-            drawIcon();
-            drawGradient();
+    /**
+     * Renders the widget on the screen
+     * @param mouseX the x coordinate of the mouse
+     * @param mouseY the y coordinate of the mouse
+     * @param partialTicks the render ticks
+     */
+    @Override
+    public void drawButton(Minecraft mc, int mouseX, int mouseY, float partialTicks) {
+    	if (this.visible) {
+            float f = 1.0f;
+            GL11.glColor4f(f, f, f, 1.0F);
+            GuiUtil.drawJobIcon(this.job, this.x+20, this.y+20, 32);
+            long xp = ClientJobsData.playerJobs.getXPByJob(this.job);
+            int lvl = ClientJobsData.playerJobs.getLevelByJob(this.job);
+            long total = lvl >= ClientJobsData.JOBS_LEVELS.getMaxLevel(this.job) ? xp :
+                    ClientJobsData.JOBS_LEVELS.getXPForLevel(this.job, lvl+1);
+            GuiUtil.renderProgressBar(this, this.x+45, this.y+15, 150, 12, xp, total);
             drawName();
-
         }
     }
 
-    private void drawIcon()
-    {
-        int i = this.xTexStart;
-        int j = this.yTexStart;
-        drawScaledCustomSizeModalRect(this.x, this.y, i, j, 40, 40, 30, 30, 256, 256);
-        drawScaledCustomSizeModalRect(this.x, this.y, 0, 40, 40, 40, 30, 30, 256, 256);
-    }
-
-    private void drawGradient()
-    {
-        long xp = ClientInfos.job.getXPByJob(this.job);
-        int lvl = ClientInfos.job.getLevelByJob(this.job);
-        if(lvl < 25)
-        {
-            long total = Constants.XP_BY_LEVEL[lvl+1];
-            int size = (int)(150*((double)xp / (double)total));
-            this.drawTexturedModalRect(this.x + 45, this.y + 15, 0, 80, 150, 12); //background
-            this.drawTexturedModalRect(this.x + 45, this.y + 15, 0, 92, size, 12);
-
-            String info = xp + "/" + total;
-            int widthInfo = Minecraft.getMinecraft().fontRenderer.getStringWidth(info);
-            Minecraft.getMinecraft().fontRenderer.drawString(info, this.x + 120 - widthInfo/2, this.y + 18,
-                    Color.white.getRGB());
-        }
-        else
-        {
-            int size = 150;
-            this.drawTexturedModalRect(this.x + 45, this.y + 15, 0, 80, 150, 12); //background
-            this.drawTexturedModalRect(this.x + 45, this.y + 15, 0, 104, size, 12);
-
-            String info = I18n.translateToLocal("text.level.max");
-            int widthInfo = Minecraft.getMinecraft().fontRenderer.getStringWidth(info);
-            Minecraft.getMinecraft().fontRenderer.drawString(info, this.x + 120 - widthInfo/2, this.y + 18,
-                    Color.white.getRGB());
-        }
-    }
-
-    private void drawName()
-    {
-        int lvl = ClientInfos.job.getLevelByJob(this.job);
-        String name = this.title + " (" + I18n.translateToLocal("text.level") + " " + lvl + ")";
+    /**
+     * Renders the Job name and level on the screen
+     */
+    private void drawName() {
+        int lvl = ClientJobsData.playerJobs.getLevelByJob(this.job);
+        String name = this.title + " (" + I18n.format("text.level") + " " + lvl + ")";
         int x = 120 - Minecraft.getMinecraft().fontRenderer.getStringWidth(name)/2;
-        int y = 2;
+        int y = Minecraft.getMinecraft().fontRenderer.FONT_HEIGHT/2;
         Minecraft.getMinecraft().fontRenderer.drawString(name, this.x + x, this.y + y, Color.black.getRGB());
+    }
+
+
+    /**
+     * Opens the corresponding Jobs Infos screen when pressed.
+     */
+    public void onPress() {
+        Minecraft.getMinecraft().displayGuiScreen(new GuiJobInfos(job));
     }
 }

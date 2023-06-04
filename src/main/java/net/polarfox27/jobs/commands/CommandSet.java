@@ -1,9 +1,7 @@
 package net.polarfox27.jobs.commands;
 
-import net.polarfox27.jobs.data.PlayerData;
+import net.polarfox27.jobs.data.capabilities.PlayerData;
 import net.polarfox27.jobs.network.PacketUpdateClientJob;
-import net.polarfox27.jobs.util.Constants;
-import net.polarfox27.jobs.util.Constants.Job;
 import net.polarfox27.jobs.util.handlers.PacketHandler;
 import net.minecraft.command.CommandBase;
 import net.minecraft.command.CommandException;
@@ -20,14 +18,12 @@ import java.util.List;
 
 public class CommandSet extends CommandBase {
     @Override
-    public String getName()
-    {
+    public String getName() {
         return "jobs-set";
     }
 
     @Override
-    public String getUsage(ICommandSender sender)
-    {
+    public String getUsage(ICommandSender sender) {
         return "/jobs-set [player] [job] [level] [xp]";
     }
 
@@ -35,8 +31,7 @@ public class CommandSet extends CommandBase {
     public int getRequiredPermissionLevel() {return 2;}
 
     @Override
-    public void execute(MinecraftServer server, ICommandSender sender, String[] args) throws CommandException
-    {
+    public void execute(MinecraftServer server, ICommandSender sender, String[] args) throws CommandException {
         EntityPlayerMP target = null;
         if(args.length == 3)
         {
@@ -72,20 +67,17 @@ public class CommandSet extends CommandBase {
     }
 
 
-    private void sendError(ICommandSender sender)
-    {
+    private void sendError(ICommandSender sender) {
         sender.sendMessage(new TextComponentString(TextFormatting.RED + this.getUsage(sender)));
     }
 
-    private void setJob(EntityPlayerMP target, Job j, long xp)
-    {
+    private void setJob(EntityPlayerMP target, Job j, long xp) {
         PlayerData.getPlayerJobs(target).set(j, xp);
         PacketHandler.INSTANCE.sendTo(new PacketUpdateClientJob(target), target);
     }
 
     @Override
-    public List<String> getTabCompletions(MinecraftServer server, ICommandSender sender, String[] args, @Nullable BlockPos targetPos)
-    {
+    public List<String> getTabCompletions(MinecraftServer server, ICommandSender sender, String[] args, @Nullable BlockPos targetPos) {
         List<String> completions = new ArrayList<>();
         if(args.length == 1)
         {

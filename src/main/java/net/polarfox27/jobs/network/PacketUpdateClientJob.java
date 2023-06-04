@@ -1,38 +1,31 @@
 package net.polarfox27.jobs.network;
 
-import net.polarfox27.jobs.data.ClientInfos;
-import net.polarfox27.jobs.data.JobsInfo;
-import net.polarfox27.jobs.data.PlayerData;
+import net.polarfox27.jobs.data.ClientJobsData;
 import io.netty.buffer.ByteBuf;
-import net.minecraft.entity.player.EntityPlayer;
 import net.minecraftforge.fml.common.network.simpleimpl.IMessage;
 import net.minecraftforge.fml.common.network.simpleimpl.IMessageHandler;
 import net.minecraftforge.fml.common.network.simpleimpl.MessageContext;
 import net.minecraftforge.fml.relauncher.Side;
+import net.polarfox27.jobs.data.capabilities.PlayerJobs;
 
 public class PacketUpdateClientJob implements IMessage {
 
-    private long[] xps = new long[]{0, 0, 0, 0};
+    private PlayerJobs jobs;
 
     public PacketUpdateClientJob(){}
-    public PacketUpdateClientJob(EntityPlayer player)
-    {
-        this.xps = PlayerData.getPlayerJobs(player).toTotalXPs();
+    public PacketUpdateClientJob(PlayerJobs jobs) {
+        this.jobs = jobs;
     }
 
 
     @Override
-    public void fromBytes(ByteBuf buf)
-    {
-        for(int i = 0; i < 4; i++)
-            this.xps[i] = buf.readLong();
+    public void fromBytes(ByteBuf buf) {
+        this.jobs = new PlayerJobs(buf);
     }
 
     @Override
-    public void toBytes(ByteBuf buf)
-    {
-        for(int i = 0; i < 4; i++)
-            buf.writeLong(xps[i]);
+    public void toBytes(ByteBuf buf) {
+        this.jobs.writeToBytes(buf);
     }
 
     public static class MessageHandler implements IMessageHandler<PacketUpdateClientJob, IMessage> {
@@ -40,7 +33,7 @@ public class PacketUpdateClientJob implements IMessage {
         @Override
         public IMessage onMessage(PacketUpdateClientJob message, MessageContext ctx) {
             if (ctx.side == Side.CLIENT) {
-                ClientInfos.job = new JobsInfo().fromTotalXPs(message.xps);
+                ClientJobsData.playerJobs = message.jobs;
             }
 
             return null;

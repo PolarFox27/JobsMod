@@ -1,38 +1,36 @@
-//KeyBindings
+"keys.jobs.category"="Jobs"
+"keys.jobs.open_gui"="Open Jobs Menu"
 
-keys.jobs.category=Jobs
-keys.jobs.open_gui=Open Jobs Menu
+"text.level"="level"
+"text.levelup"="Level Up"
+"text.jobs.title"="Jobs"
+"text.level.max"="Level Max"
+"text.unlock_xp_lvl"="Unlock at lvl"
+"text.unlocked"="Unlocked Items/Blocks/Tools"
+"text.unlock_crafting"="Craft Unlocked"
+"text.unlock_breaking"="Harvest Unlocked"
+"text.unlock_equip"="Equipment Unlocked"
+"text.unlock_left_click"="Left Click Unlocked"
+"text.unlock_right_click"="Right Click Unlocked"
+"text.unlock_crafting_lvl"="Unlock crafting at lvl"
+"text.unlock_breaking_lvl"="Unlock harvesting at lvl"
+"text.unlock_equip_lvl"="Unlock equipment at lvl"
+"text.unlock_left_click_lvl"="Unlock left click at lvl"
+"text.unlock_right_click_lvl"="Unlock right click at lvl"
+"text.rewards"="Rewards"
+"text.total_progression"="Total Progression"
+"text.no_way_of_gaining_xp"="There is no way of gaining XP for this job"
+"text.no_unlock"="Nothing Unlocked"
+"text.no_reward"="No Rewards"
 
-//Jobs
+"category.unlock"="Locked Items"
+"category.xp"="How to XP ?"
 
-jobs.hunter=Hunter
-jobs.magician=Magician
-jobs.farmer=Farmer
-jobs.miner=Miner
-
-//Items
-item.jobs_book.name=Jobs Book
-
-
-
-//Texts
-text.level=level
-text.levelup=Level Up
-text.jobs.title=Jobs
-text.level.max=Level Max
-text.unlocked=Unlocked
-text.unlock_craft=Craft Unlocked
-text.unlock_drop=Harvesting Unlocked
-text.unlock_lvl=Unlock at lvl
-text.rewards=Rewards
-text.total_progression=Total Progression
-text.need_book=You need a
-
-category.CRAFTING=Crafting
-category.SMELTING=Smelting
-category.BREAKING=Breaking
-category.KILLING=Killing
-category.HARVESTING=Harvesting
-category.UNLOCK=Locked Items
-category.XP=How to XP ?
+"category.crafting"="Crafting"
+"category.smelting"="Smelting"
+"category.breaking"="Mining"
+"category.harvesting"="Harvesting"
+"category.killing"="Killing"
+"category.breeding"="Breeding"
+"category.fishing"="Fishing"
 
