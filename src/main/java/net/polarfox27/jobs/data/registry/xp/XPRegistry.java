@@ -2,11 +2,9 @@ package net.polarfox27.jobs.data.registry.xp;
 
 import io.netty.buffer.ByteBuf;
 import net.minecraft.block.state.IBlockState;
-import net.minecraft.entity.EntityLiving;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
-import io.netty.buffer.ByteBuf;
 import net.polarfox27.jobs.util.JobsUtil;
 import net.polarfox27.jobs.util.config.JsonUtil;
 

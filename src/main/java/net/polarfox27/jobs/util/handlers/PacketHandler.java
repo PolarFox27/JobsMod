@@ -10,6 +10,9 @@ public class PacketHandler {
 
     public static final SimpleNetworkWrapper INSTANCE = NetworkRegistry.INSTANCE.newSimpleChannel(ModJobs.MOD_ID);
 
+    /**
+     * Registers packets
+     */
     public static void registerPackets() {
         INSTANCE.registerMessage(PacketUpdateClientJob.MessageHandler.class, PacketUpdateClientJob.class, 0, Side.CLIENT);
         INSTANCE.registerMessage(PacketAskClientUpdate.MessageHandler.class, PacketAskClientUpdate.class, 1, Side.SERVER);

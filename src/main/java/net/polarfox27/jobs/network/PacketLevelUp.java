@@ -6,6 +6,7 @@ import net.minecraftforge.fml.common.network.simpleimpl.IMessage;
 import net.minecraftforge.fml.common.network.simpleimpl.IMessageHandler;
 import net.minecraftforge.fml.common.network.simpleimpl.MessageContext;
 import net.minecraftforge.fml.relauncher.Side;
+import net.polarfox27.jobs.data.ClientJobsData;
 import net.polarfox27.jobs.util.JobsUtil;
 
 public class PacketLevelUp implements IMessage {
@@ -30,12 +31,10 @@ public class PacketLevelUp implements IMessage {
     public static class MessageHandler implements IMessageHandler<PacketLevelUp, IMessage> {
 
         @Override
-        public IMessage onMessage(PacketLevelUp message, MessageContext ctx)
-        {
-            if(ctx.side == Side.CLIENT)
-            {
+        public IMessage onMessage(PacketLevelUp message, MessageContext ctx) {
+            if(ctx.side == Side.CLIENT) {
                 if(Minecraft.getMinecraft().player == null) return null;
-                ClientInfos.showLevelUpGui(message.job);
+                ClientJobsData.showLevelUpGui(message.job);
             }
             return null;
         }

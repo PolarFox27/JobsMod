@@ -8,6 +8,8 @@ import net.polarfox27.jobs.gui.screens.SliderParent;
 import net.polarfox27.jobs.util.JobsUtil;
 import org.lwjgl.opengl.GL11;
 
+import javax.annotation.Nonnull;
+
 public class SlideBarButton extends GuiButton {
 
     private final ResourceLocation texture = new ResourceLocation(ModJobs.MOD_ID + ":textures/gui/gui_how_xp.png");
@@ -43,7 +45,7 @@ public class SlideBarButton extends GuiButton {
      * @param partialTicks the render ticks
      */
     @Override
-    public void drawButton(Minecraft mc, int mouseX, int mouseY, float partialTicks) {
+    public void drawButton(@Nonnull Minecraft mc, int mouseX, int mouseY, float partialTicks) {
         if (this.visible) {
             boolean disabled = this.parent.getLastPage(isVertical) == 0;
             GL11.glColor4f(1.0F, 1.0F, 1.0F, 1.0F);

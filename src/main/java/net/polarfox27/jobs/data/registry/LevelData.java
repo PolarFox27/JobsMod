@@ -1,7 +1,6 @@
 package net.polarfox27.jobs.data.registry;
 
 import io.netty.buffer.ByteBuf;
-import io.netty.buffer.ByteBuf;
 import net.polarfox27.jobs.util.JobsUtil;
 
 import java.util.Arrays;

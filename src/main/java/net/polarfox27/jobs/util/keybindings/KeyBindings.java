@@ -10,6 +10,6 @@ public class KeyBindings {
     public static final String OPEN_GUI = "keys.jobs.open_gui";
 
     public enum Key{
-        NONE, OPEN_GUI;
+        NONE, OPEN_GUI
     }
 }

@@ -68,7 +68,7 @@ public class MainJobsMenu extends GuiScreen {
     /**
      * @return the last page of the menu based on the amount of jobs
      */
-    private int lastIndex(){
+    public int lastIndex(){
         int x = this.jobs.size()-4;
         if(x < 0)
             x = 0;

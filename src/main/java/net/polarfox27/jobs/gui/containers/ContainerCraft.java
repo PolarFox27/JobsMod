@@ -1,12 +1,19 @@
 package net.polarfox27.jobs.gui.containers;
 
 import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.entity.player.InventoryPlayer;
 import net.minecraft.init.Blocks;
 import net.minecraft.inventory.*;
 import net.minecraft.item.ItemStack;
+import net.minecraft.item.crafting.CraftingManager;
+import net.minecraft.item.crafting.IRecipe;
+import net.minecraft.network.play.server.SPacketSetSlot;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
+import net.polarfox27.jobs.data.ServerJobsData;
+import net.polarfox27.jobs.data.capabilities.PlayerData;
+import net.polarfox27.jobs.data.capabilities.PlayerJobs;
 
 import javax.annotation.Nonnull;
 
@@ -37,6 +44,30 @@ public class ContainerCraft extends Container {
 
 		for (int l = 0; l < 9; ++l) {
 			this.addSlotToContainer(new Slot(playerInventory, l, 8 + l * 18, 142));
+		}
+	}
+
+	@Override
+	protected void slotChangedCraftingGrid(World world, @Nonnull EntityPlayer player, @Nonnull InventoryCrafting grid,
+										   @Nonnull InventoryCraftResult res)
+	{
+		if (!world.isRemote) {
+			EntityPlayerMP entityplayermp = (EntityPlayerMP)player;
+			PlayerJobs jobs = PlayerData.getPlayerJobs(player);
+			ItemStack itemstack = ItemStack.EMPTY;
+			IRecipe irecipe = CraftingManager.findMatchingRecipe(grid, world);
+
+			if (irecipe != null && (irecipe.isDynamic() ||
+					!world.getGameRules().getBoolean("doLimitedCrafting") ||
+					entityplayermp.getRecipeBook().isUnlocked(irecipe))) {
+				res.setRecipeUsed(irecipe);
+				itemstack = irecipe.getCraftingResult(grid);
+				if(ServerJobsData.BLOCKED_CRAFTS.isBlocked(jobs, itemstack)){
+					itemstack = ItemStack.EMPTY;
+				}
+			}
+			res.setInventorySlotContents(0, itemstack);
+			entityplayermp.connection.sendPacket(new SPacketSetSlot(this.windowId, 0, itemstack));
 		}
 	}
 

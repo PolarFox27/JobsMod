@@ -9,6 +9,10 @@ import net.polarfox27.jobs.commands.CommandSet;
 @EventBusSubscriber
 public class RegistryHandler {
 
+    /**
+     * Registers the jobs commands.
+     * @param event the server starting event
+     */
     public static void registerCommands(FMLServerStartingEvent event) {
         event.registerServerCommand(new CommandAdd());
         event.registerServerCommand(new CommandInfo());

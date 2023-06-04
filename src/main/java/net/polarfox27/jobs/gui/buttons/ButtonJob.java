@@ -6,9 +6,9 @@ import net.minecraft.client.resources.I18n;
 import net.polarfox27.jobs.data.ClientJobsData;
 import net.polarfox27.jobs.gui.screens.GuiJobInfos;
 import net.polarfox27.jobs.util.GuiUtil;
-import net.polarfox27.jobs.util.handlers.GuiHandler;
 import org.lwjgl.opengl.GL11;
 
+import javax.annotation.Nonnull;
 import java.awt.*;
 
 public class ButtonJob extends GuiButton {
@@ -39,7 +39,7 @@ public class ButtonJob extends GuiButton {
      * @param partialTicks the render ticks
      */
     @Override
-    public void drawButton(Minecraft mc, int mouseX, int mouseY, float partialTicks) {
+    public void drawButton(@Nonnull Minecraft mc, int mouseX, int mouseY, float partialTicks) {
     	if (this.visible) {
             float f = 1.0f;
             GL11.glColor4f(f, f, f, 1.0F);

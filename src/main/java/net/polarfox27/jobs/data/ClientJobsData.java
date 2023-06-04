@@ -52,7 +52,6 @@ public class ClientJobsData {
         Minecraft.getMinecraft().displayGuiScreen(new GuiLevelUp(job));
     }
 
-
     /**
      * Returns the XPData of the registry sorted by the amount of xp they can give to the player
      * @param job the job for which the XPData give xp

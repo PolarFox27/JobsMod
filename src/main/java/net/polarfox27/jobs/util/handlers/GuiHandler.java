@@ -11,6 +11,17 @@ import net.minecraftforge.fml.common.network.IGuiHandler;
 import javax.annotation.Nullable;
 
 public class GuiHandler implements IGuiHandler {
+
+    /**
+     * Gets the container to opened when opening the jobs crafting menu
+     * @param ID The Gui ID Number
+     * @param player The player viewing the Gui
+     * @param world The current world
+     * @param x X Position
+     * @param y Y Position
+     * @param z Z Position
+     * @return the container to open
+     */
     @Nullable
     @Override
     public Object getServerGuiElement(int ID, EntityPlayer player, World world, int x, int y, int z) {
@@ -21,6 +32,16 @@ public class GuiHandler implements IGuiHandler {
         return null;
     }
 
+    /**
+     * Gets the container to opened when opening the jobs crafting menu
+     * @param ID The Gui ID Number
+     * @param player The player viewing the Gui
+     * @param world The current world
+     * @param x X Position
+     * @param y Y Position
+     * @param z Z Position
+     * @return the gui to open
+     */
     @Nullable
     @Override
     public Object getClientGuiElement(int ID, EntityPlayer player, World world, int x, int y, int z) {

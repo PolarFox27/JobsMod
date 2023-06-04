@@ -5,7 +5,10 @@ import net.minecraft.client.gui.GuiButton;
 import net.minecraft.util.ResourceLocation;
 import net.polarfox27.jobs.ModJobs;
 import net.polarfox27.jobs.gui.screens.MainJobsMenu;
+import net.polarfox27.jobs.util.JobsUtil;
 import org.lwjgl.opengl.GL11;
+
+import javax.annotation.Nonnull;
 
 public class ButtonArrow extends GuiButton {
 
@@ -35,7 +38,7 @@ public class ButtonArrow extends GuiButton {
      * @param partialTicks the render ticks
      */
     @Override
-    public void drawButton(Minecraft mc, int mouseX, int mouseY, float partialTicks) {
+    public void drawButton(@Nonnull Minecraft mc, int mouseX, int mouseY, float partialTicks) {
         if (this.visible) {
             this.hovered = mouseX >= this.x && mouseY >= this.y && mouseX < this.x + this.width && mouseY < this.y + this.height;
             GL11.glColor4f(1.0F, 1.0F, 1.0F, 1.0F);
@@ -50,7 +53,9 @@ public class ButtonArrow extends GuiButton {
      * Scrolls the Main Jobs Menu up or down when the button is clicked, depending on the button's direction
      */
     public void onPress() {
-        double direction = isUp ? 1 : -1;
-        gui.mouseScrolled(0, 0, direction);
+        int direction = isUp ? 1 : -1;
+        int x = -1 * Integer.signum(direction);
+        gui.index = JobsUtil.clamp(gui.index + x, 0, gui.lastIndex());
+        gui.initGui();
     }
 }

@@ -55,7 +55,7 @@ public class GuiJobInfos extends GuiScreen implements SliderParent{
     public void initGui() {
         this.slideBar = new SlideBarButton(0, this.top + 30, this.top+135, this.width/2 + 93, this, true);
         this.buttonList.clear();
-        this.addButton(new ButtonBack(1, this.width/2 - 105 + offsetUnlock, this.height/2-85, this));
+        this.addButton(new ButtonBack(1, this.width/2 - 105 + offsetUnlock, this.height/2-85));
         this.addButton(new ButtonXPCategory(2, this, this.width/2 - 84 + offsetUnlock, this.height/2 + 57, ButtonXPCategory.Type.XP));
         this.addButton(new ButtonXPCategory(3, this, this.width/2 + 4 + offsetUnlock, this.height/2 + 57, ButtonXPCategory.Type.UNLOCK));
 

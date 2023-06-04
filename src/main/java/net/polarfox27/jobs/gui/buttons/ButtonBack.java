@@ -2,13 +2,11 @@ package net.polarfox27.jobs.gui.buttons;
 
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiButton;
-import net.minecraft.client.gui.GuiScreen;
 import net.minecraft.util.ResourceLocation;
 import net.polarfox27.jobs.ModJobs;
-import net.polarfox27.jobs.gui.screens.GuiHowXP;
-import net.polarfox27.jobs.gui.screens.GuiJobInfos;
-import net.polarfox27.jobs.gui.screens.MainJobsMenu;
 import org.lwjgl.opengl.GL11;
+
+import javax.annotation.Nonnull;
 
 public class ButtonBack extends GuiButton {
 
@@ -37,7 +35,7 @@ public class ButtonBack extends GuiButton {
      * @param partialTicks the render ticks
      */
     @Override
-    public void drawButton(Minecraft mc, int mouseX, int mouseY, float partialTicks) {
+    public void drawButton(@Nonnull Minecraft mc, int mouseX, int mouseY, float partialTicks) {
         if (this.visible) {
             boolean hovered = mouseX >= this.x && mouseY >= this.y && mouseX < this.x + this.width && mouseY < this.y + this.height;
             Minecraft.getMinecraft().getTextureManager().bindTexture(BACKGROUND);

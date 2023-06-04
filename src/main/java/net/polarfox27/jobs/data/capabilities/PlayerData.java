@@ -68,14 +68,12 @@ public class PlayerData {
 		}
 
 		@Override
-		public NBTTagCompound serializeNBT() 
-		{
+		public NBTTagCompound serializeNBT() {
 			return this.jobs.toNBT();
 		}
 
 		@Override
-		public void deserializeNBT(NBTTagCompound nbt) 
-		{
+		public void deserializeNBT(NBTTagCompound nbt) {
 			this.jobs.fromNBT(nbt);
 		}
 		

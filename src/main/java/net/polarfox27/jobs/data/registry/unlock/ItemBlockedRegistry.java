@@ -2,13 +2,11 @@ package net.polarfox27.jobs.data.registry.unlock;
 
 import io.netty.buffer.ByteBuf;
 import net.minecraft.item.ItemStack;
-import io.netty.buffer.ByteBuf;
 import net.polarfox27.jobs.data.capabilities.PlayerJobs;
 import net.polarfox27.jobs.data.registry.unlock.BlockedData.ItemBlockedData;
 import net.polarfox27.jobs.data.registry.unlock.BlockedData.Type;
 import net.polarfox27.jobs.util.JobsUtil;
 
-import java.nio.ByteBuffer;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;

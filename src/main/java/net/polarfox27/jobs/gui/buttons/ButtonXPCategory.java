@@ -10,6 +10,7 @@ import net.polarfox27.jobs.gui.screens.GuiHowXP;
 import net.polarfox27.jobs.gui.screens.GuiJobInfos;
 import org.lwjgl.opengl.GL11;
 
+import javax.annotation.Nonnull;
 import java.awt.*;
 
 public class ButtonXPCategory extends GuiButton {
@@ -42,7 +43,7 @@ public class ButtonXPCategory extends GuiButton {
      * @param mouseY the y coordinate of the mouse
      * @param partialTicks the render ticks
      */
-    public void drawButton(Minecraft mc, int mouseX, int mouseY, float partialTicks) {
+    public void drawButton(@Nonnull Minecraft mc, int mouseX, int mouseY, float partialTicks) {
     	if (this.visible) {
             boolean hovered = mouseX >= this.x && mouseY >= this.y && mouseX < this.x + this.width && mouseY < this.y + this.height;
             Minecraft.getMinecraft().getTextureManager().bindTexture(BACKGROUND);
