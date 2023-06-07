@@ -1,14 +1,7 @@
 package net.polarfox27.jobs;
 
-import net.minecraft.client.Minecraft;
-import net.minecraftforge.common.MinecraftForge;
-import net.minecraftforge.fml.common.FMLCommonHandler;
 import net.polarfox27.jobs.data.ServerJobsData;
 import net.polarfox27.jobs.data.capabilities.PlayerData;
-import net.polarfox27.jobs.events.CommonEvents;
-import net.polarfox27.jobs.events.server.BlockInteractionEvents;
-import net.polarfox27.jobs.events.server.EntityInteractionEvents;
-import net.polarfox27.jobs.events.server.ItemInteractionEvents;
 import net.polarfox27.jobs.util.config.ReadConfigManager;
 import net.polarfox27.jobs.util.handlers.GuiHandler;
 import net.polarfox27.jobs.util.handlers.PacketHandler;
@@ -24,7 +17,6 @@ import net.minecraftforge.fml.common.event.FMLPostInitializationEvent;
 import net.minecraftforge.fml.common.event.FMLPreInitializationEvent;
 import net.minecraftforge.fml.common.event.FMLServerStartingEvent;
 import net.minecraftforge.fml.common.network.NetworkRegistry;
-import scala.tools.nsc.transform.patmat.MatchOptimization;
 
 @Mod(modid = ModJobs.MOD_ID, name = ModJobs.NAME, version = ModJobs.VERSION, acceptedMinecraftVersions = ModJobs.ACCEPTED_VERSIONS)
 public class ModJobs {

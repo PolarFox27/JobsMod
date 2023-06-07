@@ -2,6 +2,7 @@ package net.polarfox27.jobs.gui;
 
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.Gui;
+import net.minecraft.client.gui.ScaledResolution;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.text.TextFormatting;
 import net.polarfox27.jobs.ModJobs;
@@ -39,7 +40,7 @@ public class GuiGainXP extends Gui {
     	GL11.glPushMatrix();
         GL11.glColor4f(1.0F, 1.0F, 1.0F, 1.0F);
         Minecraft.getMinecraft().getTextureManager().bindTexture(TEXTURE);
-        int render_width = Minecraft.getMinecraft().displayWidth;
+        int render_width = new ScaledResolution(Minecraft.getMinecraft()).getScaledWidth();
 
         long xp_progression = ClientJobsData.playerJobs.getXPByJob(job);
         long total = ClientJobsData.JOBS_LEVELS.getXPForLevel(job, ClientJobsData.playerJobs.getLevelByJob(job)+1);
@@ -51,6 +52,9 @@ public class GuiGainXP extends Gui {
         int titleWidth = Minecraft.getMinecraft().fontRenderer.getStringWidth(title);
         int xpTotalWidth = Minecraft.getMinecraft().fontRenderer.getStringWidth(xpTotal);
         System.out.println(title);
+        GL11.glEnable(GL11.GL_BLEND);
+        GL11.glBlendFunc(GL11.GL_SRC_ALPHA, GL11.GL_ONE_MINUS_SRC_ALPHA);
+
         this.drawTexturedModalRect(render_width/2 - 90, 5, 0, 0, 180, 50);//background
         this.drawTexturedModalRect(render_width/2 - 75, 35, 0, 50, 150, 12);//progress background
         this.drawTexturedModalRect(render_width/2 - 75, 35, 0, 62, width, 12);//progressbar

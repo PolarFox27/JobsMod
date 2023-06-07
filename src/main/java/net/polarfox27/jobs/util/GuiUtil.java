@@ -84,11 +84,10 @@ public class GuiUtil {
 		else if(ent.getClass() == EntityDragon.class) {
 			rotationX = 0.0f;
 			rotationY = 180.0f;
-			rotationZ = 180.0f;
 		}
 
 		if(entSize <= baseSize/2.0f){
-			scale *= 1.75f;
+			scale *= (baseSize/2.0f)/entSize;
 		}
 		else if(entSize >= baseSize){
 			scale *= (baseSize/entSize);

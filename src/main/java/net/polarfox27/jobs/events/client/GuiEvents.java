@@ -35,7 +35,6 @@ public class GuiEvents {
                 return;
             GuiGainXP gui = new GuiGainXP(toShow.getFirst(), toShow.getSecond());
             gui.drawScreen();
-            System.out.println("Gui Shown");
         }
     }
 

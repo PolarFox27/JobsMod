@@ -19,8 +19,6 @@ import net.polarfox27.jobs.data.capabilities.PlayerJobs;
 import net.polarfox27.jobs.network.PacketAskClientUpdate;
 import net.polarfox27.jobs.util.handlers.PacketHandler;
 
-import java.util.Arrays;
-
 
 @EventBusSubscriber
 public class CommonEvents {

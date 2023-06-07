@@ -2,7 +2,6 @@ package net.polarfox27.jobs.util;
 
 import com.google.common.primitives.Longs;
 import io.netty.buffer.ByteBuf;
-import net.minecraft.client.Minecraft;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.init.Blocks;
 import net.minecraft.item.Item;
