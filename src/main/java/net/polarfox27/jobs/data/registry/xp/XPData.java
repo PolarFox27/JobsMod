@@ -285,7 +285,9 @@ public abstract class  XPData {
          */
         @SideOnly(Side.CLIENT)
         public String getEntityName(){
-            String name = EntityList.getTranslationName(entity);
+            String name = entity.equals(new ResourceLocation("minecraft:player")) ?
+                    "entity.minecraft.player" :
+                    EntityList.getTranslationName(entity);
             return I18n.format(name != null ? name : "None");
         }
 

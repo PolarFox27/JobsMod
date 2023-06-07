@@ -21,7 +21,7 @@ public class EntityInteractionEvents {
      * @param event the Death Event
      */
     @SubscribeEvent
-    public void onKill(LivingDeathEvent event) {
+    public static void onKill(LivingDeathEvent event) {
     	if(event.getEntityLiving().world.isRemote ||
                 !(event.getSource().getTrueSource() instanceof EntityPlayerMP))
             return;
@@ -46,7 +46,7 @@ public class EntityInteractionEvents {
      * @param event the Baby Spawn Event
      */
     @SubscribeEvent
-    public void onBreed(BabyEntitySpawnEvent event) {
+    public static void onBreed(BabyEntitySpawnEvent event) {
         if (event.getCausedByPlayer() == null || event.getCausedByPlayer().world.isRemote
             || event.getChild() == null)
             return;
@@ -67,7 +67,7 @@ public class EntityInteractionEvents {
      * @param event the Left Click Event on a block
      */
     @SubscribeEvent
-    public void onLeftClickEntity(AttackEntityEvent event) {
+    public static void onLeftClickEntity(AttackEntityEvent event) {
         if(event.getEntityPlayer().world.isRemote || !(event.getEntityPlayer() instanceof EntityPlayerMP))
             return;
         PlayerJobs jobs = PlayerData.getPlayerJobs(event.getEntityPlayer());

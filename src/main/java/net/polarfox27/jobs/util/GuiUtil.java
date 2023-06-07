@@ -9,11 +9,12 @@ import net.minecraft.client.renderer.RenderHelper;
 import net.minecraft.client.renderer.entity.RenderManager;
 import net.minecraft.client.resources.I18n;
 import net.minecraft.entity.EntityLivingBase;
+import net.minecraft.entity.boss.EntityDragon;
+import net.minecraft.entity.boss.EntityWither;
 import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 import net.polarfox27.jobs.ModJobs;
-import net.polarfox27.jobs.data.ClientJobsData;
 import org.lwjgl.opengl.GL11;
 
 import java.awt.*;
@@ -38,7 +39,7 @@ public class GuiUtil {
 	 * @param height the height of the texture that will be rendered
 	 */
 	public static void drawScaledTexture(int x, int y, float u, float v, int uWidth, int vHeight, int width, int height) {
-		GuiScreen.drawScaledCustomSizeModalRect(x, y, u, v, width, height, uWidth, vHeight, 256, 256);
+		GuiScreen.drawScaledCustomSizeModalRect(x, y, u, v, uWidth, vHeight, width, height, width, height);
     }
 
 	/**
@@ -51,8 +52,9 @@ public class GuiUtil {
 	 */
 	public static void drawJobIcon(String job, int centerX, int centerY, int size) {
 		GL11.glColor4f(1.0F, 1.0F, 1.0F, 1.0F);
-		if(ClientJobsData.JOBS_ICONS.containsKey(job))
-			ClientJobsData.JOBS_ICONS.get(job).getTextureData();
+		ResourceLocation icon = new ResourceLocation(ModJobs.MOD_ID, "jobs/" + job);
+		if(Minecraft.getMinecraft().getTextureManager().getTexture(icon) != null)
+			Minecraft.getMinecraft().getTextureManager().bindTexture(icon);
 		else
 			Minecraft.getMinecraft().getTextureManager().bindTexture(DEFAULT_ICON);
 		GuiUtil.drawScaledTexture(centerX-size/2, centerY-size/2, 0, 0, size, size, size, size);
@@ -70,21 +72,36 @@ public class GuiUtil {
 	public static void renderEntityInGui(int posX, int posY, EntityLivingBase base, float mouseX, float mouseY, EntityLivingBase ent) {
 		if (base == null || ent == null)
 			return;
+		float scale = 7.5f;
+		float yOffset = posY;
+		float rotationZ = 180.0f;
+		float rotationX = 0.0f;
+		float rotationY = 0.0f;
+		float entSize = JobsUtil.getHeight(ent);
+		float baseSize = JobsUtil.getHeight(base);
+		if(ent.getClass() == EntityWither.class)
+			yOffset += 10;
+		else if(ent.getClass() == EntityDragon.class) {
+			rotationX = 0.0f;
+			rotationY = 180.0f;
+			rotationZ = 180.0f;
+		}
+
+		if(entSize <= baseSize/2.0f){
+			scale *= 1.75f;
+		}
+		else if(entSize >= baseSize){
+			scale *= (baseSize/entSize);
+		}
+
 
 		GlStateManager.enableColorMaterial();
 		GlStateManager.pushMatrix();
-		GlStateManager.translate((float)posX, (float)posY, 50.0F);
-
-		double scale;
-		if(JobsUtil.getHeight(base) >= JobsUtil.getHeight(ent)*2.0D)
-			scale = 20.0D * JobsUtil.getHeight(ent);
-		else if(JobsUtil.getHeight(base) > JobsUtil.getHeight(ent))
-			scale = 10.0D * JobsUtil.getHeight(ent);
-		else
-			scale = 10.0D * JobsUtil.getHeight(base) / JobsUtil.getHeight(ent);
-
-		GlStateManager.scale((float)(-scale), (float)scale, (float)scale);
-		GlStateManager.rotate(180.0F, 0.0F, 0.0F, 1.0F);
+		GlStateManager.translate((float)posX, yOffset, 50.0F);
+		GlStateManager.scale(-scale, scale, scale);
+		GlStateManager.rotate(rotationZ, 0.0F, 0.0F, 1.0F);
+		GlStateManager.rotate(rotationX, 1.0F, 0.0F, 0.0F);
+		GlStateManager.rotate(rotationY, 0.0F, 1.0F, 0.0F);
 		float f = ent.renderYawOffset;
 		float f1 = ent.rotationYaw;
 		float f2 = ent.rotationPitch;
@@ -131,7 +148,8 @@ public class GuiUtil {
 		GL11.glPushMatrix();
 		GL11.glTranslatef(x, y, 0);
 		GL11.glScalef(scale, scale, scale);
-		GL11.glColor4f(1.0F, 1.0F, 1.0F, 1.0F);
+		Color c = new Color(color);
+		GL11.glColor4f(c.getRed()/255.0f, c.getGreen()/255.0f, c.getBlue()/255.0f, 1.0F);
 		float xPos = Minecraft.getMinecraft().fontRenderer.getStringWidth(text)/-2.0f;
 		float yPos = -4.5f;
 		Minecraft.getMinecraft().fontRenderer.drawString(text, (int)xPos, (int)yPos, color);
@@ -168,6 +186,7 @@ public class GuiUtil {
 	 */
 	public static void renderProgressBarWithText(Gui gui, int x, int y, int width, int height, long progress, long total, String text){
 		Minecraft.getMinecraft().getTextureManager().bindTexture(GRADIENT_TEXTURE);
+		GL11.glColor4f(1.0F, 1.0F, 1.0F, 1.0F);
 		if(progress >= total)
 			gui.drawTexturedModalRect(x, y, 0, 74, width, height); //full
 		else{

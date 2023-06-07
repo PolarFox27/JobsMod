@@ -23,7 +23,7 @@ public class GuiEvents {
      */
     @SubscribeEvent
     @SideOnly(Side.CLIENT)
-    public void clientTick(RenderGameOverlayEvent e) {
+    public static void clientTick(RenderGameOverlayEvent e) {
         if(Minecraft.getMinecraft().player == null)
             return;
         if(e.getType() == RenderGameOverlayEvent.ElementType.ALL) {
@@ -33,7 +33,9 @@ public class GuiEvents {
             Pair<String, Long> toShow = ClientJobsData.addXPInfos.showJobAtTime();
             if(ClientJobsData.playerJobs.isMax(toShow.getFirst()))
                 return;
-            new GuiGainXP(toShow.getFirst(), toShow.getSecond()).drawScreen();
+            GuiGainXP gui = new GuiGainXP(toShow.getFirst(), toShow.getSecond());
+            gui.drawScreen();
+            System.out.println("Gui Shown");
         }
     }
 

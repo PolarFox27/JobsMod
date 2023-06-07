@@ -95,7 +95,7 @@ public class GuiJobInfos extends GuiScreen implements SliderParent{
             GL11.glColor4f(1.0F, 1.0F, 1.0F, 1.0F);
             this.drawTexturedModalRect(this.left + 225, this.top + 14, 0, 0, 70, 152);
         }
-        super.drawScreen(mouseX, mouseY, partialTicks);
+        super.drawScreen(mouseX, mouseY, partialTicks);//white
         if(offsetUnlock != 0)
             this.drawUnlockedItems(mouseX, mouseY);
 
@@ -129,14 +129,14 @@ public class GuiJobInfos extends GuiScreen implements SliderParent{
     private void drawGradients() {
         int lvl = ClientJobsData.playerJobs.getLevelByJob(job);
         boolean isMaxLevel = ClientJobsData.playerJobs.isMax(job);
-        GuiUtil.renderCenteredString(ClientJobsData.getJobName(job), Color.BLACK.getRGB(), this.width/2 + offsetUnlock, this.top+15, 1.5f);
+        GuiUtil.renderCenteredString(ClientJobsData.getJobName(job), Color.BLACK.getRGB(), this.width/2 + offsetUnlock, this.top+15, 1.5f);//white
         GuiUtil.drawJobIcon(this.job, this.width/2 + offsetUnlock, this.top + 48, 48);
 
         String title1 = I18n.format("text.level") + " " + lvl;
         long progress1 = ClientJobsData.playerJobs.getXPByJob(job);
         long total1 = ClientJobsData.JOBS_LEVELS.getXPForLevel(job, lvl+1);
         GuiUtil.renderProgressBar(this, this.width/2 - 75 + offsetUnlock, this.top + 90, 150, 12, progress1, total1);
-        GuiUtil.renderCenteredString(title1, Color.BLACK.getRGB(), this.width/2 + offsetUnlock, this.top + 86, 1.0f);
+        GuiUtil.renderCenteredString(title1, Color.BLACK.getRGB(), this.width/2 + offsetUnlock, this.top + 86, 1.0f);//ok
 
         if(isMaxLevel)
             return;
@@ -144,8 +144,8 @@ public class GuiJobInfos extends GuiScreen implements SliderParent{
         long progress2 = ClientJobsData.playerJobs.getTotalXPByJob(job);
         long total2 = ClientJobsData.JOBS_LEVELS.getTotalXPForJob(job);
         String title2 = lvl < ClientJobsData.JOBS_LEVELS.getMaxLevel(job) ? I18n.format("text.total_progression") : "";
-        GuiUtil.renderProgressBar(this, this.width / 2 - 75 + offsetUnlock, this.top + 115, 150, 12, progress2, total2);
-        GuiUtil.renderCenteredString(title2, Color.BLACK.getRGB(), this.width/2 + offsetUnlock, this.top + 111, 1.0f);
+        GuiUtil.renderProgressBar(this, this.width / 2 - 75 + offsetUnlock, this.top + 115, 150, 12, progress2, total2);//black
+        GuiUtil.renderCenteredString(title2, Color.BLACK.getRGB(), this.width/2 + offsetUnlock, this.top + 111, 1.0f);//ok
     }
 
 

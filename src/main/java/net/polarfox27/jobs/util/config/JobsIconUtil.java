@@ -1,8 +1,10 @@
 package net.polarfox27.jobs.util.config;
 
 import io.netty.buffer.ByteBuf;
+import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.texture.DynamicTexture;
 import net.minecraft.server.MinecraftServer;
+import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 import net.polarfox27.jobs.ModJobs;
@@ -14,7 +16,6 @@ import org.apache.commons.lang3.Validate;
 import javax.imageio.ImageIO;
 import java.awt.image.BufferedImage;
 import java.io.*;
-import java.nio.charset.StandardCharsets;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -52,9 +53,7 @@ public class JobsIconUtil {
     public static void toBytes(ByteBuf buf, Map<String, byte[]> map){
         buf.writeInt(map.size());
         for(Map.Entry<String, byte[]> e : map.entrySet()){
-            buf.writeInt(e.getKey().getBytes(StandardCharsets.UTF_8).length);
             JobsUtil.writeToBuf(e.getKey(), buf);
-            buf.writeInt(e.getValue().length);
             JobsUtil.writeByteArray(e.getValue(), buf);
         }
     }
@@ -76,19 +75,21 @@ public class JobsIconUtil {
     }
 
     /**
-     * Converts the map of images to a map of DynamicTexture usable in GUIs.
+     * Converts the map of images to a map of DynamicTexture usable in GUIs and loads them in TextureManager.
      * @param map the map mapping the jobs name to the jobs icons
-     * @return the map mapping the jobs name to the dynamic textures
      */
     @SideOnly(Side.CLIENT)
-    public static Map<String, DynamicTexture> convertToClient(Map<String, byte[]> map){
-        Map<String, DynamicTexture> newMap = new HashMap<>();
+    public static void loadJobsIconTextures(Map<String, byte[]> map){
         for(Map.Entry<String, byte[]> e : map.entrySet()){
             try {
                 BufferedImage image = ImageIO.read(new ByteArrayInputStream(e.getValue()));
                 Validate.validState(image.getWidth() == 64, "Must be 64 pixels wide");
                 Validate.validState(image.getHeight() == 64, "Must be 64 pixels high");
-                newMap.put(e.getKey(), new DynamicTexture(image));
+                DynamicTexture icon = new DynamicTexture(image.getWidth(), image.getHeight());
+                Minecraft.getMinecraft().getTextureManager().loadTexture(
+                        new ResourceLocation(ModJobs.MOD_ID, "jobs/" + e.getKey()), icon);
+                image.getRGB(0, 0, image.getWidth(), image.getHeight(), icon.getTextureData(), 0, image.getWidth());
+                icon.updateDynamicTexture();
             }
             catch (IOException exception) {
                 ModJobs.info("Error receiving icon from network ! (job: " + e.getKey() + ")", true);
@@ -97,6 +98,5 @@ public class JobsIconUtil {
                 ModJobs.info("Icon for job <" + e.getKey() + "> must be 64x64 !", true);
             }
         }
-        return newMap;
     }
 }

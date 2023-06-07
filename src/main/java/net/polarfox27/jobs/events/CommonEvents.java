@@ -19,6 +19,8 @@ import net.polarfox27.jobs.data.capabilities.PlayerJobs;
 import net.polarfox27.jobs.network.PacketAskClientUpdate;
 import net.polarfox27.jobs.util.handlers.PacketHandler;
 
+import java.util.Arrays;
+
 
 @EventBusSubscriber
 public class CommonEvents {
@@ -28,7 +30,7 @@ public class CommonEvents {
 	 * @param event the Capability Event
 	 */
 	@SubscribeEvent
-	public void onEntityCreating(AttachCapabilitiesEvent<Entity> event) {
+	public static void onEntityCreating(AttachCapabilitiesEvent<Entity> event) {
 		if(event.getObject().world.isRemote)
 			return;
 		if(!(event.getObject() instanceof EntityPlayer))
@@ -46,7 +48,7 @@ public class CommonEvents {
 	 * @param event Player Clone Event
 	 */
 	@SubscribeEvent
-	public void onEntityCloned(PlayerEvent.Clone event) {
+	public static void onEntityCloned(PlayerEvent.Clone event) {
 		if(!event.isWasDeath())
 			return;
 		PlayerJobs capability = event.getOriginal()
@@ -62,7 +64,7 @@ public class CommonEvents {
 	 * @param event the Join World Event
 	 */
 	@SubscribeEvent
-	public void onPlayerJoinedServer(EntityJoinWorldEvent event){
+	public static void onPlayerJoinedServer(EntityJoinWorldEvent event){
 		if(!(event.getEntity() instanceof EntityPlayerMP))
 			return;
 		ServerJobsData.sendDataToClient((EntityPlayerMP) event.getEntity());
@@ -74,7 +76,7 @@ public class CommonEvents {
 	 */
 	@SubscribeEvent
 	@SideOnly(Side.CLIENT)
-	public void onPlayerJoinedClient(EntityJoinWorldEvent event) {
+	public static void onPlayerJoinedClient(EntityJoinWorldEvent event) {
 		if(!(event.getEntity() instanceof EntityPlayerSP))
 			return;
 		PacketHandler.INSTANCE.sendToServer(new PacketAskClientUpdate());

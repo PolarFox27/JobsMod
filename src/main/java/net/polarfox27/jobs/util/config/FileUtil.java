@@ -49,7 +49,7 @@ public class FileUtil {
      * @return the path to the Base Config Folder
      */
     public static String getBaseFolder(MinecraftServer server) {
-        return server.getDataDirectory().getParentFile().getAbsolutePath() + "/jobs";
+        return server.getActiveAnvilConverter().getFile(server.getFolderName(), "jobs").getAbsolutePath();
     }
 
     /**

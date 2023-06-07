@@ -2,12 +2,15 @@ package net.polarfox27.jobs.util;
 
 import com.google.common.primitives.Longs;
 import io.netty.buffer.ByteBuf;
+import net.minecraft.client.Minecraft;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.init.Blocks;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.ResourceLocation;
+import net.minecraftforge.fml.relauncher.Side;
+import net.minecraftforge.fml.relauncher.SideOnly;
 
 import java.nio.charset.StandardCharsets;
 import java.util.Arrays;
@@ -195,7 +198,9 @@ public class JobsUtil {
      */
     public static byte[] readByteArray(ByteBuf buf){
         int length = buf.readInt();
-        return buf.readBytes(length).array();
+        byte[] bytes = new byte[length];
+        buf.readBytes(bytes);
+        return bytes;
     }
 
     /**
@@ -203,10 +208,11 @@ public class JobsUtil {
      * @param entity the entity whose size we measure
      * @return the size of the entity
      */
-    public static double getHeight(EntityLivingBase entity){
-        if(entity == null || entity.getCollisionBoundingBox() == null)
-            return 0.0D;
-        return entity.getCollisionBoundingBox().maxZ - entity.getCollisionBoundingBox().minZ;
+    @SideOnly(Side.CLIENT)
+    public static float getHeight(EntityLivingBase entity){
+        if(entity == null)
+            return 0.0f;
+        return (float)(entity.getEntityBoundingBox().maxY - entity.getEntityBoundingBox().minY);
     }
 
     public static class Pair<S, T>{

@@ -22,6 +22,7 @@ public class ReadConfigManager {
     public static void readConfigFiles(MinecraftServer server){
         WriteConfigManager.tryCreateEmptyConfigFiles(server);
         String baseFolder = FileUtil.getBaseFolder(server);
+        ModJobs.info("Starting loading config in " + baseFolder, false);
         String xpFolder = FileUtil.getXPFolder(server);
         String blockedFolder = FileUtil.getBlockedFolder(server);
         ModJobs.info("Loading jobs levels...", false);

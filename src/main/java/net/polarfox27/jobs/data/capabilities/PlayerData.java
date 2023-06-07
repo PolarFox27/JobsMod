@@ -18,8 +18,7 @@ public class PlayerData {
 	public static Capability<PlayerJobs> JOBS;
 	
 	
-	public static PlayerJobs getPlayerJobs(EntityPlayer player)
-	{
+	public static PlayerJobs getPlayerJobs(EntityPlayer player) {
 		return player.getCapability(JOBS, null);
 	}
 	

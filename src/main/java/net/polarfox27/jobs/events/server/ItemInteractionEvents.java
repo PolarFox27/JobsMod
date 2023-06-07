@@ -21,7 +21,7 @@ public class ItemInteractionEvents {
      * @param event the Craft Event
      */
     @SubscribeEvent
-    public void onCraft(PlayerEvent.ItemCraftedEvent event) {
+    public static void onCraft(PlayerEvent.ItemCraftedEvent event) {
     	if(event.player.world.isRemote || !(event.player instanceof EntityPlayerMP))
             return;
         PlayerJobs jobs = PlayerData.getPlayerJobs(event.player);
@@ -39,7 +39,7 @@ public class ItemInteractionEvents {
      * @param event the Smelt Event
      */
     @SubscribeEvent
-    public void onSmelt(PlayerEvent.ItemSmeltedEvent event) {
+    public static void onSmelt(PlayerEvent.ItemSmeltedEvent event) {
         if(event.player.world.isRemote || !(event.player instanceof EntityPlayerMP))
             return;
         PlayerJobs jobs = PlayerData.getPlayerJobs(event.player);
@@ -57,7 +57,7 @@ public class ItemInteractionEvents {
      * @param event the Fish Event
      */
     @SubscribeEvent
-    public void onFished(ItemFishedEvent event) {
+    public static void onFished(ItemFishedEvent event) {
         if(event.getEntityPlayer().world.isRemote || !(event.getEntityPlayer() instanceof EntityPlayerMP))
             return;
         PlayerJobs jobs = PlayerData.getPlayerJobs(event.getEntityPlayer());
@@ -75,7 +75,7 @@ public class ItemInteractionEvents {
      * @param event the Right Click Event
      */
     @SubscribeEvent
-    public void onRightClick(PlayerInteractEvent.RightClickItem event) {
+    public static void onRightClick(PlayerInteractEvent.RightClickItem event) {
         if(event.getEntityPlayer().world.isRemote || !(event.getEntityPlayer() instanceof EntityPlayerMP))
             return;
         PlayerJobs jobs = PlayerData.getPlayerJobs(event.getEntityPlayer());
@@ -88,7 +88,7 @@ public class ItemInteractionEvents {
      * @param event the Left Click Event on a block
      */
     @SubscribeEvent
-    public void onLeftClickBlock(PlayerInteractEvent.LeftClickBlock event) {
+    public static void onLeftClickBlock(PlayerInteractEvent.LeftClickBlock event) {
         if(event.getEntityPlayer().world.isRemote || !(event.getEntityPlayer() instanceof EntityPlayerMP))
             return;
         PlayerJobs jobs = PlayerData.getPlayerJobs(event.getEntityPlayer());
@@ -101,7 +101,7 @@ public class ItemInteractionEvents {
      * @param event the armor tick event
      */
     @SubscribeEvent
-    public void checkArmor(TickEvent.PlayerTickEvent event) {
+    public static void checkArmor(TickEvent.PlayerTickEvent event) {
         if(event.player.world.isRemote)
             return;
         PlayerJobs jobs = PlayerData.getPlayerJobs(event.player);

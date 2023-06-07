@@ -50,7 +50,7 @@ public class GuiGainXP extends Gui {
         String xpTotal = xp_progression + "/" + total;
         int titleWidth = Minecraft.getMinecraft().fontRenderer.getStringWidth(title);
         int xpTotalWidth = Minecraft.getMinecraft().fontRenderer.getStringWidth(xpTotal);
-
+        System.out.println(title);
         this.drawTexturedModalRect(render_width/2 - 90, 5, 0, 0, 180, 50);//background
         this.drawTexturedModalRect(render_width/2 - 75, 35, 0, 50, 150, 12);//progress background
         this.drawTexturedModalRect(render_width/2 - 75, 35, 0, 62, width, 12);//progressbar

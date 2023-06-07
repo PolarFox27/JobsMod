@@ -13,5 +13,4 @@ public class ClientProxy extends CommonProxy {
     	KeyBindings.open_gui = new KeyBinding(KeyBindings.OPEN_GUI, Keyboard.KEY_J, KeyBindings.CATEGORY);
 		ClientRegistry.registerKeyBinding(KeyBindings.open_gui);
     }
-
 }

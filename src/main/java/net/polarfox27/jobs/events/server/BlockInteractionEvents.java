@@ -19,7 +19,7 @@ public class BlockInteractionEvents {
      * @param event the Break Block Event
      */
     @SubscribeEvent
-    public void onBreakOreOrCrop(BreakEvent event) {
+    public static void onBreakOreOrCrop(BreakEvent event) {
     	if(event.getWorld().isRemote || !(event.getPlayer() instanceof EntityPlayerMP))
             return;
         EntityPlayerMP player = (EntityPlayerMP) event.getPlayer();
@@ -41,7 +41,6 @@ public class BlockInteractionEvents {
             long xp = ServerJobsData.BREAKING_BLOCKS_XP.getXPByLevelAndJob(state, level, job);
             if(xp > 0)
                 jobs.gainXP(job, xp, player);
-
             if(!isGrownCrop)
                 continue;
 

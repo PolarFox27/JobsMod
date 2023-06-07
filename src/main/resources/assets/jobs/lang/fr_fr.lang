@@ -33,3 +33,5 @@ category.harvesting=Récolte
 category.killing=Chasse
 category.breeding=Elevage
 category.fishing=Pêche
+
+entity.minecraft.player=Joueur

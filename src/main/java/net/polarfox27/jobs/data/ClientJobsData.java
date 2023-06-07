@@ -27,7 +27,7 @@ public class ClientJobsData {
 
     public static Set<XPRegistry<? extends XPData>> XP_REGISTRIES = new HashSet<>();
 
-    public static Map<String, DynamicTexture> JOBS_ICONS = new HashMap<>();
+    public static Map<String, byte[]> JOBS_ICONS = new HashMap<>();
 
     public static TranslationData TRANSLATIONS = null;
 

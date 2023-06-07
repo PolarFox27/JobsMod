@@ -55,6 +55,7 @@ public class ButtonXPCategory extends GuiButton {
             String name = "category." + type.name().toLowerCase();
             String txt = I18n.format(name);
             int txtWidth = Minecraft.getMinecraft().fontRenderer.getStringWidth(txt);
+            GL11.glColor4f(0.0F, 0.0F, 0.0F, 1.0F);
             Minecraft.getMinecraft().fontRenderer.drawString(txt, this.x + 48 - txtWidth/2, this.y + 5, Color.BLACK.getRGB());
         }
     }

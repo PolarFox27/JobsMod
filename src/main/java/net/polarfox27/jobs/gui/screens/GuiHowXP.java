@@ -175,14 +175,11 @@ public class GuiHowXP extends GuiScreen implements SliderParent {
                         && Minecraft.getMinecraft().world != null) {
                     if(stack.getTagCompound() == null)
                         continue;
-
                     ResourceLocation type = new ResourceLocation(stack.getTagCompound().getString("entity"));
-                    Entity entity = type.equals(EntityList.getKey(Minecraft.getMinecraft().player)) ? Minecraft.getMinecraft().player :
+                    Entity entity = type.equals(new ResourceLocation("minecraft:player")) ? Minecraft.getMinecraft().player :
                             EntityList.newEntity(EntityList.getClass(type), Minecraft.getMinecraft().world);
-                    EntityLivingBase cow = (EntityLivingBase) EntityList.newEntity(EntityCow.class, Minecraft.getMinecraft().world);
-
                      if(entity instanceof EntityLivingBase)
-                            GuiUtil.renderEntityInGui(x + 8, y + 16, cow,
+                            GuiUtil.renderEntityInGui(x + 8, y + 16, Minecraft.getMinecraft().player,
                                     this.width/2.0F - mouseX, this.height/2.0F - mouseY,
                                     (EntityLivingBase) entity);
                 }
