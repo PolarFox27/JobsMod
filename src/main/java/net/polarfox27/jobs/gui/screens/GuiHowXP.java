@@ -121,7 +121,6 @@ public class GuiHowXP extends GuiScreen implements SliderParent {
         if(!tooltip.isEmpty())
             this.drawHoveringText(tooltip, mouseX, mouseY);
 
-        System.out.println("Dragging ? " + Mouse.isButtonDown(0));
         if(isDragging(verticalSlideBar, mouseX, mouseY))
             updateSlider(verticalSlideBar, mouseY);
         if(isDragging(horizontalSlideBar, mouseX, mouseY))
