@@ -1,16 +1,16 @@
 package net.polarfox27.jobs.gui.buttons;
 
-import com.mojang.blaze3d.matrix.MatrixStack;
+import com.mojang.blaze3d.systems.RenderSystem;
+import com.mojang.blaze3d.vertex.PoseStack;
 import net.minecraft.client.Minecraft;
-import net.minecraft.client.gui.widget.button.Button;
-import net.minecraft.client.resources.I18n;
-import net.minecraft.util.text.StringTextComponent;
+import net.minecraft.client.gui.components.Button;
+import net.minecraft.client.renderer.GameRenderer;
+import net.minecraft.network.chat.TextComponent;
 import net.polarfox27.jobs.data.ClientJobsData;
 import net.polarfox27.jobs.gui.screens.GuiJobInfos;
 import net.polarfox27.jobs.util.GuiUtil;
-import org.lwjgl.opengl.GL11;
 
-import java.awt.*;
+import java.awt.Color;
 
 public class ButtonJob extends Button {
 
@@ -26,7 +26,7 @@ public class ButtonJob extends Button {
      * @param j the job the button is representing
      */
     public ButtonJob(int posX, int posY, String j) {
-        super(posX, posY, 200, 40, new StringTextComponent(""),new OnPressed());
+        super(posX, posY, 200, 40, new TextComponent(""),new OnPressed());
         this.title = ClientJobsData.getJobName(j);
         this.job = j;
     }
@@ -37,19 +37,22 @@ public class ButtonJob extends Button {
      * @param mStack the render stack
      * @param mouseX the x coordinate of the mouse
      * @param mouseY the y coordinate of the mouse
-     * @param partialTicks the render ticks
+     * @param partialTicks the rendering ticks
      */
     @Override
-    public void renderButton(MatrixStack mStack, int mouseX, int mouseY, float partialTicks) {
+    public void renderButton(PoseStack mStack, int mouseX, int mouseY, float partialTicks) {
     	if (this.visible) {
             float f = 1.0f;
-            GL11.glColor4f(f, f, f, 1.0F);
+
+            RenderSystem.setShader(GameRenderer::getPositionTexShader);
+            RenderSystem.setShaderColor(f, f, f, 1.0F);
             GuiUtil.drawJobIcon(mStack, this.job, this.x+20, this.y+20, 32);
             long xp = ClientJobsData.playerJobs.getXPByJob(this.job);
             int lvl = ClientJobsData.playerJobs.getLevelByJob(this.job);
             long total = lvl >= ClientJobsData.JOBS_LEVELS.getMaxLevel(this.job) ? xp :
                     ClientJobsData.JOBS_LEVELS.getXPForLevel(this.job, lvl+1);
-            GuiUtil.renderProgressBar(mStack, this, this.x+45, this.y+15, 150, 12, xp, total);
+            GuiUtil.renderProgressBar(mStack, Minecraft.getInstance().screen,
+                    this.x+45, this.y+15, 150, 12, xp, total);
             drawName(mStack);
         }
     }
@@ -58,15 +61,15 @@ public class ButtonJob extends Button {
      * Renders the Job name and level on the screen
      * @param mStack the render stack
      */
-    private void drawName(MatrixStack mStack) {
+    private void drawName(PoseStack mStack) {
         int lvl = ClientJobsData.playerJobs.getLevelByJob(this.job);
-        String name = this.title + " (" + I18n.get("text.level") + " " + lvl + ")";
+        String name = this.title + " (" + GuiUtil.translate("text.level") + " " + lvl + ")";
         int x = 120 - Minecraft.getInstance().font.width(name)/2;
         int y = Minecraft.getInstance().font.lineHeight/2;
         Minecraft.getInstance().font.draw(mStack, name, this.x + x, this.y + y, Color.black.getRGB());
     }
     
-    public static class OnPressed implements IPressable{
+    public static class OnPressed implements OnPress{
 
         /**
          * Opens a Jobs Infos GUI when the button is clicked
@@ -74,10 +77,9 @@ public class ButtonJob extends Button {
          */
         @Override
 		public void onPress(Button btn) {
-			if(!(btn instanceof ButtonJob))
+			if(!(btn instanceof ButtonJob b))
                 return;
-            ButtonJob b = (ButtonJob)btn;
-			Minecraft.getInstance().setScreen(new GuiJobInfos(b.job));
+            Minecraft.getInstance().setScreen(new GuiJobInfos(b.job));
 		}
     	
     }

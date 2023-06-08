@@ -1,9 +1,8 @@
 package net.polarfox27.jobs.events.server;
 
-
-import net.minecraft.block.BlockState;
-import net.minecraft.block.CropsBlock;
-import net.minecraft.entity.player.ServerPlayerEntity;
+import net.minecraft.server.level.ServerPlayer;
+import net.minecraft.world.level.block.CropBlock;
+import net.minecraft.world.level.block.state.BlockState;
 import net.minecraftforge.event.world.BlockEvent.BreakEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.common.Mod.EventBusSubscriber;
@@ -20,20 +19,19 @@ public class BlockInteractionEvents {
      */
     @SubscribeEvent
     public void onBreakOreOrCrop(BreakEvent event) {
-    	if(event.getWorld().isClientSide() || !(event.getPlayer() instanceof ServerPlayerEntity))
+    	if(event.getWorld().isClientSide() || !(event.getPlayer() instanceof ServerPlayer player))
             return;
-        ServerPlayerEntity player = (ServerPlayerEntity) event.getPlayer();
         BlockState state = event.getState();
         PlayerJobs jobs = PlayerData.getPlayerJobs(player);
 
-        if(ServerJobsData.BLOCKED_BLOCKS.isBlocked(PlayerData.getPlayerJobs(player), state)){
+        if(!ServerJobsData.BLOCKED_BLOCKS.isAllowed(PlayerData.getPlayerJobs(player), state)){
             event.setCanceled(true);
             return;
         }
 
         boolean isGrownCrop = false;
-        if(state.getBlock() instanceof CropsBlock){
-            isGrownCrop = ((CropsBlock)state.getBlock()).isMaxAge(state);
+        if(state.getBlock() instanceof CropBlock){
+            isGrownCrop = ((CropBlock)state.getBlock()).isMaxAge(state);
         }
 
         for(String job : jobs.getJobs()){

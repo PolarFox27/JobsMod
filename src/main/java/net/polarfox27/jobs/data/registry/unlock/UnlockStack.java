@@ -1,6 +1,6 @@
 package net.polarfox27.jobs.data.registry.unlock;
 
-import net.minecraft.item.ItemStack;
+import net.minecraft.world.item.ItemStack;
 
 public class UnlockStack implements Comparable<UnlockStack>{
 

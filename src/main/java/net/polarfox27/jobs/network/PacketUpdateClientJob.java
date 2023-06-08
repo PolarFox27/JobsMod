@@ -1,8 +1,8 @@
 package net.polarfox27.jobs.network;
 
-import net.minecraft.network.PacketBuffer;
-import net.minecraftforge.fml.network.NetworkDirection;
-import net.minecraftforge.fml.network.NetworkEvent.Context;
+import net.minecraft.network.FriendlyByteBuf;
+import net.minecraftforge.network.NetworkDirection;
+import net.minecraftforge.network.NetworkEvent.Context;
 import net.polarfox27.jobs.data.ClientJobsData;
 import net.polarfox27.jobs.data.capabilities.PlayerJobs;
 
@@ -27,7 +27,7 @@ public class PacketUpdateClientJob{
      * @param buf the buffer to read
      * @return the packet read
      */
-    public static PacketUpdateClientJob fromBytes(PacketBuffer buf) {
+    public static PacketUpdateClientJob fromBytes(FriendlyByteBuf buf) {
     	return new PacketUpdateClientJob(new PlayerJobs(buf));
     }
 
@@ -37,7 +37,7 @@ public class PacketUpdateClientJob{
      * @param packet the packet to write
      * @param buf the buffer where to write
      */
-    public static void toBytes(PacketUpdateClientJob packet, PacketBuffer buf) {
+    public static void toBytes(PacketUpdateClientJob packet, FriendlyByteBuf buf) {
         packet.jobs.writeToBytes(buf);
     }
 

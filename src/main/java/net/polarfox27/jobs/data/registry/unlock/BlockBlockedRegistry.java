@@ -1,7 +1,8 @@
 package net.polarfox27.jobs.data.registry.unlock;
 
-import net.minecraft.block.BlockState;
-import net.minecraft.network.PacketBuffer;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.network.FriendlyByteBuf;
+import net.minecraft.world.level.block.state.BlockState;
 import net.polarfox27.jobs.data.capabilities.PlayerJobs;
 import net.polarfox27.jobs.data.registry.unlock.BlockedData.BlockBlockedData;
 import net.polarfox27.jobs.data.registry.unlock.BlockedData.Type;
@@ -30,7 +31,7 @@ public class BlockBlockedRegistry {
      * Reads the Block Blocked Registry from a byte buffer
      * @param buf the buffer where to read
      */
-    public BlockBlockedRegistry(PacketBuffer buf){
+    public BlockBlockedRegistry(FriendlyByteBuf buf){
         this.type = Type.byCode(buf.readInt());
         int size = buf.readInt();
         for(int i = 0; i < size; i++){
@@ -77,7 +78,7 @@ public class BlockBlockedRegistry {
      * Writes the Block Blocked Registry to a byte buffer
      * @param buf the buffer where to write
      */
-    public void writeToBytes(PacketBuffer buf){
+    public void writeToBytes(FriendlyByteBuf buf){
         buf.writeInt(type.code);
         buf.writeInt(DATA.size());
         for(Map.Entry<String, List<BlockBlockedData>> e : DATA.entrySet()){
@@ -94,13 +95,13 @@ public class BlockBlockedRegistry {
      * @param state the stack to check
      * @return true if the player is allowed the stack
      */
-    public boolean isBlocked(PlayerJobs jobs, BlockState state){
+    public boolean isAllowed(PlayerJobs jobs, BlockState state){
         for(Map.Entry<String, List<BlockedData.BlockBlockedData>> e : this.DATA.entrySet())
             for(BlockedData.BlockBlockedData d : e.getValue()) {
                 if (d.matches(state)) {
-                    return d.getLevel() > jobs.getLevelByJob(e.getKey());
+                    return d.getLevel() <= jobs.getLevelByJob(e.getKey());
                 }
             }
-        return false;
+        return true;
     }
 }

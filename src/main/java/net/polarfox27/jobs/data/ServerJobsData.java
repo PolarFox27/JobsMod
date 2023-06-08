@@ -1,8 +1,8 @@
 package net.polarfox27.jobs.data;
 
-import net.minecraft.entity.player.ServerPlayerEntity;
-import net.minecraft.item.Items;
-import net.minecraftforge.fml.network.NetworkDirection;
+import net.minecraft.server.level.ServerPlayer;
+import net.minecraft.world.item.Items;
+import net.minecraftforge.network.NetworkDirection;
 import net.polarfox27.jobs.data.registry.LevelData;
 import net.polarfox27.jobs.data.registry.RewardsData;
 import net.polarfox27.jobs.data.registry.TranslationData;
@@ -69,7 +69,7 @@ public class ServerJobsData {
      * Sends all the data about the jobs to the client
      * @param player the client who will receive the data
      */
-    public static void sendDataToClient(ServerPlayerEntity player) {
+    public static void sendDataToClient(ServerPlayer player) {
         Set<ItemBlockedRegistry> itemBlockedRegistries = Arrays.stream(
                 new ItemBlockedRegistry[]{BLOCKED_CRAFTS, BLOCKED_EQUIPMENTS, BLOCKED_LEFT_CLICKS, BLOCKED_RIGHT_CLICKS}
                 ).collect(Collectors.toSet());

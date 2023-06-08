@@ -1,12 +1,12 @@
 package net.polarfox27.jobs.data.capabilities;
 
-import net.minecraft.entity.player.ServerPlayerEntity;
-import net.minecraft.item.ItemStack;
-import net.minecraft.nbt.CompoundNBT;
-import net.minecraft.network.PacketBuffer;
-import net.minecraft.util.text.StringTextComponent;
-import net.minecraft.util.text.TextFormatting;
-import net.minecraftforge.fml.network.NetworkDirection;
+import net.minecraft.ChatFormatting;
+import net.minecraft.nbt.CompoundTag;
+import net.minecraft.network.chat.TextComponent;
+import net.minecraft.server.level.ServerPlayer;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.network.FriendlyByteBuf;
+import net.minecraftforge.network.NetworkDirection;
 import net.polarfox27.jobs.data.ServerJobsData;
 import net.polarfox27.jobs.data.registry.LevelData;
 import net.polarfox27.jobs.network.PacketAddXP;
@@ -40,7 +40,7 @@ public class PlayerJobs {
 	 * Reads Jobs from a buffer
 	 * @param buf the buffer from where to read
 	 */
-	public PlayerJobs(PacketBuffer buf) {
+	public PlayerJobs(FriendlyByteBuf buf) {
 		this.levelData = new LevelData(buf);
 		int size = buf.readInt();
 		for(int i = 0; i < size; i++){
@@ -54,7 +54,7 @@ public class PlayerJobs {
 	 * Writes the Jobs to a buffer
 	 * @param buf the buffer where to write the Jobs
 	 */
-	public void writeToBytes(PacketBuffer buf){
+	public void writeToBytes(FriendlyByteBuf buf){
 		this.levelData.writeToBytes(buf);
 		buf.writeInt(XP.size());
 		for(Map.Entry<String, Long> e : XP.entrySet()){
@@ -136,7 +136,7 @@ public class PlayerJobs {
 	 * @param xp the xp amount added
 	 * @param p the player who receives the xp
 	 */
-	public void gainXP(String j, long xp, ServerPlayerEntity p) {
+	public void gainXP(String j, long xp, ServerPlayer p) {
 		if(xp <= 0 || !levelData.exists(j))
 			return;
 		int previousLVL = this.getLevelByJob(j);
@@ -156,12 +156,12 @@ public class PlayerJobs {
 		}
 
 		if(LVL == levelData.getMaxLevel(j) && p.getServer() != null) {
-			for(ServerPlayerEntity mp : p.getServer().getPlayerList().getPlayers()) {
-				String message = TextFormatting.DARK_PURPLE + p.getName().getString() +
-						TextFormatting.BLUE + " has reached level " + levelData.getMaxLevel(j) + "for the job " + j + " !";
-				mp.sendMessage(new StringTextComponent(message),
+			for(ServerPlayer mp : p.getServer().getPlayerList().getPlayers()) {
+				String message = ChatFormatting.DARK_PURPLE + p.getName().getString() +
+						ChatFormatting.BLUE + " has reached level " + levelData.getMaxLevel(j) + " for the job " + j + " !";
+				mp.sendMessage(new TextComponent(message),
 							   mp.getGameProfile().getId());
-				p.getServer().sendMessage(new StringTextComponent(message),
+				p.getServer().sendMessage(new TextComponent(message),
 							   mp.getGameProfile().getId());
 			}
 		}
@@ -173,7 +173,7 @@ public class PlayerJobs {
 	 * @param j the job for which the player has leveled up
 	 * @param lvl the level the player reached
 	 */
-	private void giveReward(ServerPlayerEntity p, String j, int lvl) {
+	private void giveReward(ServerPlayer p, String j, int lvl) {
 		if(!levelData.exists(j))
 			return;
 		List<ItemStack> list = ServerJobsData.REWARDS.getRewards(j, lvl);
@@ -181,15 +181,15 @@ public class PlayerJobs {
 									  p.connection.getConnection(),
 									  NetworkDirection.PLAY_TO_CLIENT);
 		for(ItemStack s : list)
-			p.inventory.add(s.copy());
-		p.inventory.setChanged();
+			p.getInventory().add(s.copy());
+		p.getInventory().setChanged();
 	}
 
 	/**
 	 * Deserialize Jobs from NBT
 	 * @param nbt the nbt to read from
 	 */
-	public void fromNBT(CompoundNBT nbt) {
+	public void fromNBT(CompoundTag nbt) {
 		for(String job : nbt.getAllKeys())
 			this.set(job, nbt.getLong(job));
 	}
@@ -198,8 +198,8 @@ public class PlayerJobs {
 	 * Serialize Jobs to NBT
 	 * @return the serialized NBT
 	 */
-	public CompoundNBT toNBT() {
-		CompoundNBT nbt = new CompoundNBT();
+	public CompoundTag toNBT() {
+		CompoundTag nbt = new CompoundTag();
 		for(Map.Entry<String, Long> e : this.XP.entrySet())
 			nbt.putLong(e.getKey(), e.getValue());
 		return nbt;

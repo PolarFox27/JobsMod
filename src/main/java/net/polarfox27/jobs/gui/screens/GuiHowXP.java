@@ -1,20 +1,20 @@
 package net.polarfox27.jobs.gui.screens;
 
 
-import com.mojang.blaze3d.matrix.MatrixStack;
+import com.mojang.blaze3d.systems.RenderSystem;
+import com.mojang.blaze3d.vertex.PoseStack;
+import net.minecraft.ChatFormatting;
 import net.minecraft.client.Minecraft;
-import net.minecraft.client.gui.screen.Screen;
-import net.minecraft.client.renderer.RenderHelper;
-import net.minecraft.client.resources.I18n;
-import net.minecraft.entity.Entity;
-import net.minecraft.entity.EntityType;
-import net.minecraft.entity.LivingEntity;
-import net.minecraft.item.ItemStack;
-import net.minecraft.item.Items;
-import net.minecraft.util.IReorderingProcessor;
-import net.minecraft.util.ResourceLocation;
-import net.minecraft.util.text.StringTextComponent;
-import net.minecraft.util.text.TextFormatting;
+import net.minecraft.client.gui.screens.Screen;
+import net.minecraft.client.renderer.GameRenderer;
+import net.minecraft.network.chat.Component;
+import net.minecraft.network.chat.TextComponent;
+import net.minecraft.world.entity.Entity;
+import net.minecraft.world.entity.EntityType;
+import net.minecraft.world.entity.LivingEntity;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.Items;
+import net.minecraft.resources.ResourceLocation;
 import net.polarfox27.jobs.ModJobs;
 import net.polarfox27.jobs.data.ClientJobsData;
 import net.polarfox27.jobs.data.registry.xp.XPData;
@@ -23,9 +23,9 @@ import net.polarfox27.jobs.gui.buttons.ButtonBack;
 import net.polarfox27.jobs.gui.buttons.SlideBarButton;
 import net.polarfox27.jobs.util.GuiUtil;
 import net.polarfox27.jobs.util.JobsUtil;
-import org.lwjgl.opengl.GL11;
 
-import java.awt.*;
+
+import java.awt.Color;
 import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.List;
@@ -42,14 +42,14 @@ public class GuiHowXP extends Screen implements SliderParent {
     private SlideBarButton horizontalSlideBar;
     private final List<XPRegistry<? extends XPData>> categories = new ArrayList<>();
     private final List<List<XPData>> xpLists = new ArrayList<>();
-    private final List<IReorderingProcessor> tooltip = new ArrayList<>();
+    private final List<Component> tooltip = new ArrayList<>();
 
     /**
      * Creates the How XP GUI for a job
      * @param j the job
      */
     public GuiHowXP(String j) {
-    	super(new StringTextComponent(""));
+    	super(new TextComponent(""));
         this.job = j;
         for(XPRegistry<? extends XPData> c : ClientJobsData.XP_REGISTRIES) {
         	if(!c.getXPDataByJob(job).isEmpty()) {
@@ -73,12 +73,11 @@ public class GuiHowXP extends Screen implements SliderParent {
     public void init() {
         this.verticalSlideBar = new SlideBarButton(this.height/2 -45, this.height/2+45, this.width/2 + 65, this, true);
         this.horizontalSlideBar = new SlideBarButton(this.width/2-73, this.width/2+44, this.height/2+66, this, false);
-        this.buttons.clear();
-        this.children.clear();
-        this.addButton(new ButtonBack(this.width/2 - 83, this.height/2-70, this));
-        this.addButton(verticalSlideBar);
+        this.clearWidgets();
+        this.addRenderableWidget(new ButtonBack(this.width/2 - 83, this.height/2-70, this));
+        this.addRenderableWidget(verticalSlideBar);
         if(getLastPage(false) > 0)
-            this.addButton(horizontalSlideBar);
+            this.addRenderableWidget(horizontalSlideBar);
     }
 
     /**
@@ -95,19 +94,19 @@ public class GuiHowXP extends Screen implements SliderParent {
      * @param mStack the render stack
      * @param mouseX the x coordinate of the mouse
      * @param mouseY the y coordinate of the mouse
-     * @param partialTicks the render ticks
+     * @param partialTicks the rendering ticks
      */
     @Override
-    public void render(MatrixStack mStack, int mouseX, int mouseY, float partialTicks) {
+    public void render(PoseStack mStack, int mouseX, int mouseY, float partialTicks) {
         this.tooltip.clear();
         this.left = this.width/2 - 88;
         this.top = this.height/2 - 75;
-        Minecraft.getInstance().getTextureManager().bind(BACKGROUND);
-        GL11.glColor4f(1.0F, 1.0F, 1.0F, 1.0F);
+        RenderSystem.setShader(GameRenderer::getPositionTexShader);
+        RenderSystem.setShaderColor(1.0f, 1.0f, 1.0f, 1.0f);
+        RenderSystem.setShaderTexture(0, BACKGROUND);
         this.blit(mStack, this.left, this.top, 0, 0, 176, 150);//background
         if(getLastPage(false) > 0)
             this.blit(mStack, this.left, this.top + 140, 0, 150, 176, 24);
-
 
         super.render(mStack, mouseX, mouseY, partialTicks);
         if(xpLists.stream().anyMatch(x -> !x.isEmpty())){
@@ -115,12 +114,12 @@ public class GuiHowXP extends Screen implements SliderParent {
             this.drawCategoriesStacks(mouseX, mouseY);
         }
         else{
-            GuiUtil.renderCenteredString(mStack, I18n.get("text.no_way_of_gaining_xp"), Color.RED.getRGB(), this.width/2-10, this.height/2, 0.65f);
+            GuiUtil.renderCenteredString(mStack, GuiUtil.translate("text.no_way_of_gaining_xp"), Color.RED.getRGB(), this.width/2-10, this.height/2, 0.65f);
             return;
         }
 
         if(!tooltip.isEmpty())
-            this.renderToolTip(mStack, tooltip, mouseX, mouseY, Minecraft.getInstance().font);
+            this.renderComponentTooltip(mStack, tooltip, mouseX, mouseY, Minecraft.getInstance().font);
 
         if(isDragging(verticalSlideBar, mouseX, mouseY))
             updateSlider(verticalSlideBar, mouseY);
@@ -134,23 +133,26 @@ public class GuiHowXP extends Screen implements SliderParent {
      * @param mouseX the x coordinate of the mouse, used to find the tooltips to render
      * @param mouseY the y coordinate of the mouse, used to find the tooltips to render
      */
-    private void drawCategories(MatrixStack mStack, int mouseX, int mouseY) {
-        Minecraft.getInstance().getTextureManager().bind(BACKGROUND);
+    private void drawCategories(PoseStack mStack, int mouseX, int mouseY) {
+        RenderSystem.setShader(GameRenderer::getPositionTexShader);
+        RenderSystem.setShaderColor(1.0f, 1.0f, 1.0f, 1.0f);
+        RenderSystem.setShaderTexture(0, BACKGROUND);
         int size = 30*Math.min(this.categories.size(), 5) + Math.min(this.categories.size()-1, 4);
         int x = this.width/2 - 10 - size/2;
         int renderIndex = -1;
-        RenderHelper.setupForFlatItems();
         for(int i = 0; i < Math.min(this.categories.size(), 5); i++) {
             this.itemRenderer.renderGuiItem(new ItemStack(this.categories.get(i+horizontalPage).getIcon()), x + i*31 + 7, this.top + 20);
             if(mouseX >= x + i*31 + 7 && mouseX < x + i*31 + 23 && mouseY >= this.top + 20 && mouseY < this.top + 36)
                 renderIndex = i;
             if(i < Math.min(this.categories.size()-1, 4) && this.categories.size() > 1) {
-                Minecraft.getInstance().getTextureManager().bind(BACKGROUND);
+                RenderSystem.setShader(GameRenderer::getPositionTexShader);
+                RenderSystem.setShaderColor(1.0f, 1.0f, 1.0f, 1.0f);
+                RenderSystem.setShaderTexture(0, BACKGROUND);
                 this.blit(mStack, x + i * 31 + 30, this.top + 38, 176, 0, 1, 100);
             }
         }
         if(renderIndex != -1)
-            this.tooltip.add(new StringTextComponent(I18n.get("category." + this.categories.get(renderIndex).getName())).getVisualOrderText());
+            this.tooltip.add(new TextComponent(GuiUtil.translate("category." + this.categories.get(renderIndex).getName())));
     }
 
     /**
@@ -164,7 +166,6 @@ public class GuiHowXP extends Screen implements SliderParent {
         for(int i = 0; i < Math.min(this.categories.size(), 5); i++) {
             int x = p + i*31;
             List<XPData> xps = this.xpLists.get(horizontalPage + i);
-            RenderHelper.setupForFlatItems();
 
             int hoveredIndex = -1;
             for(int j = this.verticalPage; j < xps.size() && j < this.verticalPage+5 && j >= 0; j++) {
@@ -192,32 +193,31 @@ public class GuiHowXP extends Screen implements SliderParent {
             if(hoveredIndex != -1) {
                 XPData data = xps.get(hoveredIndex);
                 if(data instanceof XPData.EntityXPData)
-                    tooltip.add(new StringTextComponent(((XPData.EntityXPData)data).getEntityName()).getVisualOrderText());
+                    tooltip.add(new TextComponent(((XPData.EntityXPData)data).getEntityName()));
                 else
-                    tooltip.add(new StringTextComponent(data.createStack().getDisplayName().getString()
+                    tooltip.add(new TextComponent(data.createStack().getDisplayName().getString()
                             .replace("[", "")
                             .replace("]", ""))
-                            .getVisualOrderText());
+                            );
                 long xp;
                 int lvl = ClientJobsData.playerJobs.getLevelByJob(this.job);
                 if (lvl < ClientJobsData.JOBS_LEVELS.getMaxLevel(job)) {
                     xp =  data.getXPByLevel(lvl);
                     if(xp != 0L)
-                        tooltip.add(new StringTextComponent(TextFormatting.GREEN + Long.toString(xp) + " xp").getVisualOrderText());
+                        tooltip.add(new TextComponent(ChatFormatting.GREEN + Long.toString(xp) + " xp"));
                     else {
                         int unlockLevel = data.unlockingLevel(lvl);
                         if(unlockLevel > 0)
-                            tooltip.add(new StringTextComponent(TextFormatting.RED + I18n.get("text.unlock_xp_lvl") + " " + unlockLevel)
-                                    .getVisualOrderText());
+                            tooltip.add(new TextComponent(ChatFormatting.RED + GuiUtil.translate("text.unlock_xp_lvl") + " " + unlockLevel)
+                                    );
                         else
-                            tooltip.add(new StringTextComponent(TextFormatting.RED + "0 xp")
-                                    .getVisualOrderText());
+                            tooltip.add(new TextComponent(ChatFormatting.RED + "0 xp")
+                                    );
                     }
                 }
                 else
-                    tooltip.add(new StringTextComponent(TextFormatting.DARK_PURPLE + "0 xp").getVisualOrderText());
+                    tooltip.add(new TextComponent(ChatFormatting.DARK_PURPLE + "0 xp"));
             }
-            RenderHelper.setupFor3DItems();
         }
     }
 

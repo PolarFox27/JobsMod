@@ -1,16 +1,17 @@
 package net.polarfox27.jobs.gui.buttons;
 
-import com.mojang.blaze3d.matrix.MatrixStack;
+import com.mojang.blaze3d.systems.RenderSystem;
+import com.mojang.blaze3d.vertex.PoseStack;
 import net.minecraft.client.Minecraft;
-import net.minecraft.client.gui.screen.Screen;
-import net.minecraft.client.gui.widget.button.Button;
-import net.minecraft.util.ResourceLocation;
-import net.minecraft.util.text.StringTextComponent;
+import net.minecraft.client.gui.components.Button;
+import net.minecraft.client.gui.screens.Screen;
+import net.minecraft.client.renderer.GameRenderer;
+import net.minecraft.network.chat.TextComponent;
+import net.minecraft.resources.ResourceLocation;
 import net.polarfox27.jobs.ModJobs;
 import net.polarfox27.jobs.gui.screens.GuiHowXP;
 import net.polarfox27.jobs.gui.screens.GuiJobInfos;
 import net.polarfox27.jobs.gui.screens.MainJobsMenu;
-import org.lwjgl.opengl.GL11;
 
 public class ButtonBack extends Button {
 
@@ -27,7 +28,7 @@ public class ButtonBack extends Button {
      * @param parent the parent GUI
      */
     public ButtonBack(int x, int y, Screen parent) {
-        super(x, y, 18, 10, new StringTextComponent(""), new OnPressed());
+        super(x, y, 18, 10, new TextComponent(""), new OnPressed());
         this.xTexStart = 0;
         this.yTexStart = 212;
         this.xDiffText = 18;
@@ -39,20 +40,23 @@ public class ButtonBack extends Button {
      * @param mStack the render stack
      * @param mouseX the x coordinate of the mouse
      * @param mouseY the y coordinate of the mouse
-     * @param partialTicks the render ticks
+     * @param partialTicks the rendering ticks
      */
     @Override
-    public void renderButton(MatrixStack mStack, int mouseX, int mouseY, float partialTicks) {
+    public void renderButton(PoseStack mStack, int mouseX, int mouseY, float partialTicks) {
         if (this.visible) {
             boolean hovered = mouseX >= this.x && mouseY >= this.y && mouseX < this.x + this.width && mouseY < this.y + this.height;
-            Minecraft.getInstance().getTextureManager().bind(BACKGROUND);
-            GL11.glColor4f(1.0F, 1.0F, 1.0F, 1.0F);
-            int i = hovered ? this.xDiffText + this.xTexStart : this.xTexStart;
-            this.blit(mStack, this.x, this.y, i, yTexStart, this.width, this.height);
+            RenderSystem.setShader(GameRenderer::getPositionTexShader);
+            RenderSystem.setShaderColor(1.0f, 1.0f, 1.0f, 1.0f);
+            RenderSystem.setShaderTexture(0, BACKGROUND);
+            int i = this.xTexStart;
+            if (hovered)
+                i += this.xDiffText;
+            this.blit(mStack, this.x, this.y, i, this.yTexStart, this.width, this.height);
         }
     }
     
-    public static class OnPressed implements IPressable{
+    public static class OnPressed implements OnPress{
 
         /**
          * Goes back to the previous GUI when the button is clicked
@@ -60,10 +64,9 @@ public class ButtonBack extends Button {
          */
         @Override
 		public void onPress(Button btn) {
-			if(!(btn instanceof ButtonBack))
+			if(!(btn instanceof ButtonBack button))
                 return;
-			ButtonBack button = (ButtonBack)btn;
-			if(button.parent instanceof GuiJobInfos)
+            if(button.parent instanceof GuiJobInfos)
 				Minecraft.getInstance().setScreen(new MainJobsMenu());
 			if(button.parent instanceof GuiHowXP)
 				Minecraft.getInstance().setScreen(new GuiJobInfos(((GuiHowXP)button.parent).job));

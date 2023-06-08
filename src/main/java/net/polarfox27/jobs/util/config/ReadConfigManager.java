@@ -94,7 +94,6 @@ public class ReadConfigManager {
      * Reads a Block XP registry json
      * @param object the json object containing the configuration
      * @param registry the registry to configure
-     * @param isCrop whether the registry uses crops or normal blocks
      */
     public static void loadBlockRegistry(JsonObject object, XPRegistry.BlockXPRegistry registry, boolean isCrop){
         try{

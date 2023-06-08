@@ -3,11 +3,12 @@ package net.polarfox27.jobs.util.config;
 
 import com.google.gson.JsonArray;
 import com.google.gson.JsonObject;
-import net.minecraft.block.Blocks;
-import net.minecraft.entity.EntityType;
-import net.minecraft.item.ItemStack;
-import net.minecraft.item.Items;
+import net.minecraft.world.level.block.Blocks;
+import net.minecraft.world.entity.EntityType;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.Items;
 import net.minecraft.server.MinecraftServer;
+import net.minecraft.ChatFormatting;
 import net.polarfox27.jobs.ModJobs;
 import net.polarfox27.jobs.data.ServerJobsData;
 import net.polarfox27.jobs.data.registry.RewardsData;
@@ -66,25 +67,19 @@ public class WriteConfigManager {
      */
     public static void tryCreateEmptyXPFile(String folder, String name, int type) {
         if(new File(folder).mkdirs())
-            ModJobs.warning("XP folder created");
+            ModJobs.warning("Empty XP folder created");
         File f = FileUtil.join(folder, name);
         if(f.exists())
             return;
         JsonObject json = new JsonObject();
         JsonObject defaultProperty;
         long[] base_xp = new long[]{1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20};
-        switch(type){
-            case 0:
-                defaultProperty = JsonUtil.itemXPDataToJSON(new XPData.ItemXPData(base_xp, Items.GOLDEN_APPLE, -1));
-                break;
-            case 1:
-                defaultProperty = JsonUtil.blockXPDataToJSON(new XPData.BlockXPData(base_xp, Blocks.COAL_ORE));
-                break;
-            case 2:
-                defaultProperty = JsonUtil.entityXPDataToJSON(new XPData.EntityXPData(base_xp, EntityType.COW));
-                break;
-            default:
-                defaultProperty = new JsonObject();
+        switch (type) {
+            case 0 -> defaultProperty = JsonUtil.itemXPDataToJSON(new XPData.ItemXPData(base_xp,
+                    Items.GOLDEN_APPLE, -1));
+            case 1 -> defaultProperty = JsonUtil.blockXPDataToJSON(new XPData.BlockXPData(base_xp, Blocks.COAL_ORE));
+            case 2 -> defaultProperty = JsonUtil.entityXPDataToJSON(new XPData.EntityXPData(base_xp, EntityType.COW));
+            default -> defaultProperty = new JsonObject();
         }
         JsonArray array1 = new JsonArray();
         array1.add(defaultProperty);
@@ -100,7 +95,7 @@ public class WriteConfigManager {
      */
     public static void tryCreateEmptyLevelFile(String folder, String name) {
         if(new File(folder).mkdirs())
-            ModJobs.warning("Base folder created");
+            ModJobs.warning("Base folder created !");
         File f = FileUtil.join(folder, name);
         if(f.exists())
             return;
@@ -186,7 +181,7 @@ public class WriteConfigManager {
      */
     public static void tryCreateEmptyBlockedItemsFile(String folder, String name) {
         if(new File(folder).mkdirs())
-            ModJobs.warning("Blocked folder created");
+            ModJobs.warning("Blocked Items folder created");
         File f = FileUtil.join(folder, name);
         if(f.exists())
             return;
@@ -208,7 +203,7 @@ public class WriteConfigManager {
      */
     public static void tryCreateEmptyBlockedBlocksFile(String folder, String name) {
         if(new File(folder).mkdirs())
-            ModJobs.warning("Blocked folder created");
+            ModJobs.warning("Blocked Items folder created");
         File f = FileUtil.join(folder, name);
         if(f.exists())
             return;

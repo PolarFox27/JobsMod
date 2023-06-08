@@ -1,17 +1,17 @@
 package net.polarfox27.jobs.data.registry.xp;
 
-import net.minecraft.block.Block;
-import net.minecraft.block.BlockState;
-import net.minecraft.block.CropsBlock;
-import net.minecraft.client.resources.I18n;
-import net.minecraft.entity.Entity;
-import net.minecraft.entity.EntityType;
-import net.minecraft.item.Item;
-import net.minecraft.item.ItemStack;
-import net.minecraft.item.Items;
-import net.minecraft.network.PacketBuffer;
+import net.minecraft.network.FriendlyByteBuf;
+import net.minecraft.world.entity.Entity;
+import net.minecraft.world.entity.EntityType;
+import net.minecraft.world.item.Item;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.Items;
+import net.minecraft.world.level.block.Block;
+import net.minecraft.world.level.block.CropBlock;
+import net.minecraft.world.level.block.state.BlockState;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
+import net.polarfox27.jobs.util.GuiUtil;
 import net.polarfox27.jobs.util.JobsUtil;
 import net.polarfox27.jobs.util.config.JsonUtil;
 
@@ -33,7 +33,7 @@ public abstract class  XPData {
      * Reads an XPData from a byte buffer
      * @param buf the buffer where to read
      */
-    public XPData(PacketBuffer buf) {
+    public XPData(FriendlyByteBuf buf) {
         this.xp_values = JobsUtil.fromBytes(JobsUtil.readByteArray(buf));
     }
 
@@ -71,7 +71,7 @@ public abstract class  XPData {
      * Writes the XPData to a byte buffer
      * @param buf the buffer where to write
      */
-    public void writeToBytes(PacketBuffer buf){
+    public void writeToBytes(FriendlyByteBuf buf){
         JobsUtil.writeByteArray(JobsUtil.toBytes(xp_values), buf);
     }
 
@@ -95,9 +95,9 @@ public abstract class  XPData {
 
         /**
          * Constructs an XPData for an Item
-         * @param xp_values the xp that can be earned at each level
-         * @param item the item that will give the xp
-         * @param metadata the item's metadata (e.g. durability)
+         * @param xp_values the amount of xp gained at each level
+         * @param item the item that gives the xp
+         * @param metadata the item metadata
          */
         public ItemXPData(long[] xp_values, Item item, int metadata) {
             super(xp_values);
@@ -109,7 +109,7 @@ public abstract class  XPData {
          * Reads an Item XPData from a byte buffer
          * @param buf the buffer where to read
          */
-        public ItemXPData(PacketBuffer buf){
+        public ItemXPData(FriendlyByteBuf buf){
             super(buf);
             this.item = Item.byId(buf.readInt());
             this.metadata = buf.readInt();
@@ -139,7 +139,7 @@ public abstract class  XPData {
          * @param buf the buffer where to write
          */
         @Override
-        public void writeToBytes(PacketBuffer buf) {
+        public void writeToBytes(FriendlyByteBuf buf) {
             super.writeToBytes(buf);
             buf.writeInt(Item.getId(item));
             buf.writeInt(metadata);
@@ -172,8 +172,8 @@ public abstract class  XPData {
 
         /**
          * Constructs an XPData for a Block
-         * @param xp_values the xp that can be earned at each level
-         * @param block the block that will give the xp
+         * @param xp_values the amount of xp gained at each level
+         * @param block the block that gives the xp
          */
         public BlockXPData(long[] xp_values, Block block) {
             super(xp_values);
@@ -183,9 +183,9 @@ public abstract class  XPData {
 
         /**
          * Constructs an XPData for a Block giving the option to register a Crops Block
-         * @param xp_values the xp that can be earned at each level
-         * @param block the block that will give the xp
-         * @param isCrop whether the block is a crop or not
+         * @param xp_values the amount of xp gained at each level
+         * @param block the block that gives the xp
+         * @param isCrop whether this block is a crop or not
          */
         public BlockXPData(long[] xp_values, Block block, boolean isCrop) {
             super(xp_values);
@@ -197,7 +197,7 @@ public abstract class  XPData {
          * Reads a Block XPData from a byte buffer
          * @param buf the buffer where to read
          */
-        public BlockXPData(PacketBuffer buf){
+        public BlockXPData(FriendlyByteBuf buf){
             super(buf);
             this.block = Block.stateById(buf.readInt()).getBlock();
             this.isCrop = buf.readBoolean();
@@ -215,10 +215,9 @@ public abstract class  XPData {
         public boolean matches(BlockState state){
             if(this.block != state.getBlock())
                 return false;
-            if(!(this.block instanceof CropsBlock) || !isCrop)
+            if(!(this.block instanceof CropBlock crop) || !isCrop)
                 return true;
             else{
-                CropsBlock crop = (CropsBlock) this.block;
                 return crop.isMaxAge(state);
             }
         }
@@ -228,7 +227,7 @@ public abstract class  XPData {
          * @param buf the buffer where to write
          */
         @Override
-        public void writeToBytes(PacketBuffer buf) {
+        public void writeToBytes(FriendlyByteBuf buf) {
             super.writeToBytes(buf);
             buf.writeInt(Block.getId(block.defaultBlockState()));
             buf.writeBoolean(isCrop);
@@ -247,8 +246,7 @@ public abstract class  XPData {
          */
         @Override
         public String toString() {
-            String s = JsonUtil.getRegistryName(block);
-            return  s + " : " + super.toString();
+            return JsonUtil.getRegistryName(block) + " : " + super.toString();
         }
     }
 
@@ -258,8 +256,8 @@ public abstract class  XPData {
 
         /**
          * Constructs an XPData for an Entity
-         * @param xp_values the xp that can be earned at each level
-         * @param type the entity that will give the xp
+         * @param xp_values the amount of xp gained at each level
+         * @param type the entity that gives the xp
          */
         public EntityXPData(long[] xp_values, EntityType<? extends Entity> type) {
             super(xp_values);
@@ -270,7 +268,7 @@ public abstract class  XPData {
          * Reads an Entity XPData from a byte buffer
          * @param buf the buffer where to read
          */
-        public EntityXPData(PacketBuffer buf){
+        public EntityXPData(FriendlyByteBuf buf){
             super(buf);
             entity = EntityType.byString(JobsUtil.readString(buf)).orElse(null);
         }
@@ -284,7 +282,7 @@ public abstract class  XPData {
          */
         @OnlyIn(Dist.CLIENT)
         public String getEntityName(){
-            return I18n.get("entity.minecraft." + EntityType.getKey(entity).getPath());
+            return GuiUtil.translate("entity.minecraft." + EntityType.getKey(entity).getPath());
         }
 
         /**
@@ -301,7 +299,7 @@ public abstract class  XPData {
          * @param buf the buffer where to write
          */
         @Override
-        public void writeToBytes(PacketBuffer buf) {
+        public void writeToBytes(FriendlyByteBuf buf) {
             super.writeToBytes(buf);
             String name = EntityType.getKey(entity).toString();
             JobsUtil.writeString(name, buf);

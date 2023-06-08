@@ -1,7 +1,7 @@
 package net.polarfox27.jobs.data.registry.unlock;
 
-import net.minecraft.item.ItemStack;
-import net.minecraft.network.PacketBuffer;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.network.FriendlyByteBuf;
 import net.polarfox27.jobs.data.capabilities.PlayerJobs;
 import net.polarfox27.jobs.data.registry.unlock.BlockedData.ItemBlockedData;
 import net.polarfox27.jobs.data.registry.unlock.BlockedData.Type;
@@ -30,7 +30,7 @@ public class ItemBlockedRegistry {
      * Reads the Item Blocked Registry from a byte buffer
      * @param buf the buffer where to read
      */
-    public ItemBlockedRegistry(PacketBuffer buf){
+    public ItemBlockedRegistry(FriendlyByteBuf buf){
         this.type = Type.byCode(buf.readInt());
         int size = buf.readInt();
         for(int i = 0; i < size; i++){
@@ -77,7 +77,7 @@ public class ItemBlockedRegistry {
      * Writes the Item Blocked Registry to a byte buffer
      * @param buf the buffer where to write
      */
-    public void writeToBytes(PacketBuffer buf){
+    public void writeToBytes(FriendlyByteBuf buf){
         buf.writeInt(type.code);
         buf.writeInt(DATA.size());
         for(Map.Entry<String, List<ItemBlockedData>> e : DATA.entrySet()){

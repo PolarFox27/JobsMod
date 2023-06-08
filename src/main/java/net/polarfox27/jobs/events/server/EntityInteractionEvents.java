@@ -1,9 +1,9 @@
 package net.polarfox27.jobs.events.server;
 
-import net.minecraft.entity.Entity;
-import net.minecraft.entity.EntityType;
-import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.entity.player.ServerPlayerEntity;
+import net.minecraft.world.entity.Entity;
+import net.minecraft.world.entity.EntityType;
+import net.minecraft.world.entity.player.Player;
+import net.minecraft.server.level.ServerPlayer;
 import net.minecraftforge.event.entity.living.BabyEntitySpawnEvent;
 import net.minecraftforge.event.entity.living.LivingDeathEvent;
 import net.minecraftforge.event.entity.player.AttackEntityEvent;
@@ -24,14 +24,13 @@ public class EntityInteractionEvents {
     @SubscribeEvent
     public void onKill(LivingDeathEvent event) {
     	if(event.getEntityLiving().level.isClientSide() ||
-                !(event.getSource().getEntity() instanceof ServerPlayerEntity))
+                !(event.getSource().getEntity() instanceof ServerPlayer p))
             return;
-        if(event.getEntityLiving() instanceof PlayerEntity &&
+        if(event.getEntityLiving() instanceof Player &&
                 event.getSource().getEntity().equals(event.getEntityLiving()))
             return;
         EntityType<? extends Entity> type = event.getEntityLiving().getType();
 
-        ServerPlayerEntity p = (ServerPlayerEntity)event.getSource().getEntity();
         PlayerJobs jobs = PlayerData.getPlayerJobs(p);
 
         for(String job : jobs.getJobs()){
@@ -49,9 +48,8 @@ public class EntityInteractionEvents {
     @SubscribeEvent
     public void onBreed(BabyEntitySpawnEvent event) {
         if (event.getCausedByPlayer() == null || event.getCausedByPlayer().level.isClientSide()
-            || event.getChild() == null)
+                || event.getChild() == null)
             return;
-        System.out.println("Breeding");
         EntityType<? extends Entity> type = event.getChild().getType();
 
         PlayerJobs jobs = PlayerData.getPlayerJobs(event.getCausedByPlayer());
@@ -59,8 +57,7 @@ public class EntityInteractionEvents {
         for (String job : jobs.getJobs()) {
             int level = jobs.getLevelByJob(job);
             long xp = ServerJobsData.BREEDING_ENTITY_XP.getXPByLevelAndJob(type, level, job);
-            jobs.gainXP(job, xp, (ServerPlayerEntity) event.getCausedByPlayer());
-            System.out.println("gaining " + xp + " xp");
+            jobs.gainXP(job, xp, (ServerPlayer) event.getCausedByPlayer());
         }
     }
 
@@ -70,7 +67,7 @@ public class EntityInteractionEvents {
      */
     @SubscribeEvent
     public void onLeftClickEntity(AttackEntityEvent event) {
-        if(event.getPlayer().level.isClientSide() || !(event.getPlayer() instanceof ServerPlayerEntity))
+        if(event.getPlayer().level.isClientSide() || !(event.getPlayer() instanceof ServerPlayer))
             return;
         PlayerJobs jobs = PlayerData.getPlayerJobs(event.getPlayer());
         if(ServerJobsData.BLOCKED_LEFT_CLICKS.isBlocked(jobs, event.getPlayer().getMainHandItem()))

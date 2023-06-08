@@ -1,23 +1,21 @@
 package net.polarfox27.jobs.gui.screens;
 
-import com.mojang.blaze3d.matrix.MatrixStack;
-import net.minecraft.client.Minecraft;
-import net.minecraft.client.gui.screen.Screen;
-import net.minecraft.client.resources.I18n;
-import net.minecraft.util.ResourceLocation;
-import net.minecraft.util.text.TranslationTextComponent;
+import com.mojang.blaze3d.systems.RenderSystem;
+import com.mojang.blaze3d.vertex.PoseStack;
+import net.minecraft.client.gui.screens.Screen;
+import net.minecraft.client.renderer.GameRenderer;
+import net.minecraft.network.chat.TranslatableComponent;
+import net.minecraft.resources.ResourceLocation;
 import net.polarfox27.jobs.ModJobs;
 import net.polarfox27.jobs.data.ClientJobsData;
 import net.polarfox27.jobs.gui.buttons.ButtonArrow;
 import net.polarfox27.jobs.gui.buttons.ButtonJob;
 import net.polarfox27.jobs.util.GuiUtil;
 import net.polarfox27.jobs.util.JobsUtil;
-import org.lwjgl.opengl.GL11;
 
-import java.awt.*;
+import java.awt.Color;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.stream.Collectors;
 
 public class MainJobsMenu extends Screen {
 
@@ -30,7 +28,7 @@ public class MainJobsMenu extends Screen {
      * Creates the Main Jobs Menu GUI
      */
     public MainJobsMenu() {
-		super(new TranslationTextComponent("text.jobs.title"));
+		super(new TranslatableComponent("text.jobs.title"));
         this.jobs = new ArrayList<>(ClientJobsData.JOBS_LEVELS.getJobs());
 	}
 
@@ -39,18 +37,17 @@ public class MainJobsMenu extends Screen {
      */
     @Override
     protected void init() {
-        this.buttons.clear();
-        this.children.clear();
+        this.clearWidgets();
         int offset = 0;
-        for(String job : jobs.stream().skip(index).limit(4).collect(Collectors.toList())){
-            this.addButton(new ButtonJob(this.width/2 - 100, this.height/2 - 67 + offset, job));
+        for(String job : jobs.stream().skip(index).limit(4).toList()){
+            this.addRenderableWidget(new ButtonJob(this.width/2 - 100, this.height/2 - 67 + offset, job));
             offset += 40;
         }
         if(index > 0){
-            this.addButton(new ButtonArrow(this.width/2-9, 43, this, true));
+            this.addRenderableWidget(new ButtonArrow(this.width/2-9, 43, this, true));
         }
         if(index < lastIndex()){
-            this.addButton(new ButtonArrow(this.width/2-9, this.height/2+93, this, false));
+            this.addRenderableWidget(new ButtonArrow(this.width/2-9, this.height/2+93, this, false));
         }
     }
 
@@ -77,14 +74,16 @@ public class MainJobsMenu extends Screen {
      * @param mStack the render stack
      * @param mouseX the x coordinate of the mouse
      * @param mouseY the y coordinate of the mouse
-     * @param partialTicks the render ticks
+     * @param partialTicks the rendering ticks
      */
     @Override
-    public void render(MatrixStack mStack, int mouseX, int mouseY, float partialTicks) {
-    	GL11.glColor4f(1.0F, 1.0F, 1.0F, 1.0F);
-        Minecraft.getInstance().getTextureManager().bind(BACKGROUND);
+    public void render(PoseStack mStack, int mouseX, int mouseY, float partialTicks) {
+        RenderSystem.setShader(GameRenderer::getPositionTexShader);
+        RenderSystem.setShaderColor(1.0f, 1.0f, 1.0f, 1.0f);
+        RenderSystem.setShaderTexture(0, BACKGROUND);
         this.blit(mStack, this.width/2 - 128, this.height/2 - 110, 0, 0, 256, 220);
-        GuiUtil.renderCenteredString(mStack, I18n.get("text.jobs.title"), Color.black.getRGB(), this.width/2, this.height/2 - 95, 2.0f);
+        GuiUtil.renderCenteredString(mStack, GuiUtil.translate("text.jobs.title"),
+                Color.black.getRGB(), this.width/2, this.height/2 - 95, 2.0f);
     	super.render(mStack, mouseX, mouseY, partialTicks);
     }
 

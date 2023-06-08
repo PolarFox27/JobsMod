@@ -1,11 +1,11 @@
 package net.polarfox27.jobs.network;
 
 
-import net.minecraft.item.Item;
-import net.minecraft.item.ItemStack;
-import net.minecraft.network.PacketBuffer;
-import net.minecraftforge.fml.network.NetworkDirection;
-import net.minecraftforge.fml.network.NetworkEvent.Context;
+import net.minecraft.world.item.Item;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.network.FriendlyByteBuf;
+import net.minecraftforge.network.NetworkDirection;
+import net.minecraftforge.network.NetworkEvent.Context;
 import net.polarfox27.jobs.data.ClientJobsData;
 import net.polarfox27.jobs.util.JobsUtil;
 
@@ -35,7 +35,7 @@ public class PacketSendRewardsClient{
      * @param buf the buffer to read
      * @return the packet read
      */
-    public static PacketSendRewardsClient fromBytes(PacketBuffer buf) {
+    public static PacketSendRewardsClient fromBytes(FriendlyByteBuf buf) {
     	PacketSendRewardsClient packet = new PacketSendRewardsClient();
         int size = buf.readInt();
         for(int i = 0; i < size; i++) {
@@ -53,7 +53,7 @@ public class PacketSendRewardsClient{
      * @param packet the packet to write
      * @param buf the buffer where to write
      */
-    public static void toBytes(PacketSendRewardsClient packet, PacketBuffer buf) {
+    public static void toBytes(PacketSendRewardsClient packet, FriendlyByteBuf buf) {
         buf.writeInt(packet.stacks.size());
         for(ItemStack s : packet.stacks) {
             buf.writeInt(Item.getId(s.getItem()));

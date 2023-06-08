@@ -2,7 +2,7 @@ package net.polarfox27.jobs.data;
 
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.texture.DynamicTexture;
-import net.minecraft.item.ItemStack;
+import net.minecraft.world.item.ItemStack;
 import net.polarfox27.jobs.data.capabilities.PlayerJobs;
 import net.polarfox27.jobs.data.registry.LevelData;
 import net.polarfox27.jobs.data.registry.TranslationData;
@@ -65,7 +65,7 @@ public class ClientJobsData {
                 .stream()
                 .map(x -> (XPData)x)
                 .filter(x -> !x.createStack().isEmpty())
-                .collect(Collectors.toList());
+                .toList();
         List<XPData> ordered = new ArrayList<>();
         for(XPData x : unordered){
             boolean flag = true;

@@ -1,8 +1,8 @@
 package net.polarfox27.jobs.network;
 
-import net.minecraft.network.PacketBuffer;
-import net.minecraftforge.fml.network.NetworkDirection;
-import net.minecraftforge.fml.network.NetworkEvent.Context;
+import net.minecraft.network.FriendlyByteBuf;
+import net.minecraftforge.network.NetworkDirection;
+import net.minecraftforge.network.NetworkEvent.Context;
 import net.polarfox27.jobs.data.capabilities.PlayerData;
 import net.polarfox27.jobs.util.handler.PacketHandler;
 
@@ -18,7 +18,7 @@ public class PacketAskClientUpdate{
      * @param buf the buffer to read
      * @return the default instance
      */
-    public static PacketAskClientUpdate fromBytes(PacketBuffer buf){
+    public static PacketAskClientUpdate fromBytes(FriendlyByteBuf buf){
         return instance;
     }
 
@@ -28,7 +28,7 @@ public class PacketAskClientUpdate{
      * @param packet the packet to write
      * @param buf the buffer where to write
      */
-    public static void toBytes(PacketAskClientUpdate packet, PacketBuffer buf){
+    public static void toBytes(PacketAskClientUpdate packet, FriendlyByteBuf buf){
     }
 
     /**

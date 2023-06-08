@@ -4,12 +4,12 @@ import com.mojang.brigadier.CommandDispatcher;
 import com.mojang.brigadier.arguments.IntegerArgumentType;
 import com.mojang.brigadier.arguments.LongArgumentType;
 import com.mojang.brigadier.arguments.StringArgumentType;
-import net.minecraft.command.CommandSource;
-import net.minecraft.command.Commands;
-import net.minecraft.command.arguments.EntityArgument;
-import net.minecraft.entity.player.ServerPlayerEntity;
-import net.minecraft.util.text.StringTextComponent;
-import net.minecraftforge.fml.network.NetworkDirection;
+import net.minecraft.commands.CommandSourceStack;
+import net.minecraft.commands.Commands;
+import net.minecraft.commands.arguments.EntityArgument;
+import net.minecraft.network.chat.TextComponent;
+import net.minecraft.server.level.ServerPlayer;
+import net.minecraftforge.network.NetworkDirection;
 import net.polarfox27.jobs.data.ServerJobsData;
 import net.polarfox27.jobs.data.capabilities.PlayerData;
 import net.polarfox27.jobs.network.PacketSendChatMessage;
@@ -23,7 +23,7 @@ public class CommandSet {
 	 * jobs-set <player> <job> (<total xp> | <level> <xp>)
 	 * @param dispatcher the CommandDispatcher where the command will be registered
 	 */
-	public static void register(CommandDispatcher<CommandSource> dispatcher) {
+	public static void register(CommandDispatcher<CommandSourceStack> dispatcher) {
 		dispatcher.register(Commands.literal("jobs-set")
 			.requires((source) -> source.hasPermission(2))
 			.then(Commands.argument("target", EntityArgument.player())
@@ -52,7 +52,7 @@ public class CommandSet {
 	 * @param lvl the new level value for the job
 	 * @param xp the new xp value for the job
 	 */
-	private static void setJobs(CommandSource source, ServerPlayerEntity target, String job, int lvl, long xp) {
+	private static void setJobs(CommandSourceStack source, ServerPlayer target, String job, int lvl, long xp) {
 		setJobs(source, target, job, ServerJobsData.JOBS_LEVELS.getTotalXPForLevel(job, lvl) + xp);
 	}
 
@@ -63,20 +63,19 @@ public class CommandSet {
 	 * @param job the job for which the xp is set
 	 * @param total the new total xp value for the job
 	 */
-	private static void setJobs(CommandSource source, ServerPlayerEntity target, String job, long total) {
+	private static void setJobs(CommandSourceStack source, ServerPlayer target, String job, long total) {
 		PlayerData.getPlayerJobs(target).set(job, total);
         PacketHandler.INSTANCE.sendTo(
 				new PacketUpdateClientJob(PlayerData.getPlayerJobs(target)),
 										  target.connection.getConnection(),
 										  NetworkDirection.PLAY_TO_CLIENT);
         
-        if(source.getEntity() instanceof ServerPlayerEntity) {
-        	ServerPlayerEntity sender = (ServerPlayerEntity)source.getEntity();
-        	int lvl = PlayerData.getPlayerJobs(target).getLevelByJob(job);
+        if(source.getEntity() instanceof ServerPlayer sender) {
+			int lvl = PlayerData.getPlayerJobs(target).getLevelByJob(job);
         	long xp = PlayerData.getPlayerJobs(target).getXPByJob(job);
 			String message = "Job " + job + " of " + target.getDisplayName().getString() + " set to lvl " + lvl + ", xp " + xp;
         	PacketHandler.INSTANCE.sendTo(
-					new PacketSendChatMessage(new StringTextComponent(message)),
+					new PacketSendChatMessage(new TextComponent(message)),
 											  sender.connection.getConnection(),
 											  NetworkDirection.PLAY_TO_CLIENT);
         }

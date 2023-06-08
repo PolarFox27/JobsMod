@@ -1,12 +1,12 @@
 package net.polarfox27.jobs.commands;
 
 import com.mojang.brigadier.CommandDispatcher;
-import net.minecraft.command.CommandSource;
-import net.minecraft.command.Commands;
-import net.minecraft.command.arguments.EntityArgument;
-import net.minecraft.entity.player.ServerPlayerEntity;
-import net.minecraft.util.text.StringTextComponent;
-import net.minecraft.util.text.TextFormatting;
+import net.minecraft.ChatFormatting;
+import net.minecraft.commands.CommandSourceStack;
+import net.minecraft.commands.Commands;
+import net.minecraft.commands.arguments.EntityArgument;
+import net.minecraft.network.chat.TextComponent;
+import net.minecraft.server.level.ServerPlayer;
 import net.polarfox27.jobs.data.capabilities.PlayerData;
 import net.polarfox27.jobs.data.capabilities.PlayerJobs;
 import net.polarfox27.jobs.util.handler.PacketHandler;
@@ -18,13 +18,13 @@ public class CommandInfo {
 	 * jobs-info <player>
 	 * @param dispatcher the CommandDispatcher where the command will be registered
 	 */
-	public static void register(CommandDispatcher<CommandSource> dispatcher) {
+	public static void register(CommandDispatcher<CommandSourceStack> dispatcher) {
 		dispatcher.register(Commands.literal("jobs-info")
 							.requires((source) -> source.hasPermission(2))
 				.executes((ctx) -> {
-					if(!(ctx.getSource().getEntity() instanceof ServerPlayerEntity))
+					if(!(ctx.getSource().getEntity() instanceof ServerPlayer))
 						return 0;
-					showInfos(ctx.getSource(), (ServerPlayerEntity)ctx.getSource().getEntity());
+					showInfos(ctx.getSource(), (ServerPlayer)ctx.getSource().getEntity());
 					return 0;
 				})
 				.then(Commands.argument("target", EntityArgument.player())
@@ -40,26 +40,25 @@ public class CommandInfo {
 	 * @param source the Command Source
 	 * @param target the player whom information will be printed to the source
 	 */
-	private static void showInfos(CommandSource source, ServerPlayerEntity target) {
-		if(!(source.getEntity() instanceof ServerPlayerEntity))
+	private static void showInfos(CommandSourceStack source, ServerPlayer target) {
+		if(!(source.getEntity() instanceof ServerPlayer sender))
 			return;
-		ServerPlayerEntity sender = (ServerPlayerEntity)source.getEntity();
 		PlayerJobs infos = PlayerData.getPlayerJobs(target);
 
 		if(sender.getGameProfile().getId().equals(target.getGameProfile().getId()))
 			PacketHandler.sendMessageToClient(sender,
-					new StringTextComponent(TextFormatting.BLUE + "Your Stats"));
+					new TextComponent(ChatFormatting.BLUE + "Your Stats"));
 		else
 			PacketHandler.sendMessageToClient(sender,
-					new StringTextComponent(TextFormatting.LIGHT_PURPLE + "Stats of " +
-							TextFormatting.BLUE + target.getName().getString()));
+					new TextComponent(ChatFormatting.LIGHT_PURPLE + "Stats of " +
+							ChatFormatting.BLUE + target.getName().getString()));
 
 		for(String job : infos.getJobs()) {
             int lvl = infos.getLevelByJob(job);
             long xp = infos.getXPByJob(job);
             PacketHandler.sendMessageToClient(sender,
-					new StringTextComponent(TextFormatting.LIGHT_PURPLE + job + " : lvl " +
-                    TextFormatting.BLUE + lvl + TextFormatting.LIGHT_PURPLE + ", xp " + TextFormatting.BLUE + xp));
+					new TextComponent(ChatFormatting.LIGHT_PURPLE + job + " : lvl " +
+                    ChatFormatting.BLUE + lvl + ChatFormatting.LIGHT_PURPLE + ", xp " + ChatFormatting.BLUE + xp));
         }
 	}
 

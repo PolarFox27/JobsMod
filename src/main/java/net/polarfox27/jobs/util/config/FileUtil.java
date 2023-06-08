@@ -4,7 +4,7 @@ import com.google.gson.JsonObject;
 import com.google.gson.JsonParseException;
 import com.google.gson.JsonParser;
 import net.minecraft.server.MinecraftServer;
-import net.minecraft.world.storage.FolderName;
+import net.minecraft.world.level.storage.LevelResource;
 import net.polarfox27.jobs.ModJobs;
 
 import java.io.*;
@@ -50,7 +50,7 @@ public class FileUtil {
      * @return the path to the Base Config Folder
      */
     public static String getBaseFolder(MinecraftServer server) {
-        return server.getWorldPath(FolderName.ROOT).getParent().toAbsolutePath() + "/jobs";
+        return server.getWorldPath(LevelResource.ROOT).getParent().toAbsolutePath() + "/jobs";
     }
 
     /**
@@ -90,7 +90,7 @@ public class FileUtil {
     public static Optional<JsonObject> safeReadJSONFromFile(File f){
         try{
             if(f.exists())
-                return Optional.of(new JsonParser().parse(new FileReader(f)).getAsJsonObject());
+                return Optional.of(JsonParser.parseReader(new FileReader(f)).getAsJsonObject());
         }
         catch (FileNotFoundException e) {
             ModJobs.info("Error while reading file <" + f.getName() + "> : file doesn't exist !", true);

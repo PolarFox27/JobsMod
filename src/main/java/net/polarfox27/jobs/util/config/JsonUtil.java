@@ -1,14 +1,14 @@
 package net.polarfox27.jobs.util.config;
 
 import com.google.gson.*;
-import net.minecraft.block.Block;
-import net.minecraft.block.Blocks;
-import net.minecraft.entity.Entity;
-import net.minecraft.entity.EntityType;
-import net.minecraft.item.Item;
-import net.minecraft.item.ItemStack;
-import net.minecraft.item.Items;
-import net.minecraft.util.ResourceLocation;
+import net.minecraft.world.level.block.Block;
+import net.minecraft.world.level.block.Blocks;
+import net.minecraft.world.entity.Entity;
+import net.minecraft.world.entity.EntityType;
+import net.minecraft.world.item.Item;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.Items;
+import net.minecraft.resources.ResourceLocation;
 import net.minecraftforge.registries.ForgeRegistries;
 import net.polarfox27.jobs.data.registry.RewardsData;
 import net.polarfox27.jobs.data.registry.unlock.BlockedData;
@@ -111,8 +111,8 @@ public class JsonUtil {
      * @return the created Item Stack
      */
     public static Optional<ItemStack> itemStackFromJSON(JsonObject object){
-        Item item = ForgeRegistries.ITEMS.getValue(new ResourceLocation(object.get("item").getAsString()));
-        if(item == null)
+        Item item = getItemFromRegistryName(object.get("item").getAsString());
+        if(item == Items.AIR)
             return Optional.empty();
         int count = object.get("count").getAsInt();
         int metadata = object.has("metadata") ? object.get("metadata").getAsInt() : -1;
@@ -141,9 +141,11 @@ public class JsonUtil {
      */
     public static Optional<XPData.ItemXPData> itemXPDataFromJSON(JsonObject object){
         Item item = getItemFromRegistryName(object.get("item").getAsString());
-        if(item == null || item == Items.AIR)
+        if(item == Items.AIR)
             return Optional.empty();
-        int metadata = object.has("metadata") ? object.get("metadata").getAsInt() : -1;
+        int metadata = -1;
+        if(object.has("metadata"))
+            metadata = object.get("metadata").getAsInt();
         JsonArray array = object.getAsJsonArray("xp");
         long[] xp = longArrayFromJSON(array, false);
         return Optional.of(new XPData.ItemXPData(xp, item, metadata));
@@ -165,12 +167,11 @@ public class JsonUtil {
     /**
      * Creates the Block XPData represented in the JSON object
      * @param object the JSON object representing the Block XPData
-     * @param isCrop whether it is a crop or not
      * @return the created Block XPData
      */
     public static Optional<XPData.BlockXPData> blockXPDataFromJSON(JsonObject object, boolean isCrop){
         Block block = getBlockFromRegistryName(object.get("block").getAsString());
-        if(block == null || block == Blocks.AIR)
+        if(block == Blocks.AIR)
             return Optional.empty();
         JsonArray array = object.getAsJsonArray("xp");
         long[] xp = longArrayFromJSON(array, false);
@@ -196,8 +197,7 @@ public class JsonUtil {
      * @return the created Entity XPData
      */
     public static Optional<XPData.EntityXPData> entityXPDataFromJSON(JsonObject object){
-        EntityType<? extends Entity> entity = EntityType.byString(object.get("entity").getAsString())
-                .orElse(null);
+        EntityType<? extends Entity> entity = EntityType.byString(object.get("entity").getAsString()).orElse(null);
         if(entity == null)
             return Optional.empty();
         JsonArray array = object.getAsJsonArray("xp");
@@ -212,7 +212,7 @@ public class JsonUtil {
      */
     public static JsonArray rewardToJSON(RewardsData.Reward reward){
         JsonArray stacks = new JsonArray();
-        for(ItemStack s : reward.getRewards())
+        for(ItemStack s : reward.rewards())
             stacks.add(itemStackToJSON(s));
         return stacks;
     }
@@ -252,10 +252,12 @@ public class JsonUtil {
      * @return the created Blocked Item data
      */
     public static Optional<BlockedData.ItemBlockedData> blockedItemFromJSON(JsonObject object, BlockedData.Type type){
-        Item item = ForgeRegistries.ITEMS.getValue(new ResourceLocation(object.get("item").getAsString()));
-        if(item == null)
+        Item item = getItemFromRegistryName(object.get("item").getAsString());
+        if(item == Items.AIR)
             return Optional.empty();
-        int metadata = object.has("metadata") ? object.get("metadata").getAsInt() : -1;
+        int metadata = -1;
+        if(object.has("metadata"))
+            metadata = object.get("metadata").getAsInt();
         int level = object.get("level").getAsInt();
         return Optional.of(new BlockedData.ItemBlockedData(level, type, item, metadata));
     }
@@ -279,7 +281,7 @@ public class JsonUtil {
      */
     public static Optional<BlockedData.BlockBlockedData> blockedBlockFromJSON(JsonObject object, BlockedData.Type type){
         Block block = getBlockFromRegistryName(object.get("block").getAsString());
-        if(block == null)
+        if(block == Blocks.AIR)
             return Optional.empty();
         int level = object.get("level").getAsInt();
         return Optional.of(new BlockedData.BlockBlockedData(level, type, block));

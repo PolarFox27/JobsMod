@@ -1,5 +1,5 @@
 modLoader="javafml"
-loaderVersion="[36,)"
+loaderVersion="[43,)"
 license="All rights reserved"
 logoFile="banner.png"
 issueTrackerURL="https://github.com/PolarFox27/JobsMod/issues"
@@ -18,9 +18,9 @@ Jobs is a mod that adds a highly customizable jobs system to Minecraft creating 
 [[dependencies.jobs]]
     modId="forge"
     mandatory=true
-    versionRange="[36,)"
+    versionRange="[43,)"
 
 [[dependencies.jobs]]
     modId="minecraft"
     mandatory=true
-    versionRange="[1.16.5,1.17)"
+    versionRange="[1.19.2,1.19.3)"

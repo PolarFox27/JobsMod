@@ -1,6 +1,6 @@
 package net.polarfox27.jobs.data.registry;
 
-import net.minecraft.network.PacketBuffer;
+import net.minecraft.network.FriendlyByteBuf;
 import net.polarfox27.jobs.util.JobsUtil;
 
 import java.util.Arrays;
@@ -22,7 +22,7 @@ public class LevelData {
      * Reads the level data from a byte buffer
      * @param buf the buffer where to read
      */
-    public LevelData(PacketBuffer buf){
+    public LevelData(FriendlyByteBuf buf){
         int size = buf.readInt();
         for(int i = 0; i < size; i++){
             int length = buf.readInt();
@@ -59,7 +59,7 @@ public class LevelData {
 
     /**
      * Gets the maximum level a player can reach in a certain job
-     * @param job the job
+     * @param job the job from which we are checking the level
      * @return the maximum possible level of that job
      */
     public int getMaxLevel(String job){
@@ -134,7 +134,7 @@ public class LevelData {
      * Writes the levels data to a byte buffer
      * @param buf the buffer where to write
      */
-    public void writeToBytes(PacketBuffer buf){
+    public void writeToBytes(FriendlyByteBuf buf){
         buf.writeInt(this.LEVELS_BY_JOB.size());
         for(Map.Entry<String, Levels> e : this.LEVELS_BY_JOB.entrySet()){
             JobsUtil.writeString(e.getKey(), buf);
@@ -175,7 +175,7 @@ public class LevelData {
          * Reads a level data from a byte buffer
          * @param buf the byte buffer
          */
-        public Levels(PacketBuffer buf) {
+        public Levels(FriendlyByteBuf buf) {
             this.XP_BY_LEVEL = JobsUtil.fromBytes(JobsUtil.readByteArray(buf));
         }
 
@@ -237,7 +237,7 @@ public class LevelData {
          * Writes the level data to a byte buffer
          * @param buf the buffer where to write
          */
-        private void writeToBytes(PacketBuffer buf){
+        private void writeToBytes(FriendlyByteBuf buf){
             byte[] array = JobsUtil.toBytes(XP_BY_LEVEL);
             JobsUtil.writeByteArray(array, buf);
         }

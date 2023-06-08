@@ -3,12 +3,12 @@ package net.polarfox27.jobs.commands;
 import com.mojang.brigadier.CommandDispatcher;
 import com.mojang.brigadier.arguments.LongArgumentType;
 import com.mojang.brigadier.arguments.StringArgumentType;
-import net.minecraft.command.CommandSource;
-import net.minecraft.command.Commands;
-import net.minecraft.command.arguments.EntityArgument;
-import net.minecraft.entity.player.ServerPlayerEntity;
-import net.minecraft.util.text.StringTextComponent;
-import net.minecraftforge.fml.network.NetworkDirection;
+import net.minecraft.commands.CommandSourceStack;
+import net.minecraft.commands.Commands;
+import net.minecraft.commands.arguments.EntityArgument;
+import net.minecraft.network.chat.TextComponent;
+import net.minecraft.server.level.ServerPlayer;
+import net.minecraftforge.network.NetworkDirection;
 import net.polarfox27.jobs.data.capabilities.PlayerData;
 import net.polarfox27.jobs.network.PacketSendChatMessage;
 import net.polarfox27.jobs.network.PacketUpdateClientJob;
@@ -21,7 +21,7 @@ public class CommandAdd {
 	 * jobs-add <player> <job> <xp>
 	 * @param dispatcher the CommandDispatcher where the command will be registered
 	 */
-	public static void register(CommandDispatcher<CommandSource> dispatcher) {
+	public static void register(CommandDispatcher<CommandSourceStack> dispatcher) {
 		dispatcher.register(Commands.literal("jobs-add")
 									.requires((source)-> source.hasPermission(2))
 			.then(Commands.argument("target", EntityArgument.player())
@@ -42,19 +42,18 @@ public class CommandAdd {
 	 * @param job the job for which the target will gain xp
 	 * @param xp the xp to be gained
 	 */
-	private static void addXP(CommandSource source, ServerPlayerEntity target, String job, long xp) {
+	private static void addXP(CommandSourceStack source, ServerPlayer target, String job, long xp) {
 		PlayerData.getPlayerJobs(target).gainXP(job, xp, target);
         PacketHandler.INSTANCE.sendTo(
 				new PacketUpdateClientJob(PlayerData.getPlayerJobs(target)),
 										  target.connection.getConnection(),
 										  NetworkDirection.PLAY_TO_CLIENT);
         
-        if(source.getEntity() instanceof ServerPlayerEntity) {
-        	ServerPlayerEntity sender = (ServerPlayerEntity)source.getEntity();
+        if(source.getEntity() instanceof ServerPlayer sender) {
 			String message = xp + " xp added to " + target.getName().getString() + " for job " + job;
         	PacketHandler.INSTANCE.sendTo(
 					new PacketSendChatMessage(
-							new StringTextComponent(message)),
+							new TextComponent(message)),
     				sender.connection.getConnection(), NetworkDirection.PLAY_TO_CLIENT);
         }
 	}

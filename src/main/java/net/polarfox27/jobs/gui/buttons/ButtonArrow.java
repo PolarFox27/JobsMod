@@ -1,14 +1,13 @@
 package net.polarfox27.jobs.gui.buttons;
 
-import com.mojang.blaze3d.matrix.MatrixStack;
-import net.minecraft.client.Minecraft;
-import net.minecraft.client.gui.widget.button.Button;
-import net.minecraft.util.ResourceLocation;
-import net.minecraft.util.text.StringTextComponent;
+import com.mojang.blaze3d.systems.RenderSystem;
+import com.mojang.blaze3d.vertex.PoseStack;
+import net.minecraft.client.gui.components.Button;
+import net.minecraft.network.chat.TextComponent;
+import net.minecraft.resources.ResourceLocation;
 import net.polarfox27.jobs.ModJobs;
 import net.polarfox27.jobs.gui.screens.MainJobsMenu;
 import net.polarfox27.jobs.util.GuiUtil;
-import org.lwjgl.opengl.GL11;
 
 public class ButtonArrow extends Button {
 
@@ -25,7 +24,7 @@ public class ButtonArrow extends Button {
      * @param isUp sets the direction of the arrow to be up or down
      */
     public ButtonArrow(int posX, int posY, MainJobsMenu gui, boolean isUp) {
-        super(posX, posY, 17, 10, new StringTextComponent(""), new OnPressed());
+        super(posX, posY, 17, 10, new TextComponent(""), new OnPressed());
         this.gui = gui;
         this.isUp = isUp;
     }
@@ -35,20 +34,19 @@ public class ButtonArrow extends Button {
      * @param mStack the render stack
      * @param mouseX the x coordinate of the mouse
      * @param mouseY the y coordinate of the mouse
-     * @param partialTicks the render ticks
+     * @param partialTicks the rendering ticks
      */
     @Override
-    public void renderButton(MatrixStack mStack, int mouseX, int mouseY, float partialTicks) {
+    public void renderButton(PoseStack mStack, int mouseX, int mouseY, float partialTicks) {
         if (this.visible) {
-            GL11.glColor4f(1.0F, 1.0F, 1.0F, 1.0F);
-            Minecraft.getInstance().getTextureManager().bind(BACKGROUND);
-            int x = this.isHovered() ? 17 : 0;
+            RenderSystem.setShaderTexture(0, BACKGROUND);
+            int x = this.isHoveredOrFocused() ? 17 : 0;
             int y = isUp ? 220 : 230;
-            GuiUtil.drawTexture(mStack, this, this.x, this.y, x, y, 17, 10);
+            GuiUtil.drawTexture(mStack, gui, this.x, this.y, x, y, 17, 10);
         }
     }
 
-    public static class OnPressed implements IPressable{
+    public static class OnPressed implements OnPress{
 
         /**
          * Scrolls the Main Jobs Menu up or down when the button is clicked, depending on the button's direction
@@ -56,9 +54,8 @@ public class ButtonArrow extends Button {
          */
         @Override
         public void onPress(Button btn) {
-            if(!(btn instanceof ButtonArrow))
+            if(!(btn instanceof ButtonArrow b))
                 return;
-            ButtonArrow b = (ButtonArrow) btn;
             double direction = b.isUp ? 1 : -1;
             b.gui.mouseScrolled(0, 0, direction);
         }

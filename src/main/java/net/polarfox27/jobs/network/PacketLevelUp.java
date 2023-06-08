@@ -1,9 +1,9 @@
 package net.polarfox27.jobs.network;
 
 import net.minecraft.client.Minecraft;
-import net.minecraft.network.PacketBuffer;
-import net.minecraftforge.fml.network.NetworkDirection;
-import net.minecraftforge.fml.network.NetworkEvent.Context;
+import net.minecraft.network.FriendlyByteBuf;
+import net.minecraftforge.network.NetworkDirection;
+import net.minecraftforge.network.NetworkEvent.Context;
 import net.polarfox27.jobs.data.ClientJobsData;
 
 import java.nio.charset.StandardCharsets;
@@ -26,7 +26,7 @@ public class PacketLevelUp{
      * @param buf the buffer to read
      * @return the packet read
      */
-    public static PacketLevelUp fromBytes(PacketBuffer buf) {
+    public static PacketLevelUp fromBytes(FriendlyByteBuf buf) {
         int length = buf.readInt();
         return new PacketLevelUp(buf.readUtf(length));
     }
@@ -36,7 +36,7 @@ public class PacketLevelUp{
      * @param packet the packet to write
      * @param buf the buffer where to write
      */
-    public static void toBytes(PacketLevelUp packet, PacketBuffer buf) {
+    public static void toBytes(PacketLevelUp packet, FriendlyByteBuf buf) {
         buf.writeInt(packet.job.getBytes(StandardCharsets.UTF_8).length);
         buf.writeUtf(packet.job);
     }

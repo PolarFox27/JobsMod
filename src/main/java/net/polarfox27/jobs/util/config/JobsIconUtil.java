@@ -1,8 +1,8 @@
 package net.polarfox27.jobs.util.config;
 
+import com.mojang.blaze3d.platform.NativeImage;
 import net.minecraft.client.renderer.texture.DynamicTexture;
-import net.minecraft.client.renderer.texture.NativeImage;
-import net.minecraft.network.PacketBuffer;
+import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.server.MinecraftServer;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
@@ -26,7 +26,7 @@ public class JobsIconUtil {
         Map<String, byte[]> map = ServerJobsData.JOBS_ICONS;
         File folder = new File(FileUtil.getIconFolder(server));
         if(folder.mkdirs())
-            ModJobs.warning("Icons folder created");
+            ModJobs.warning("Icons folder was created");
         if(folder.isDirectory()){
             for(String job : ServerJobsData.JOBS_LEVELS.getJobs()){
                 File file = FileUtil.join(folder.getAbsolutePath(), job + ".png");
@@ -47,7 +47,7 @@ public class JobsIconUtil {
      * @param buf the buffer where to write
      * @param map the map mapping the jobs name to the jobs icons
      */
-    public static void toBytes(PacketBuffer buf, Map<String, byte[]> map){
+    public static void toBytes(FriendlyByteBuf buf, Map<String, byte[]> map){
         buf.writeInt(map.size());
         for(Map.Entry<String, byte[]> e : map.entrySet()){
             buf.writeInt(e.getKey().getBytes(StandardCharsets.UTF_8).length);
@@ -62,7 +62,7 @@ public class JobsIconUtil {
      * @param buf the buffer where to read
      * @return the map mapping the jobs name to the jobs icons
      */
-    public static Map<String, byte[]> fromBytes(PacketBuffer buf){
+    public static Map<String, byte[]> fromBytes(FriendlyByteBuf buf){
         Map<String, byte[]> map = new HashMap<>();
         int size = buf.readInt();
         for(int i = 0; i < size; i++){

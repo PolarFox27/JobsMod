@@ -1,9 +1,9 @@
 package net.polarfox27.jobs.network;
 
 
-import net.minecraft.network.PacketBuffer;
-import net.minecraftforge.fml.network.NetworkDirection;
-import net.minecraftforge.fml.network.NetworkEvent.Context;
+import net.minecraft.network.FriendlyByteBuf;
+import net.minecraftforge.network.NetworkDirection;
+import net.minecraftforge.network.NetworkEvent.Context;
 import net.polarfox27.jobs.data.ClientJobsData;
 import net.polarfox27.jobs.data.registry.LevelData;
 import net.polarfox27.jobs.data.registry.TranslationData;
@@ -57,7 +57,7 @@ public class PacketUpdateClientJobsData{
      * @param buf the buffer to read
      * @return the packet read
      */
-    public static PacketUpdateClientJobsData fromBytes(PacketBuffer buf) {
+    public static PacketUpdateClientJobsData fromBytes(FriendlyByteBuf buf) {
         Set<XPRegistry<? extends XPData>> registries = new HashSet<>();
         int amount = buf.readInt();
         for(int i = 0; i < amount; i++)
@@ -82,7 +82,7 @@ public class PacketUpdateClientJobsData{
      * @param packet the packet to write
      * @param buf the buffer where to write
      */
-    public static void toBytes(PacketUpdateClientJobsData packet, PacketBuffer buf) {
+    public static void toBytes(PacketUpdateClientJobsData packet, FriendlyByteBuf buf) {
         buf.writeInt(packet.registries.size());
         for(XPRegistry<? extends XPData> registry : packet.registries)
             registry.writeToBytes(buf);

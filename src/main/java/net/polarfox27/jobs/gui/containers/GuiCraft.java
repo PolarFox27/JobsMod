@@ -1,173 +1,108 @@
 package net.polarfox27.jobs.gui.containers;
 
-import com.mojang.blaze3d.matrix.MatrixStack;
 import com.mojang.blaze3d.systems.RenderSystem;
-import net.minecraft.client.gui.recipebook.IRecipeShownListener;
-import net.minecraft.client.gui.recipebook.RecipeBookGui;
-import net.minecraft.client.gui.screen.inventory.ContainerScreen;
-import net.minecraft.client.gui.widget.button.ImageButton;
-import net.minecraft.entity.player.PlayerInventory;
-import net.minecraft.inventory.container.ClickType;
-import net.minecraft.inventory.container.Slot;
-import net.minecraft.util.ResourceLocation;
-import net.minecraft.util.text.ITextComponent;
+import com.mojang.blaze3d.vertex.PoseStack;
+import net.minecraft.client.gui.components.ImageButton;
+import net.minecraft.client.gui.screens.inventory.AbstractContainerScreen;
+import net.minecraft.client.gui.screens.recipebook.RecipeBookComponent;
+import net.minecraft.client.gui.screens.recipebook.RecipeUpdateListener;
+import net.minecraft.client.renderer.GameRenderer;
+import net.minecraft.network.chat.Component;
+import net.minecraft.resources.ResourceLocation;
+import net.minecraft.world.entity.player.Inventory;
+import net.minecraft.world.inventory.ClickType;
+import net.minecraft.world.inventory.Slot;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 
 @OnlyIn(Dist.CLIENT)
-public class GuiCraft extends ContainerScreen<ContainerCraft> implements IRecipeShownListener {
-
+public class GuiCraft extends AbstractContainerScreen<JobsCraftingMenu> implements RecipeUpdateListener {
     private static final ResourceLocation CRAFTING_TABLE_LOCATION = new ResourceLocation("textures/gui/container/crafting_table.png");
     private static final ResourceLocation RECIPE_BUTTON_LOCATION = new ResourceLocation("textures/gui/recipe_button.png");
-    private final RecipeBookGui recipeBookComponent = new RecipeBookGui();
+    private final RecipeBookComponent recipeBookComponent = new RecipeBookComponent();
     private boolean widthTooNarrow;
 
-    /**
-     * Creates a modified crafting table GUI
-     * @param container the item container
-     * @param playerInventory the player opening the crafting table
-     * @param title the name of the GUI
-     */
-    public GuiCraft(ContainerCraft container, PlayerInventory playerInventory, ITextComponent title) {
-        super(container, playerInventory, title);
+    public GuiCraft(JobsCraftingMenu menu, Inventory inv, Component name) {
+        super(menu, inv, name);
     }
 
-    /**
-     * Creates all the buttons and stacks
-     */
     protected void init() {
         super.init();
-        if(this.minecraft == null)
-            return;
         this.widthTooNarrow = this.width < 379;
         this.recipeBookComponent.init(this.width, this.height, this.minecraft, this.widthTooNarrow, this.menu);
-        this.leftPos = this.recipeBookComponent.updateScreenPosition(this.widthTooNarrow, this.width, this.imageWidth);
-        this.children.add(this.recipeBookComponent);
-        this.setInitialFocus(this.recipeBookComponent);
-        this.addButton(new ImageButton(this.leftPos + 5, this.height / 2 - 49, 20, 18, 0, 0, 19, RECIPE_BUTTON_LOCATION, (p_214076_1_) -> {
-            this.recipeBookComponent.initVisuals(this.widthTooNarrow);
+        this.leftPos = this.recipeBookComponent.updateScreenPosition(this.width, this.imageWidth);
+        this.addRenderableWidget(new ImageButton(this.leftPos + 5, this.height / 2 - 49, 20, 18, 0, 0, 19, RECIPE_BUTTON_LOCATION, (p_98484_) -> {
             this.recipeBookComponent.toggleVisibility();
-            this.leftPos = this.recipeBookComponent.updateScreenPosition(this.widthTooNarrow, this.width, this.imageWidth);
-            ((ImageButton)p_214076_1_).setPosition(this.leftPos + 5, this.height / 2 - 49);
+            this.leftPos = this.recipeBookComponent.updateScreenPosition(this.width, this.imageWidth);
+            ((ImageButton) p_98484_).setPosition(this.leftPos + 5, this.height / 2 - 49);
         }));
+        this.addWidget(this.recipeBookComponent);
+        this.setInitialFocus(this.recipeBookComponent);
         this.titleLabelX = 29;
     }
 
-    /**
-     * Ticks the recipe book
-     */
-    public void tick() {
-        super.tick();
+    public void containerTick() {
+        super.containerTick();
         this.recipeBookComponent.tick();
     }
 
-    /**
-     * Renders the GUI on the screen
-     * @param mStack the render stack
-     * @param mouseX the x coordinate of the mouse
-     * @param mouseY the y coordinate of the mouse
-     * @param partialTicks the render ticks
-     */
-    public void render(MatrixStack mStack, int mouseX, int mouseY, float partialTicks) {
-        this.renderBackground(mStack);
+    public void render(PoseStack p_98479_, int p_98480_, int p_98481_, float p_98482_) {
+        this.renderBackground(p_98479_);
         if (this.recipeBookComponent.isVisible() && this.widthTooNarrow) {
-            this.renderBg(mStack, partialTicks, mouseX, mouseY);
-            this.recipeBookComponent.render(mStack, mouseX, mouseY, partialTicks);
+            this.renderBg(p_98479_, p_98482_, p_98480_, p_98481_);
+            this.recipeBookComponent.render(p_98479_, p_98480_, p_98481_, p_98482_);
         } else {
-            this.recipeBookComponent.render(mStack, mouseX, mouseY, partialTicks);
-            super.render(mStack, mouseX, mouseY, partialTicks);
-            this.recipeBookComponent.renderGhostRecipe(mStack, this.leftPos, this.topPos, true, partialTicks);
+            this.recipeBookComponent.render(p_98479_, p_98480_, p_98481_, p_98482_);
+            super.render(p_98479_, p_98480_, p_98481_, p_98482_);
+            this.recipeBookComponent.renderGhostRecipe(p_98479_, this.leftPos, this.topPos, true, p_98482_);
         }
 
-        this.renderTooltip(mStack, mouseX, mouseY);
-        this.recipeBookComponent.renderTooltip(mStack, this.leftPos, this.topPos, mouseX, mouseY);
+        this.renderTooltip(p_98479_, p_98480_, p_98481_);
+        this.recipeBookComponent.renderTooltip(p_98479_, this.leftPos, this.topPos, p_98480_, p_98481_);
     }
 
-    /**
-     * Renders the background image
-     * @param mStack the render stack
-     * @param partialTicks the render ticks
-     * @param mouseX the x coordinate of the mouse
-     * @param mouseY the y coordinate of the mouse
-     */
-    protected void renderBg(MatrixStack mStack, float partialTicks, int mouseX, int mouseY) {
-        RenderSystem.color4f(1.0F, 1.0F, 1.0F, 1.0F);
-        if(this.minecraft == null)
-            return;
-        this.minecraft.getTextureManager().bind(CRAFTING_TABLE_LOCATION);
+    protected void renderBg(PoseStack p_98474_, float p_98475_, int p_98476_, int p_98477_) {
+        RenderSystem.setShader(GameRenderer::getPositionTexShader);
+        RenderSystem.setShaderColor(1.0F, 1.0F, 1.0F, 1.0F);
+        RenderSystem.setShaderTexture(0, CRAFTING_TABLE_LOCATION);
         int i = this.leftPos;
         int j = (this.height - this.imageHeight) / 2;
-        this.blit(mStack, i, j, 0, 0, this.imageWidth, this.imageHeight);
+        this.blit(p_98474_, i, j, 0, 0, this.imageWidth, this.imageHeight);
     }
 
-    /**
-     * Returns true if the mouse is hovering
-     * @param xPos the box starting x position
-     * @param yPos the box starting y position
-     * @param width the box width
-     * @param height the box height
-     * @param mouseX the x coordinate of the mouse
-     * @param mouseY the y coordinate of the mouse
-     * @return true if the mouse is hovering over the specified area
-     */
-    protected boolean isHovering(int xPos, int yPos, int width, int height, double mouseX, double mouseY) {
-        return (!this.widthTooNarrow || !this.recipeBookComponent.isVisible()) && super.isHovering(xPos, yPos, width, height, mouseX, mouseY);
+    protected boolean isHovering(int p_98462_, int p_98463_, int p_98464_, int p_98465_, double p_98466_, double p_98467_) {
+        return (!this.widthTooNarrow || !this.recipeBookComponent.isVisible()) && super.isHovering(p_98462_, p_98463_, p_98464_, p_98465_, p_98466_, p_98467_);
     }
 
-    /**
-     * Handles a mouse click
-     * @param mouseX the mouse x coordinate
-     * @param mouseY the mouse y coordinate
-     * @param clickType the click type
-     * @return true if the click has been handled successfully
-     */
-    public boolean mouseClicked(double mouseX, double mouseY, int clickType) {
-        if (this.recipeBookComponent.mouseClicked(mouseX, mouseY, clickType)) {
+    public boolean mouseClicked(double p_98452_, double p_98453_, int p_98454_) {
+        if (this.recipeBookComponent.mouseClicked(p_98452_, p_98453_, p_98454_)) {
             this.setFocused(this.recipeBookComponent);
             return true;
         } else {
-            return this.widthTooNarrow && this.recipeBookComponent.isVisible() || super.mouseClicked(mouseX, mouseY, clickType);
+            return this.widthTooNarrow && this.recipeBookComponent.isVisible() ? true : super.mouseClicked(p_98452_, p_98453_, p_98454_);
         }
     }
 
-
-    protected boolean hasClickedOutside(double p_195361_1_, double p_195361_3_, int p_195361_5_, int p_195361_6_, int p_195361_7_) {
-        boolean flag = p_195361_1_ < (double)p_195361_5_ || p_195361_3_ < (double)p_195361_6_ || p_195361_1_ >= (double)(p_195361_5_ + this.imageWidth) || p_195361_3_ >= (double)(p_195361_6_ + this.imageHeight);
-        return this.recipeBookComponent.hasClickedOutside(p_195361_1_, p_195361_3_, this.leftPos, this.topPos, this.imageWidth, this.imageHeight, p_195361_7_) && flag;
+    protected boolean hasClickedOutside(double p_98456_, double p_98457_, int p_98458_, int p_98459_, int p_98460_) {
+        boolean flag = p_98456_ < (double) p_98458_ || p_98457_ < (double) p_98459_ || p_98456_ >= (double) (p_98458_ + this.imageWidth) || p_98457_ >= (double) (p_98459_ + this.imageHeight);
+        return this.recipeBookComponent.hasClickedOutside(p_98456_, p_98457_, this.leftPos, this.topPos, this.imageWidth, this.imageHeight, p_98460_) && flag;
     }
 
-    /**
-     * Clicks on a slot
-     * @param slot the slot clicked
-     * @param mouseX the mouse x coordinate
-     * @param mouseY the mouse y coordinate
-     * @param clickType the type of mouse click
-     */
-    protected void slotClicked(Slot slot, int mouseX, int mouseY, ClickType clickType) {
-        super.slotClicked(slot, mouseX, mouseY, clickType);
-        this.recipeBookComponent.slotClicked(slot);
+    protected void slotClicked(Slot p_98469_, int p_98470_, int p_98471_, ClickType p_98472_) {
+        super.slotClicked(p_98469_, p_98470_, p_98471_, p_98472_);
+        this.recipeBookComponent.slotClicked(p_98469_);
     }
 
-    /**
-     * Updates the Recipe Book
-     */
     public void recipesUpdated() {
         this.recipeBookComponent.recipesUpdated();
     }
 
-    /**
-     * Executes when the GUI is removed from the screen
-     */
     public void removed() {
         this.recipeBookComponent.removed();
         super.removed();
     }
 
-    /**
-     * @return the Recipe Book
-     */
-    public RecipeBookGui getRecipeBookComponent() {
+    public RecipeBookComponent getRecipeBookComponent() {
         return this.recipeBookComponent;
     }
-
 }

@@ -1,11 +1,11 @@
 package net.polarfox27.jobs.data.registry.xp;
 
-import net.minecraft.block.BlockState;
-import net.minecraft.entity.Entity;
-import net.minecraft.entity.EntityType;
-import net.minecraft.item.Item;
-import net.minecraft.item.ItemStack;
-import net.minecraft.network.PacketBuffer;
+import net.minecraft.network.FriendlyByteBuf;
+import net.minecraft.world.entity.Entity;
+import net.minecraft.world.entity.EntityType;
+import net.minecraft.world.item.Item;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.level.block.state.BlockState;
 import net.polarfox27.jobs.util.JobsUtil;
 import net.polarfox27.jobs.util.config.JsonUtil;
 
@@ -35,7 +35,7 @@ public abstract class XPRegistry <T extends XPData> {
      * @param buf the buffer where to read
      * @param type the type of the XP Registry
      */
-    private XPRegistry(PacketBuffer buf, Type type) {
+    private XPRegistry(FriendlyByteBuf buf, Type type) {
         this.type = type;
         this.name = JobsUtil.readString(buf);
         this.icon = Item.byId(buf.readInt());
@@ -81,7 +81,7 @@ public abstract class XPRegistry <T extends XPData> {
      * Writes the XP Registry to a byte buffer
      * @param buf the buffer where to write
      */
-    public void writeToBytes(PacketBuffer buf){
+    public void writeToBytes(FriendlyByteBuf buf){
         buf.writeInt(type.id);
         JobsUtil.writeString(name, buf);
         buf.writeInt(Item.getId(icon));
@@ -115,19 +115,15 @@ public abstract class XPRegistry <T extends XPData> {
      * @param buf the buffer where to read
      * @return the created XP Registry
      */
-    public static XPRegistry<? extends XPData> fromBytes(PacketBuffer buf){
+    public static XPRegistry<? extends XPData> fromBytes(FriendlyByteBuf buf){
         Type type = Type.byID(buf.readInt());
         if(type == null)
             return null;
-        switch (type){
-            case ITEM:
-                return new ItemXPRegistry(buf);
-            case BLOCK:
-                return new BlockXPRegistry(buf);
-            case ENTITY:
-                return new EntityXPRegistry(buf);
-        }
-        return null;
+        return switch (type) {
+            case ITEM -> new ItemXPRegistry(buf);
+            case BLOCK -> new BlockXPRegistry(buf);
+            case ENTITY -> new EntityXPRegistry(buf);
+        };
     }
 
     /**
@@ -162,7 +158,7 @@ public abstract class XPRegistry <T extends XPData> {
          * Reads an Item XP Registry from a byte buffer
          * @param buf the buffer where to read
          */
-        public ItemXPRegistry(PacketBuffer buf){
+        public ItemXPRegistry(FriendlyByteBuf buf){
             super(buf, Type.ITEM);
             int size = buf.readInt();
             for(int i = 0; i < size; i++){
@@ -204,7 +200,7 @@ public abstract class XPRegistry <T extends XPData> {
          * Reads a Block XP Registry from a byte buffer
          * @param buf the buffer where to read
          */
-        public BlockXPRegistry(PacketBuffer buf){
+        public BlockXPRegistry(FriendlyByteBuf buf){
             super(buf, Type.BLOCK);
             int size = buf.readInt();
             for(int i = 0; i < size; i++){
@@ -246,7 +242,7 @@ public abstract class XPRegistry <T extends XPData> {
          * Reads an Entity XP Registry from a byte buffer
          * @param buf the buffer where to read
          */
-        public EntityXPRegistry(PacketBuffer buf){
+        public EntityXPRegistry(FriendlyByteBuf buf){
             super(buf, Type.ENTITY);
             int size = buf.readInt();
             for(int i = 0; i < size; i++){

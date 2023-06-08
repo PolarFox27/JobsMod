@@ -1,12 +1,13 @@
 package net.polarfox27.jobs.events;
 
-import net.minecraft.client.entity.player.ClientPlayerEntity;
-import net.minecraft.entity.Entity;
-import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.entity.player.ServerPlayerEntity;
-import net.minecraft.util.ResourceLocation;
+import net.minecraft.client.player.AbstractClientPlayer;
+import net.minecraft.server.level.ServerPlayer;
+import net.minecraft.world.entity.Entity;
+import net.minecraft.world.entity.player.Player;
+import net.minecraft.resources.ResourceLocation;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
+import net.minecraftforge.common.capabilities.RegisterCapabilitiesEvent;
 import net.minecraftforge.event.AttachCapabilitiesEvent;
 import net.minecraftforge.event.entity.EntityJoinWorldEvent;
 import net.minecraftforge.event.entity.player.PlayerEvent;
@@ -32,15 +33,20 @@ public class CommonEvents {
 	public void onEntityCreating(AttachCapabilitiesEvent<Entity> event) {
 		if(event.getObject().level.isClientSide)
 			return;
-		if(!(event.getObject() instanceof PlayerEntity))
+		if(!(event.getObject() instanceof Player))
 			return;
 		Optional<PlayerJobs> capability = event.getObject()
 											 .getCapability(PlayerData.JOBS, null)
 											 .resolve();
-		if(!capability.isPresent()) {
+		if(capability.isEmpty()) {
 			event.addCapability(new ResourceLocation(ModJobs.MOD_ID, "jobs"),
 								new PlayerData.JobsDispatcher(ServerJobsData.JOBS_LEVELS));
 		}
+	}
+
+	@SubscribeEvent
+	public void onRegisterCapabilities(RegisterCapabilitiesEvent event){
+		event.register(PlayerJobs.class);
 	}
 
 	/**
@@ -67,9 +73,9 @@ public class CommonEvents {
 	 */
 	@SubscribeEvent
 	public void onPlayerJoinedServer(EntityJoinWorldEvent event){
-		if(!(event.getEntity() instanceof ServerPlayerEntity))
+		if(!(event.getEntity() instanceof ServerPlayer))
 			return;
-		ServerJobsData.sendDataToClient((ServerPlayerEntity)event.getEntity());
+		ServerJobsData.sendDataToClient((ServerPlayer)event.getEntity());
 	}
 
 	/**
@@ -79,7 +85,7 @@ public class CommonEvents {
 	@SubscribeEvent
 	@OnlyIn(Dist.CLIENT)
 	public void onPlayerJoinedClient(EntityJoinWorldEvent event) {
-		if(!(event.getEntity() instanceof ClientPlayerEntity))
+		if(!(event.getEntity() instanceof AbstractClientPlayer))
 			return;
 		PacketHandler.INSTANCE.sendToServer(PacketAskClientUpdate.instance);
 	}

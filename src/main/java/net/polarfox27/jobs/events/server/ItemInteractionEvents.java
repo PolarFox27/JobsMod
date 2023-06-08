@@ -1,7 +1,7 @@
 package net.polarfox27.jobs.events.server;
 
-import net.minecraft.entity.player.ServerPlayerEntity;
-import net.minecraft.item.ItemStack;
+import net.minecraft.server.level.ServerPlayer;
+import net.minecraft.world.item.ItemStack;
 import net.minecraftforge.event.TickEvent;
 import net.minecraftforge.event.entity.player.ItemFishedEvent;
 import net.minecraftforge.event.entity.player.PlayerEvent.ItemCraftedEvent;
@@ -23,7 +23,7 @@ public class ItemInteractionEvents {
      */
     @SubscribeEvent
     public void onCraft(ItemCraftedEvent event) {
-    	if(event.getPlayer().level.isClientSide() || !(event.getPlayer() instanceof ServerPlayerEntity))
+    	if(event.getPlayer().level.isClientSide() || !(event.getPlayer() instanceof ServerPlayer))
             return;
         PlayerJobs jobs = PlayerData.getPlayerJobs(event.getPlayer());
         ItemStack stack = event.getCrafting();
@@ -31,7 +31,7 @@ public class ItemInteractionEvents {
         for(String job : jobs.getJobs()){
             int level = jobs.getLevelByJob(job);
             long xp = ServerJobsData.CRAFTING_ITEMS_XP.getXPByLevelAndJob(stack, level, job);
-            jobs.gainXP(job, xp*stack.getCount(), (ServerPlayerEntity) event.getPlayer());
+            jobs.gainXP(job, xp*stack.getCount(), (ServerPlayer) event.getPlayer());
         }
     }
 
@@ -41,7 +41,7 @@ public class ItemInteractionEvents {
      */
     @SubscribeEvent
     public void onSmelt(ItemSmeltedEvent event) {
-        if(event.getPlayer().level.isClientSide() || !(event.getPlayer() instanceof ServerPlayerEntity))
+        if(event.getPlayer().level.isClientSide() || !(event.getPlayer() instanceof ServerPlayer))
             return;
         PlayerJobs jobs = PlayerData.getPlayerJobs(event.getPlayer());
         ItemStack stack = event.getSmelting();
@@ -49,7 +49,7 @@ public class ItemInteractionEvents {
         for(String job : jobs.getJobs()){
             int level = jobs.getLevelByJob(job);
             long xp = ServerJobsData.SMELTING_ITEMS_XP.getXPByLevelAndJob(stack, level, job);
-            jobs.gainXP(job, xp*stack.getCount(), (ServerPlayerEntity) event.getPlayer());
+            jobs.gainXP(job, xp*stack.getCount(), (ServerPlayer) event.getPlayer());
         }
     }
 
@@ -59,14 +59,14 @@ public class ItemInteractionEvents {
      */
     @SubscribeEvent
     public void onFished(ItemFishedEvent event) {
-        if(event.getPlayer().level.isClientSide() || !(event.getPlayer() instanceof ServerPlayerEntity))
+        if(event.getPlayer().level.isClientSide() || !(event.getPlayer() instanceof ServerPlayer))
             return;
         PlayerJobs jobs = PlayerData.getPlayerJobs(event.getPlayer());
         for(ItemStack stack : event.getDrops()){
             for(String job : jobs.getJobs()){
                 int level = jobs.getLevelByJob(job);
                 long xp = ServerJobsData.FISHING_ITEMS_XP.getXPByLevelAndJob(stack, level, job);
-                jobs.gainXP(job, xp*stack.getCount(), (ServerPlayerEntity) event.getPlayer());
+                jobs.gainXP(job, xp*stack.getCount(), (ServerPlayer) event.getPlayer());
             }
         }
     }
@@ -77,7 +77,7 @@ public class ItemInteractionEvents {
      */
     @SubscribeEvent
     public void onRightClick(PlayerInteractEvent.RightClickItem event) {
-        if(event.getPlayer().level.isClientSide() || !(event.getPlayer() instanceof ServerPlayerEntity))
+        if(event.getPlayer().level.isClientSide() || !(event.getPlayer() instanceof ServerPlayer))
             return;
         PlayerJobs jobs = PlayerData.getPlayerJobs(event.getPlayer());
         if(ServerJobsData.BLOCKED_RIGHT_CLICKS.isBlocked(jobs, event.getItemStack()))
@@ -90,7 +90,7 @@ public class ItemInteractionEvents {
      */
     @SubscribeEvent
     public void onLeftClickBlock(PlayerInteractEvent.LeftClickBlock event) {
-        if(event.getPlayer().level.isClientSide() || !(event.getPlayer() instanceof ServerPlayerEntity))
+        if(event.getPlayer().level.isClientSide() || !(event.getPlayer() instanceof ServerPlayer))
             return;
         PlayerJobs jobs = PlayerData.getPlayerJobs(event.getPlayer());
         if(ServerJobsData.BLOCKED_LEFT_CLICKS.isBlocked(jobs, event.getItemStack()))
@@ -106,11 +106,11 @@ public class ItemInteractionEvents {
         if(event.player.level.isClientSide())
             return;
         PlayerJobs jobs = PlayerData.getPlayerJobs(event.player);
-        for(int i = 0; i < event.player.inventory.armor.size(); i++) {
-            ItemStack stack = event.player.inventory.armor.get(i);
+        for(int i = 0; i < event.player.getInventory().armor.size(); i++) {
+            ItemStack stack = event.player.getInventory().armor.get(i);
             if (ServerJobsData.BLOCKED_EQUIPMENTS.isBlocked(jobs, stack)) {
                 event.player.drop(stack, true);
-                event.player.inventory.armor.set(i, ItemStack.EMPTY);
+                event.player.getInventory().armor.set(i, ItemStack.EMPTY);
                 return;
             }
         }

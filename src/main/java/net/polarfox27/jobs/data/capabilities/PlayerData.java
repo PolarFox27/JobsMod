@@ -1,56 +1,31 @@
 package net.polarfox27.jobs.data.capabilities;
 
 
-import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.nbt.CompoundNBT;
-import net.minecraft.nbt.INBT;
-import net.minecraft.util.Direction;
-import net.minecraftforge.common.capabilities.Capability;
-import net.minecraftforge.common.capabilities.CapabilityInject;
-import net.minecraftforge.common.capabilities.CapabilityManager;
-import net.minecraftforge.common.capabilities.ICapabilitySerializable;
+import net.minecraft.core.Direction;
+import net.minecraft.world.entity.player.Player;
+import net.minecraft.nbt.CompoundTag;
+import net.minecraftforge.common.capabilities.*;
 import net.minecraftforge.common.util.LazyOptional;
 import net.polarfox27.jobs.data.registry.LevelData;
+import org.jetbrains.annotations.NotNull;
 
-import javax.annotation.Nonnull;
-import javax.annotation.Nullable;
 import java.util.Optional;
 
 public class PlayerData {
 	
-	@CapabilityInject(PlayerJobs.class)
-	public static Capability<PlayerJobs> JOBS;
+	public static Capability<PlayerJobs> JOBS = CapabilityManager.get(new CapabilityToken<>(){});
 
 	/**
 	 * Gets the Jobs from a player
-	 * @param player the player from which we retrieve the jobs
+	 * @param player the player from whom we get the capability
 	 * @return the jobs of the player
 	 */
-	public static PlayerJobs getPlayerJobs(PlayerEntity player) {
+	public static PlayerJobs getPlayerJobs(Player player) {
 		Optional<PlayerJobs> capability = player.getCapability(JOBS, null).resolve();
 		return capability.orElse(null);
 	}
-
-	/**
-	 * Registers the capability
-	 */
-	public static void register() {
-		CapabilityManager.INSTANCE.register(PlayerJobs.class, new Capability.IStorage<PlayerJobs>() {
-
-			@Override
-			public INBT writeNBT(Capability<PlayerJobs> capability, PlayerJobs instance, Direction side) {
-				return instance.toNBT();
-			}
-
-			@Override
-			public void readNBT(Capability<PlayerJobs> capability, PlayerJobs instance, Direction side, INBT nbt) {
-				instance.fromNBT((CompoundNBT) nbt);
-			}
-			
-		}, () -> null);
-	}
 	
-	public static class JobsDispatcher implements ICapabilitySerializable<CompoundNBT>{
+	public static class JobsDispatcher implements ICapabilitySerializable<CompoundTag> {
 
 		private final PlayerJobs jobs;
 
@@ -63,8 +38,7 @@ public class PlayerData {
 		}
 
 		@Override
-		@Nonnull
-		public <T> LazyOptional<T> getCapability(@Nullable Capability<T> cap, Direction side) {
+		public <T> @NotNull LazyOptional<T> getCapability(@NotNull Capability<T> cap, Direction side) {
 			return JOBS.orEmpty(cap, LazyOptional.of(() -> jobs));
 		}
 
@@ -73,7 +47,7 @@ public class PlayerData {
 		 * @return the NBT containing the jobs
 		 */
 		@Override
-		public CompoundNBT serializeNBT() {
+		public CompoundTag serializeNBT() {
 			return this.jobs.toNBT();
 		}
 
@@ -82,9 +56,10 @@ public class PlayerData {
 		 * @param nbt the nbt from which the jobs are deserialized
 		 */
 		@Override
-		public void deserializeNBT(CompoundNBT nbt) {
+		public void deserializeNBT(CompoundTag nbt) {
 			this.jobs.fromNBT(nbt);
 		}
+
 		
 		
 	}

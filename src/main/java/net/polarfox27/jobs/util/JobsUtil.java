@@ -1,12 +1,12 @@
 package net.polarfox27.jobs.util;
 
 import com.google.common.primitives.Longs;
-import net.minecraft.entity.Entity;
-import net.minecraft.entity.EntityType;
-import net.minecraft.item.Item;
-import net.minecraft.item.ItemStack;
-import net.minecraft.item.Items;
-import net.minecraft.network.PacketBuffer;
+import net.minecraft.network.FriendlyByteBuf;
+import net.minecraft.world.entity.Entity;
+import net.minecraft.world.entity.EntityType;
+import net.minecraft.world.item.Item;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.Items;
 
 import java.nio.charset.StandardCharsets;
 import java.util.Arrays;
@@ -142,9 +142,9 @@ public class JobsUtil {
 
     /**
      * Constructs an item stack.
-     * @param item the item in the stack
-     * @param count the amount of items in the stack
-     * @param metadata the item's metadata (e.g. durability)
+     * @param item the item in the itemStack
+     * @param count the amount of item
+     * @param metadata the metadata of the stack (e.g. item durability)
      * @return the item stack
      */
     public static ItemStack itemStack(Item item, int count, int metadata){
@@ -159,7 +159,7 @@ public class JobsUtil {
      * @param s the string to write
      * @param buf the buffer where to write
      */
-    public static void writeString(String s, PacketBuffer buf){
+    public static void writeString(String s, FriendlyByteBuf buf){
         buf.writeInt(s.getBytes(StandardCharsets.UTF_8).length);
         buf.writeUtf(s);
     }
@@ -169,7 +169,7 @@ public class JobsUtil {
      * @param buf the buffer to read from
      * @return the read string
      */
-    public static String readString(PacketBuffer buf){
+    public static String readString(FriendlyByteBuf buf){
         int length = buf.readInt();
         return buf.readUtf(length);
     }
@@ -179,7 +179,7 @@ public class JobsUtil {
      * @param array the array to write
      * @param buf the buffer where to write
      */
-    public static void writeByteArray(byte[] array, PacketBuffer buf){
+    public static void writeByteArray(byte[] array, FriendlyByteBuf buf){
         buf.writeInt(array.length);
         buf.writeByteArray(array);
     }
@@ -189,7 +189,7 @@ public class JobsUtil {
      * @param buf the buffer to read from
      * @return the read byte array
      */
-    public static byte[] readByteArray(PacketBuffer buf){
+    public static byte[] readByteArray(FriendlyByteBuf buf){
         int length = buf.readInt();
         return buf.readByteArray(length);
     }

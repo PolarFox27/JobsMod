@@ -1,11 +1,11 @@
 package net.polarfox27.jobs.util.handler;
 
-import net.minecraft.entity.player.ServerPlayerEntity;
-import net.minecraft.util.ResourceLocation;
-import net.minecraft.util.text.ITextComponent;
-import net.minecraftforge.fml.network.NetworkDirection;
-import net.minecraftforge.fml.network.NetworkRegistry;
-import net.minecraftforge.fml.network.simple.SimpleChannel;
+import net.minecraft.network.chat.Component;
+import net.minecraft.resources.ResourceLocation;
+import net.minecraft.server.level.ServerPlayer;
+import net.minecraftforge.network.NetworkDirection;
+import net.minecraftforge.network.NetworkRegistry;
+import net.minecraftforge.network.simple.SimpleChannel;
 import net.polarfox27.jobs.ModJobs;
 import net.polarfox27.jobs.network.*;
 
@@ -37,7 +37,7 @@ public class PacketHandler {
 	 * @param player the player who will receive the message
 	 * @param message the message to send
 	 */
-	public static void sendMessageToClient(ServerPlayerEntity player, ITextComponent message) {
+	public static void sendMessageToClient(ServerPlayer player, Component message) {
 		INSTANCE.sendTo(new PacketSendChatMessage(message),
 						player.connection.getConnection(),
 						NetworkDirection.PLAY_TO_CLIENT);

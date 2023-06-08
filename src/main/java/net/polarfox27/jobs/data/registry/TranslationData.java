@@ -1,6 +1,6 @@
 package net.polarfox27.jobs.data.registry;
 
-import net.minecraft.network.PacketBuffer;
+import net.minecraft.network.FriendlyByteBuf;
 import net.polarfox27.jobs.util.JobsUtil;
 
 import java.util.HashMap;
@@ -21,7 +21,7 @@ public class TranslationData {
      * Reads Translations from a byte buffer
      * @param buf the buffer where to read
      */
-    public TranslationData(PacketBuffer buf){
+    public TranslationData(FriendlyByteBuf buf){
         int size = buf.readInt();
         for(int i = 0; i < size; i++){
             String job = JobsUtil.readString(buf);
@@ -82,7 +82,7 @@ public class TranslationData {
      * Writes the translations to a byte buffer
      * @param buf the buffer where to write
      */
-    public void writeToBytes(PacketBuffer buf){
+    public void writeToBytes(FriendlyByteBuf buf){
         buf.writeInt(this.data.size());
         for(Map.Entry<String, Map<String, String>> e : this.data.entrySet()){
             JobsUtil.writeString(e.getKey(), buf);

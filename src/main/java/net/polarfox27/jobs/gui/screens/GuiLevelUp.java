@@ -1,23 +1,23 @@
 package net.polarfox27.jobs.gui.screens;
 
 
-import com.mojang.blaze3d.matrix.MatrixStack;
+import com.mojang.blaze3d.systems.RenderSystem;
+import com.mojang.blaze3d.vertex.PoseStack;
+import net.minecraft.ChatFormatting;
 import net.minecraft.client.Minecraft;
-import net.minecraft.client.gui.screen.Screen;
-import net.minecraft.client.renderer.RenderHelper;
-import net.minecraft.client.resources.I18n;
-import net.minecraft.item.ItemStack;
-import net.minecraft.util.IReorderingProcessor;
-import net.minecraft.util.ResourceLocation;
-import net.minecraft.util.text.StringTextComponent;
-import net.minecraft.util.text.TextFormatting;
+import net.minecraft.client.gui.screens.Screen;
+import net.minecraft.client.renderer.GameRenderer;
+import net.minecraft.network.chat.Component;
+import net.minecraft.network.chat.TextComponent;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.resources.ResourceLocation;
 import net.polarfox27.jobs.ModJobs;
 import net.polarfox27.jobs.data.ClientJobsData;
 import net.polarfox27.jobs.data.registry.unlock.UnlockStack;
 import net.polarfox27.jobs.util.GuiUtil;
-import org.lwjgl.opengl.GL11;
 
-import java.awt.*;
+
+import java.awt.Color;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -32,7 +32,7 @@ public class GuiLevelUp extends Screen {
      * @param job the job that leveled up
      */
     public GuiLevelUp(String job) {
-    	super(new StringTextComponent(""));
+    	super(new TextComponent(""));
         this.job = job;
     }
 
@@ -49,26 +49,25 @@ public class GuiLevelUp extends Screen {
      * @param mStack the render stack
      * @param mouseX the x coordinate of the mouse
      * @param mouseY the y coordinate of the mouse
-     * @param partialTicks the render ticks
+     * @param partialTicks the rendering ticks
      */
     @Override
-    public void render(MatrixStack mStack, int mouseX, int mouseY, float partialTicks) {
-        if(this.font == null)
-            return;
-        Minecraft.getInstance().getTextureManager().bind(TEXTURES);
-        GL11.glColor4f(1.0F, 1.0F, 1.0F, 1.0F);
+    public void render(PoseStack mStack, int mouseX, int mouseY, float partialTicks) {
+        RenderSystem.setShader(GameRenderer::getPositionTexShader);
+        RenderSystem.setShaderColor(1.0f, 1.0f, 1.0f, 1.0f);
+        RenderSystem.setShaderTexture(0, TEXTURES);
         this.blit(mStack, this.width/2 - 88, this.height/2 - 75, 0, 0, 176, 150); //background
 
 
         
         GuiUtil.drawJobIcon(mStack, job, this.width/2, this.height/2-47, 40);
-        String lvl = I18n.get("text.level") + " " + ClientJobsData.playerJobs.getLevelByJob(job);
+        String lvl = GuiUtil.translate("text.level") + " " + ClientJobsData.playerJobs.getLevelByJob(job);
         GuiUtil.renderProgressBarWithText(mStack, this, this.width/2 - 75, this.height/2 - 25, 150, 12, 1, 1, lvl);
 
-        String unlock = I18n.get("text.unlocked");
+        String unlock = GuiUtil.translate("text.unlocked");
         GuiUtil.renderCenteredString(mStack, unlock, Color.BLACK.getRGB(), this.width/2, this.height/2, 1.0f);
         this.drawUnlockedStacks(mStack, mouseX, mouseY);
-        String reward = I18n.get("text.rewards");
+        String reward = GuiUtil.translate("text.rewards");
         GuiUtil.renderCenteredString(mStack, reward, Color.BLACK.getRGB(), this.width/2, this.height/2 + 36, 1.0f);
         this.drawRewardStacks(mStack, mouseX, mouseY);
         super.render(mStack, mouseX, mouseY, partialTicks);
@@ -81,13 +80,12 @@ public class GuiLevelUp extends Screen {
      * @param mouseX the x coordinate of the mouse, used to find the tooltip to render
      * @param mouseY the y coordinate of the mouse, used to find the tooltip to render
      */
-    private void drawUnlockedStacks(MatrixStack mStack, int mouseX, int mouseY) {
-        RenderHelper.setupForFlatItems();
+    private void drawUnlockedStacks(PoseStack mStack, int mouseX, int mouseY) {
         List<UnlockStack> stacks = ClientJobsData.getUnlockedStacksSorted(this.job);
         stacks.removeIf(x -> x.getLevel() != ClientJobsData.playerJobs.getLevelByJob(job));
 
         if(stacks.isEmpty()){
-            String text = I18n.get("text.no_unlock");
+            String text = GuiUtil.translate("text.no_unlock");
             GuiUtil.renderCenteredString(mStack, text, Color.RED.getRGB(), this.width/2, this.height/2 + 19, 0.75f);
             return;
         }
@@ -103,7 +101,6 @@ public class GuiLevelUp extends Screen {
         }
         if(hovered != -1)
             this.renderUnlockedCraftToolTip(mStack, stacks.get(hovered), mouseX, mouseY);
-        RenderHelper.setupFor3DItems();
     }
 
     /**
@@ -112,12 +109,11 @@ public class GuiLevelUp extends Screen {
      * @param mouseX the x coordinate of the mouse, used to find the tooltip to render
      * @param mouseY the y coordinate of the mouse, used to find the tooltip to render
      */
-    private void drawRewardStacks(MatrixStack mStack, int mouseX, int mouseY) {
-        RenderHelper.setupForFlatItems();
+    private void drawRewardStacks(PoseStack mStack, int mouseX, int mouseY) {
         List<ItemStack> stacks = ClientJobsData.CURRENT_REWARDS;
 
         if(stacks.isEmpty()){
-            String text = I18n.get("text.no_reward");
+            String text = GuiUtil.translate("text.no_reward");
             GuiUtil.renderCenteredString(mStack, text, Color.RED.getRGB(), this.width/2, this.height/2 + 56, 0.75f);
             return;
         }
@@ -133,7 +129,6 @@ public class GuiLevelUp extends Screen {
         }
         if(hovered != -1)
             this.renderToolTipAndCount(mStack, stacks.get(hovered), mouseX, mouseY);
-        RenderHelper.setupFor3DItems();
     }
 
 
@@ -144,12 +139,11 @@ public class GuiLevelUp extends Screen {
      * @param x the x coordinate of the mouse
      * @param y the y coordinate of the mouse
      */
-    private void renderUnlockedCraftToolTip(MatrixStack mStack, UnlockStack stack, int x, int y) {
-        List<IReorderingProcessor> tooltips = new ArrayList<>();
-        tooltips.add(new StringTextComponent(stack.getStack().getDisplayName().getString().replace("[", "").replace("]", "")).getVisualOrderText());
-        tooltips.add(new StringTextComponent(TextFormatting.GREEN + I18n.get("text.unlock_" + stack.getType())).getVisualOrderText());
-
-        this.renderToolTip(mStack, tooltips, x, y, Minecraft.getInstance().font);
+    private void renderUnlockedCraftToolTip(PoseStack mStack, UnlockStack stack, int x, int y) {
+        List<Component> tooltips = new ArrayList<>();
+        tooltips.add(new TextComponent(stack.getStack().getDisplayName().getString().replace("[", "").replace("]", "")));
+        tooltips.add(new TextComponent(ChatFormatting.GREEN + GuiUtil.translate("text.unlock_" + stack.getType())));
+        this.renderComponentTooltip(mStack, tooltips, x, y, Minecraft.getInstance().font);
     }
 
     /**
@@ -159,12 +153,12 @@ public class GuiLevelUp extends Screen {
      * @param x the x coordinate of the mouse
      * @param y the y coordinate of the mouse
      */
-    protected void renderToolTipAndCount(MatrixStack mStack, ItemStack stack, int x, int y) {
-        List<IReorderingProcessor> tooltips = new ArrayList<>();
+    protected void renderToolTipAndCount(PoseStack mStack, ItemStack stack, int x, int y) {
+        List<Component> tooltips = new ArrayList<>();
 
-        tooltips.add(new StringTextComponent(stack.getDisplayName().getString().replace("[", "").replace("]", "")).getVisualOrderText());
-        tooltips.add(new StringTextComponent(TextFormatting.GREEN + Integer.toString(stack.getCount())).getVisualOrderText());
+        tooltips.add(new TextComponent(stack.getDisplayName().getString().replace("[", "").replace("]", "")));
+        tooltips.add(new TextComponent(ChatFormatting.GREEN + Integer.toString(stack.getCount())));
 
-        this.renderToolTip(mStack, tooltips, x, y, Minecraft.getInstance().font);
+        this.renderComponentTooltip(mStack, tooltips, x, y, Minecraft.getInstance().font);
     }
 }

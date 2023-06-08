@@ -1,6 +1,6 @@
 package net.polarfox27.jobs.data.registry;
 
-import net.minecraft.item.ItemStack;
+import net.minecraft.world.item.ItemStack;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -40,7 +40,7 @@ public class RewardsData {
             return new ArrayList<>();
         return REWARDS_BY_JOB.get(job).stream()
                 .filter(x -> x.level == level)
-                .flatMap(x -> x.getRewards().stream())
+                .flatMap(x -> x.rewards().stream())
                 .collect(Collectors.toList());
     }
 
@@ -51,27 +51,13 @@ public class RewardsData {
         this.REWARDS_BY_JOB.clear();
     }
 
-    public static class Reward{
-        private final int level;
-        private final List<ItemStack> rewards;
-
+    public record Reward(int level, List<ItemStack> rewards) {
         /**
          * Creates a Reward list for a specific level
-         * @param level the level at which the reward will be received
-         * @param rewards the items the player will receive with this reward
+         *
+         * @param level  the level at which this reward is earned
+         * @param rewards the stacks the player will receive with this reward
          */
-        public Reward(int level, List<ItemStack> rewards) {
-            this.level = level;
-            this.rewards = rewards;
-        }
-
-        public int getLevel() {
-            return level;
-        }
-
-        public List<ItemStack> getRewards() {
-            return rewards;
-        }
-
+        public Reward {}
     }
 }
