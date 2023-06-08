@@ -1,13 +1,11 @@
 package net.polarfox27.jobs.network;
 
-import java.util.Arrays;
 import java.util.HashSet;
 import java.util.Map;
 import java.util.Set;
 
 
 import io.netty.buffer.ByteBuf;
-import net.minecraft.client.Minecraft;
 import net.minecraftforge.fml.common.network.simpleimpl.IMessage;
 import net.minecraftforge.fml.common.network.simpleimpl.IMessageHandler;
 import net.minecraftforge.fml.common.network.simpleimpl.MessageContext;
@@ -67,24 +65,18 @@ public class PacketUpdateClientJobsData implements IMessage {
         int amount = buf.readInt();
         for(int i = 0; i < amount; i++)
             registries.add(XPRegistry.fromBytes(buf));
-        System.out.println("XP Registries loaded");
         this.JOBS_LEVELS = new LevelData(buf);
-        System.out.println("Levels loaded : " + Arrays.toString(JOBS_LEVELS.getJobs().toArray()));
         this.BLOCKED_ITEMS_REGISTRIES = new HashSet<>();
         this.BLOCKED_BLOCKS_REGISTRIES = new HashSet<>();
         int size1 = buf.readInt();
         for(int i = 0; i < size1; i++)
             BLOCKED_ITEMS_REGISTRIES.add(new ItemBlockedRegistry(buf));
-        System.out.println("Blocked Items Registries loaded");
         int size2 = buf.readInt();
         for(int i = 0; i < size2; i++)
             BLOCKED_BLOCKS_REGISTRIES.add(new BlockBlockedRegistry(buf));
-        System.out.println("Blocked Blocks Registries loaded");
 
         this.JOBS_ICONS = JobsIconUtil.fromBytes(buf);
-        System.out.println("Icons loaded");
         this.TRANSLATIONS = new TranslationData(buf);
-        System.out.println("Translations loaded");
     }
 
     @Override

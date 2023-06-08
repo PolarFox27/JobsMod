@@ -9,7 +9,6 @@ import net.minecraft.client.resources.I18n;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityList;
 import net.minecraft.entity.EntityLivingBase;
-import net.minecraft.entity.passive.EntityCow;
 import net.minecraft.init.Blocks;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
@@ -122,6 +121,7 @@ public class GuiHowXP extends GuiScreen implements SliderParent {
         if(!tooltip.isEmpty())
             this.drawHoveringText(tooltip, mouseX, mouseY);
 
+        System.out.println("Dragging ? " + Mouse.isButtonDown(0));
         if(isDragging(verticalSlideBar, mouseX, mouseY))
             updateSlider(verticalSlideBar, mouseY);
         if(isDragging(horizontalSlideBar, mouseX, mouseY))
@@ -238,7 +238,7 @@ public class GuiHowXP extends GuiScreen implements SliderParent {
      */
     @Override
     public boolean isDragging(SlideBarButton btn, int mouseX, int mouseY){
-        return Mouse.isGrabbed() && (
+        return Mouse.isButtonDown(0) && (
                 (mouseX >= this.width/2 + 65 && mouseX <= this.width/2 + 77 &&
                 mouseY >= this.top + 30 && mouseY <= this.top + 135 &&
                 btn.isVertical) ||

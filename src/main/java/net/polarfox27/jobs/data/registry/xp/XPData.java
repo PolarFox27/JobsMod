@@ -16,6 +16,7 @@ import net.polarfox27.jobs.util.JobsUtil;
 import net.polarfox27.jobs.util.config.JsonUtil;
 
 import java.util.Arrays;
+import java.util.Random;
 
 public abstract class  XPData {
 
@@ -239,7 +240,7 @@ public abstract class  XPData {
          */
         @Override
         public ItemStack createStack() {
-            Item item = Item.getItemFromBlock(block);
+            Item item = block.getItemDropped(block.getDefaultState(), new Random(), 0);
             return JobsUtil.itemStack(item, 1, -1);
         }
 

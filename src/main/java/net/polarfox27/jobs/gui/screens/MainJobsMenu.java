@@ -49,7 +49,7 @@ public class MainJobsMenu extends GuiScreen {
             offset += 40;
         }
         if(index > 0){
-            this.addButton(new ButtonArrow(id, this.width/2-9, 43, this, true));
+            this.addButton(new ButtonArrow(id, this.width/2-9, 54, this, true));
             id++;
         }
         if(index < lastIndex()){

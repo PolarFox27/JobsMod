@@ -47,7 +47,8 @@ public class CommandInfo extends CommandBase {
                     throw new CommandException(this.getUsage(sender));
                 printInfoOfPlayer(sender, target);
             }
-            throw new CommandException(this.getUsage(sender));
+            else
+                throw new CommandException(this.getUsage(sender));
         }
         else {
             if(args.length != 1)

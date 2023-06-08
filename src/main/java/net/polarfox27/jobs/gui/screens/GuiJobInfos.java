@@ -199,7 +199,7 @@ public class GuiJobInfos extends GuiScreen implements SliderParent{
      */
     @Override
     public boolean isDragging(SlideBarButton btn, int mouseX, int mouseY){
-        return Mouse.isGrabbed() &&
+        return Mouse.isButtonDown(0) &&
                 mouseX >= this.width/2 + offsetUnlock + 163 && mouseX <= this.width/2 + offsetUnlock + 175 &&
                 mouseY >= this.top + 30 && mouseY <= this.top + 135;
     }

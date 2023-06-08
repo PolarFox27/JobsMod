@@ -80,7 +80,7 @@ public class GuiUtil {
 		float entSize = JobsUtil.getHeight(ent);
 		float baseSize = JobsUtil.getHeight(base);
 		if(ent.getClass() == EntityWither.class)
-			yOffset += 10;
+			yOffset += 3;
 		else if(ent.getClass() == EntityDragon.class) {
 			rotationX = 0.0f;
 			rotationY = 180.0f;

@@ -51,7 +51,6 @@ public class GuiGainXP extends Gui {
         String xpTotal = xp_progression + "/" + total;
         int titleWidth = Minecraft.getMinecraft().fontRenderer.getStringWidth(title);
         int xpTotalWidth = Minecraft.getMinecraft().fontRenderer.getStringWidth(xpTotal);
-        System.out.println(title);
         GL11.glEnable(GL11.GL_BLEND);
         GL11.glBlendFunc(GL11.GL_SRC_ALPHA, GL11.GL_ONE_MINUS_SRC_ALPHA);
 
