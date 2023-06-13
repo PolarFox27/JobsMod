@@ -6,6 +6,7 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.text.TextComponentString;
 import net.minecraft.util.text.TextFormatting;
+import net.minecraftforge.fml.common.network.ByteBufUtils;
 import net.polarfox27.jobs.data.ServerJobsData;
 import net.polarfox27.jobs.data.registry.LevelData;
 import net.polarfox27.jobs.network.PacketAddXP;
@@ -43,7 +44,7 @@ public class PlayerJobs {
         this.levelData = new LevelData(buf);
         int size = buf.readInt();
         for(int i = 0; i < size; i++){
-            String job = JobsUtil.readFromBuf(buf);
+            String job = ByteBufUtils.readUTF8String(buf);
             long xp = buf.readLong();
             this.XP.put(job, xp);
         }
@@ -57,7 +58,7 @@ public class PlayerJobs {
         this.levelData.writeToBytes(buf);
         buf.writeInt(XP.size());
         for(Map.Entry<String, Long> e : XP.entrySet()){
-            JobsUtil.writeToBuf(e.getKey(), buf);
+            ByteBufUtils.writeUTF8String(buf, e.getKey());
             buf.writeLong(e.getValue());
         }
     }

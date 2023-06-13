@@ -10,6 +10,7 @@ import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.ResourceLocation;
+import net.minecraftforge.fml.common.network.ByteBufUtils;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 import net.polarfox27.jobs.util.JobsUtil;
@@ -274,7 +275,7 @@ public abstract class  XPData {
          */
         public EntityXPData(ByteBuf buf){
             super(buf);
-            entity = new ResourceLocation(JobsUtil.readFromBuf(buf));
+            entity = new ResourceLocation(ByteBufUtils.readUTF8String(buf));
         }
 
         public ResourceLocation getEntity() {
@@ -308,7 +309,7 @@ public abstract class  XPData {
         @Override
         public void writeToBytes(ByteBuf buf) {
             super.writeToBytes(buf);
-            JobsUtil.writeToBuf(entity.toString(), buf);
+            ByteBufUtils.writeUTF8String(buf, entity.toString());
         }
 
         /**

@@ -2,6 +2,7 @@ package net.polarfox27.jobs.network;
 
 import io.netty.buffer.ByteBuf;
 import net.minecraft.client.Minecraft;
+import net.minecraftforge.fml.common.network.ByteBufUtils;
 import net.minecraftforge.fml.common.network.simpleimpl.IMessage;
 import net.minecraftforge.fml.common.network.simpleimpl.IMessageHandler;
 import net.minecraftforge.fml.common.network.simpleimpl.MessageContext;
@@ -20,12 +21,12 @@ public class PacketLevelUp implements IMessage {
 
     @Override
     public void fromBytes(ByteBuf buf) {
-        this.job = JobsUtil.readFromBuf(buf);
+        this.job = ByteBufUtils.readUTF8String(buf);
     }
 
     @Override
     public void toBytes(ByteBuf buf) {
-        JobsUtil.writeToBuf(this.job, buf);
+        ByteBufUtils.writeUTF8String(buf, this.job);
     }
 
     public static class MessageHandler implements IMessageHandler<PacketLevelUp, IMessage> {

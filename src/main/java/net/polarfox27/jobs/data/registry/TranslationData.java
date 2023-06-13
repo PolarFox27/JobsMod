@@ -1,6 +1,7 @@
 package net.polarfox27.jobs.data.registry;
 
 import io.netty.buffer.ByteBuf;
+import net.minecraftforge.fml.common.network.ByteBufUtils;
 import net.polarfox27.jobs.util.JobsUtil;
 
 import java.util.HashMap;
@@ -24,12 +25,12 @@ public class TranslationData {
     public TranslationData(ByteBuf buf){
         int size = buf.readInt();
         for(int i = 0; i < size; i++){
-            String job = JobsUtil.readFromBuf(buf);
+            String job = ByteBufUtils.readUTF8String(buf);
             data.put(job, new HashMap<>());
             int size2 = buf.readInt();
             for(int j = 0; j < size2; j++){
-                String code = JobsUtil.readFromBuf(buf);
-                String translation = JobsUtil.readFromBuf(buf);
+                String code = ByteBufUtils.readUTF8String(buf);
+                String translation = ByteBufUtils.readUTF8String(buf);
                 data.get(job).put(code, translation);
             }
         }
@@ -85,11 +86,11 @@ public class TranslationData {
     public void writeToBytes(ByteBuf buf){
         buf.writeInt(this.data.size());
         for(Map.Entry<String, Map<String, String>> e : this.data.entrySet()){
-            JobsUtil.writeToBuf(e.getKey(), buf);
+            ByteBufUtils.writeUTF8String(buf, e.getKey());
             buf.writeInt(e.getValue().size());
             for(Map.Entry<String, String> e2 : e.getValue().entrySet()){
-                JobsUtil.writeToBuf(e2.getKey(), buf);
-                JobsUtil.writeToBuf(e2.getValue(), buf);
+                ByteBufUtils.writeUTF8String(buf, e2.getKey());
+                ByteBufUtils.writeUTF8String(buf, e2.getValue());
             }
         }
     }

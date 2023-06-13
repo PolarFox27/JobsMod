@@ -1,6 +1,7 @@
 package net.polarfox27.jobs.data.registry;
 
 import io.netty.buffer.ByteBuf;
+import net.minecraftforge.fml.common.network.ByteBufUtils;
 import net.polarfox27.jobs.util.JobsUtil;
 
 import java.util.Arrays;
@@ -25,7 +26,7 @@ public class LevelData {
     public LevelData(ByteBuf buf){
         int size = buf.readInt();
         for(int i = 0; i < size; i++){
-            String job = JobsUtil.readFromBuf(buf);
+            String job = ByteBufUtils.readUTF8String(buf);
             Levels levels = new Levels(buf);
             this.LEVELS_BY_JOB.put(job, levels);
         }
@@ -136,7 +137,7 @@ public class LevelData {
     public void writeToBytes(ByteBuf buf){
         buf.writeInt(this.LEVELS_BY_JOB.size());
         for(Map.Entry<String, Levels> e : this.LEVELS_BY_JOB.entrySet()){
-            JobsUtil.writeToBuf(e.getKey(), buf);
+            ByteBufUtils.writeUTF8String(buf, e.getKey());
             e.getValue().writeToBytes(buf);
         }
     }
