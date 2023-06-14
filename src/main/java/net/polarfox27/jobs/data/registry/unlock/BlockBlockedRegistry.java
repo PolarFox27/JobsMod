@@ -2,6 +2,7 @@ package net.polarfox27.jobs.data.registry.unlock;
 
 import io.netty.buffer.ByteBuf;
 import net.minecraft.block.state.IBlockState;
+import net.minecraftforge.fml.common.network.ByteBufUtils;
 import net.polarfox27.jobs.data.capabilities.PlayerJobs;
 import net.polarfox27.jobs.data.registry.unlock.BlockedData.BlockBlockedData;
 import net.polarfox27.jobs.data.registry.unlock.BlockedData.Type;
@@ -34,7 +35,7 @@ public class BlockBlockedRegistry {
         this.type = Type.byCode(buf.readInt());
         int size = buf.readInt();
         for(int i = 0; i < size; i++){
-            String job = JobsUtil.readFromBuf(buf);
+            String job = ByteBufUtils.readUTF8String(buf);
             List<BlockBlockedData> list = new ArrayList<>();
             int length = buf.readInt();
             for(int j = 0; j < length; j++)
@@ -81,7 +82,7 @@ public class BlockBlockedRegistry {
         buf.writeInt(type.code);
         buf.writeInt(DATA.size());
         for(Map.Entry<String, List<BlockBlockedData>> e : DATA.entrySet()){
-            JobsUtil.writeToBuf(e.getKey(), buf);
+            ByteBufUtils.writeUTF8String(buf, e.getKey());
             buf.writeInt(e.getValue().size());
             for(BlockBlockedData data : e.getValue())
                 data.writeToBytes(buf);

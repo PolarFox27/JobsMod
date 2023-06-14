@@ -133,27 +133,6 @@ public class JobsUtil {
     }
 
     /**
-     * Writes a string to a buffer
-     * @param text the text to write
-     * @param buf the buffer where to write
-     */
-    public static void writeToBuf(String text, ByteBuf buf){
-        buf.writeInt(text.length());
-        buf.writeCharSequence(text, StandardCharsets.UTF_8);
-    }
-
-    /**
-     * Reads a string from a buffer
-     *
-     * @param buf the buffer where the string must be read
-     * @return the read string
-     */
-    public static String readFromBuf(ByteBuf buf){
-        int size = buf.readInt();
-        return buf.readCharSequence(size, StandardCharsets.UTF_8).toString();
-    }
-
-    /**
      * Creates an item stack representing the entity (used for Jobs interface)
      * @param entity the entity to represent
      * @return the item stack representing the entity

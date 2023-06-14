@@ -5,6 +5,7 @@ import net.minecraft.block.state.IBlockState;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
+import net.minecraftforge.fml.common.network.ByteBufUtils;
 import net.polarfox27.jobs.util.JobsUtil;
 import net.polarfox27.jobs.util.config.JsonUtil;
 
@@ -36,7 +37,7 @@ public abstract class XPRegistry <T extends XPData> {
      */
     private XPRegistry(ByteBuf buf, Type type) {
         this.type = type;
-        this.name = JobsUtil.readFromBuf(buf);
+        this.name = ByteBufUtils.readUTF8String(buf);
         this.icon = Item.getItemById(buf.readInt());
     }
 
@@ -82,11 +83,11 @@ public abstract class XPRegistry <T extends XPData> {
      */
     public void writeToBytes(ByteBuf buf){
         buf.writeInt(type.id);
-        JobsUtil.writeToBuf(name, buf);
+        ByteBufUtils.writeUTF8String(buf, name);
         buf.writeInt(Item.getIdFromItem(icon));
         buf.writeInt(data.size());
         for(Map.Entry<String, List<T>> entry : data.entrySet()){
-            JobsUtil.writeToBuf(entry.getKey(), buf);
+            ByteBufUtils.writeUTF8String(buf, entry.getKey());
             buf.writeInt(entry.getValue().size());
             for(T xpData : entry.getValue()){
                 xpData.writeToBytes(buf);
@@ -165,7 +166,7 @@ public abstract class XPRegistry <T extends XPData> {
             super(buf, Type.ITEM);
             int size = buf.readInt();
             for(int i = 0; i < size; i++){
-                String job = JobsUtil.readFromBuf(buf);
+                String job = ByteBufUtils.readUTF8String(buf);
                 int amount = buf.readInt();
                 for(int j = 0; j < amount; j++)
                     this.addDataForJob(job, new XPData.ItemXPData(buf));
@@ -207,7 +208,7 @@ public abstract class XPRegistry <T extends XPData> {
             super(buf, Type.BLOCK);
             int size = buf.readInt();
             for(int i = 0; i < size; i++){
-                String job = JobsUtil.readFromBuf(buf);
+                String job = ByteBufUtils.readUTF8String(buf);
                 int amount = buf.readInt();
                 for(int j = 0; j < amount; j++)
                     this.addDataForJob(job, new XPData.BlockXPData(buf));
@@ -249,7 +250,7 @@ public abstract class XPRegistry <T extends XPData> {
             super(buf, Type.ENTITY);
             int size = buf.readInt();
             for(int i = 0; i < size; i++){
-                String job = JobsUtil.readFromBuf(buf);
+                String job = ByteBufUtils.readUTF8String(buf);
                 int amount = buf.readInt();
                 for(int j = 0; j < amount; j++)
                     this.addDataForJob(job, new XPData.EntityXPData(buf));

@@ -5,6 +5,7 @@ import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.texture.DynamicTexture;
 import net.minecraft.server.MinecraftServer;
 import net.minecraft.util.ResourceLocation;
+import net.minecraftforge.fml.common.network.ByteBufUtils;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 import net.polarfox27.jobs.ModJobs;
@@ -53,7 +54,7 @@ public class JobsIconUtil {
     public static void toBytes(ByteBuf buf, Map<String, byte[]> map){
         buf.writeInt(map.size());
         for(Map.Entry<String, byte[]> e : map.entrySet()){
-            JobsUtil.writeToBuf(e.getKey(), buf);
+            ByteBufUtils.writeUTF8String(buf, e.getKey());
             JobsUtil.writeByteArray(e.getValue(), buf);
         }
     }
@@ -67,7 +68,7 @@ public class JobsIconUtil {
         Map<String, byte[]> map = new HashMap<>();
         int size = buf.readInt();
         for(int i = 0; i < size; i++){
-            String job = JobsUtil.readFromBuf(buf);
+            String job = ByteBufUtils.readUTF8String(buf);
             byte[] array = JobsUtil.readByteArray(buf);
             map.put(job, array);
         }
