@@ -6,11 +6,13 @@ import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.math.Quaternion;
 import com.mojang.math.Vector3f;
 import net.minecraft.client.Minecraft;
+import net.minecraft.client.gui.Gui;
+import net.minecraft.client.gui.GuiComponent;
 import net.minecraft.client.gui.screens.Screen;
 import net.minecraft.client.renderer.GameRenderer;
 import net.minecraft.client.renderer.MultiBufferSource;
 import net.minecraft.client.renderer.entity.EntityRenderDispatcher;
-import net.minecraft.network.chat.TranslatableComponent;
+import net.minecraft.client.resources.language.I18n;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.LivingEntity;
@@ -40,7 +42,7 @@ public class GuiUtil {
      * @param width the width of the texture to render
      * @param height the height of the texture to render
      */
-    public static void drawTexture(PoseStack mStack, Screen gui, int x, int y, int textX, int textY, int width, int height) {
+    public static void drawTexture(PoseStack mStack, GuiComponent gui, int x, int y, int textX, int textY, int width, int height) {
         gui.blit(mStack, x, y, textX, textY, width, height);
     }
 
@@ -115,7 +117,7 @@ public class GuiUtil {
         else if(baseEntity.getBbHeight() > entity.getBbHeight())
             scale = 10.0f * entity.getBbHeight();
         else
-            scale = 10.0f * baseEntity.getBbHeight() / entity.getBbHeight();
+            scale = 8.5f * baseEntity.getBbHeight() / entity.getBbHeight();
 
         poseStack1.scale(scale, scale, scale);
         Quaternion quaternion = Vector3f.ZP.rotationDegrees(180.0F);
@@ -184,7 +186,7 @@ public class GuiUtil {
      * @param progress the progression that the progress bar must render
      * @param total the maximum progression that the progress bar could have
      */
-    public static void renderProgressBar(PoseStack mStack, Screen gui, int x, int y, int width, int height, long progress, long total) {
+    public static void renderProgressBar(PoseStack mStack, GuiComponent gui, int x, int y, int width, int height, long progress, long total) {
         String info = progress < total ? progress + "/" + total : GuiUtil.translate("text.level.max");
         renderProgressBarWithText(mStack, gui, x, y, width, height, progress, total, info);
     }
@@ -202,7 +204,7 @@ public class GuiUtil {
      * @param total the maximum progression that the progress bar could have
      * @param text the custom text that will be rendered in the progress bar
      */
-    public static void renderProgressBarWithText(PoseStack mStack, Screen gui, int x, int y, int width, int height, long progress, long total, String text) {
+    public static void renderProgressBarWithText(PoseStack mStack, GuiComponent gui, int x, int y, int width, int height, long progress, long total, String text) {
         RenderSystem.setShader(GameRenderer::getPositionTexShader);
         RenderSystem.setShaderColor(1.0f, 1.0f, 1.0f, 1.0f);
         RenderSystem.setShaderTexture(0, GRADIENT_TEXTURE);
@@ -217,7 +219,7 @@ public class GuiUtil {
     }
 
     public static String translate(String key) {
-        return new TranslatableComponent(key).getString();
+        return I18n.get(key);
     }
 
 }

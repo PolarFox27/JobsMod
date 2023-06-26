@@ -1,6 +1,7 @@
 package net.polarfox27.jobs.util.handler;
 
 import net.minecraft.world.inventory.MenuType;
+import net.minecraftforge.client.event.RegisterKeyMappingsEvent;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.common.capabilities.RegisterCapabilitiesEvent;
 import net.minecraftforge.event.RegisterCommandsEvent;
@@ -17,15 +18,17 @@ import net.polarfox27.jobs.commands.CommandSet;
 import net.polarfox27.jobs.data.capabilities.PlayerJobs;
 import net.polarfox27.jobs.events.CommonEvents;
 import net.polarfox27.jobs.events.client.GuiEvents;
+import net.polarfox27.jobs.events.client.KeyBindingsEvent;
 import net.polarfox27.jobs.events.server.BlockInteractionEvents;
 import net.polarfox27.jobs.events.server.EntityInteractionEvents;
 import net.polarfox27.jobs.events.server.ItemInteractionEvents;
 import net.polarfox27.jobs.gui.containers.JobsCraftingMenu;
+import net.polarfox27.jobs.util.keybindings.KeyBindings;
 
 @EventBusSubscriber
 public class RegistryHandler {
 
-	public static final DeferredRegister<MenuType<?>> CONTAINERS = DeferredRegister.create(ForgeRegistries.CONTAINERS, ModJobs.MOD_ID);
+	public static final DeferredRegister<MenuType<?>> CONTAINERS = DeferredRegister.create(ForgeRegistries.MENU_TYPES, ModJobs.MOD_ID);
 	public static final RegistryObject<MenuType<JobsCraftingMenu>> JOBS_CRAFT = CONTAINERS.register("jobs_crafting", () -> new MenuType<>(JobsCraftingMenu::new));
 
 	/**
@@ -44,12 +47,14 @@ public class RegistryHandler {
 	 * Registers the Event Listeners of the mod
 	 */
 	public static void registerListeners() {
+		FMLJavaModLoadingContext.get().getModEventBus().addListener(new RegistryHandler()::registerKeyBindings);
 		MinecraftForge.EVENT_BUS.register(new GuiEvents());
 		MinecraftForge.EVENT_BUS.register(new RegistryHandler());
 		MinecraftForge.EVENT_BUS.register(new CommonEvents());
 		MinecraftForge.EVENT_BUS.register(new BlockInteractionEvents());
 		MinecraftForge.EVENT_BUS.register(new EntityInteractionEvents());
 		MinecraftForge.EVENT_BUS.register(new ItemInteractionEvents());
+		MinecraftForge.EVENT_BUS.register(new KeyBindingsEvent());
 	}
 
 	/**
@@ -67,6 +72,16 @@ public class RegistryHandler {
 	 */
 	public static void registerContainers(){
 		CONTAINERS.register(FMLJavaModLoadingContext.get().getModEventBus());
+	}
+
+	/**
+	 * Registers the key bindings
+	 * @param event the registry event
+	 */
+	@SubscribeEvent
+	public void registerKeyBindings(RegisterKeyMappingsEvent event){
+		event.register(KeyBindings.open_gui.get());
+		ModJobs.info("Keybindings Registered", false);
 	}
 
 }

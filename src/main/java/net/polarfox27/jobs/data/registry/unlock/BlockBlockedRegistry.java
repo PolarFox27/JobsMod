@@ -1,6 +1,5 @@
 package net.polarfox27.jobs.data.registry.unlock;
 
-import net.minecraft.world.item.ItemStack;
 import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.world.level.block.state.BlockState;
 import net.polarfox27.jobs.data.capabilities.PlayerJobs;

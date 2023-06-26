@@ -3,7 +3,7 @@ package net.polarfox27.jobs.events.client;
 import com.mojang.datafixers.util.Pair;
 import net.minecraft.client.Minecraft;
 import net.minecraft.core.BlockPos;
-import net.minecraft.network.chat.TranslatableComponent;
+import net.minecraft.network.chat.Component;
 import net.minecraft.stats.Stats;
 import net.minecraft.world.MenuProvider;
 import net.minecraft.world.SimpleMenuProvider;
@@ -13,7 +13,8 @@ import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.Blocks;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
-import net.minecraftforge.client.event.RenderGameOverlayEvent;
+import net.minecraftforge.client.event.RenderGuiOverlayEvent;
+import net.minecraftforge.client.gui.overlay.VanillaGuiOverlay;
 import net.minecraftforge.event.entity.player.PlayerInteractEvent.RightClickBlock;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.common.Mod.EventBusSubscriber;
@@ -30,10 +31,10 @@ public class GuiEvents {
      */
     @SubscribeEvent
     @OnlyIn(Dist.CLIENT)
-    public void clientTick(RenderGameOverlayEvent e) {
+    public void clientTick(RenderGuiOverlayEvent e) {
         if(Minecraft.getInstance().player == null)
             return;
-        if(e.getType() == RenderGameOverlayEvent.ElementType.ALL) {
+        if(e.getOverlay() == VanillaGuiOverlay.HOTBAR.type()) {
             ClientJobsData.addXPInfos.update();
             if(!ClientJobsData.addXPInfos.shouldShow())
                 return;
@@ -41,7 +42,7 @@ public class GuiEvents {
             if(ClientJobsData.playerJobs.isMax(toShow.getFirst()))
                 return;
             GuiGainXP gui = new GuiGainXP(toShow.getFirst(), toShow.getSecond());
-            gui.render(e.getMatrixStack(), 0, 0, 0.0f);
+            gui.render(e.getPoseStack(), 0, 0, 0.0f);
         }
     }
 
@@ -51,10 +52,10 @@ public class GuiEvents {
      */
     @SubscribeEvent
     public void onOpenCraftingTable(RightClickBlock e) {
-        if(e.getWorld().getBlockState(e.getPos()).getBlock() == Blocks.CRAFTING_TABLE) {
+        if(e.getLevel().getBlockState(e.getPos()).getBlock() == Blocks.CRAFTING_TABLE) {
             e.setCanceled(true);
-            if(!e.getWorld().isClientSide) {
-                openUpdatedCraftingTable(e.getPlayer(), e.getWorld(), e.getPos());
+            if(!e.getLevel().isClientSide) {
+                openUpdatedCraftingTable(e.getEntity(), e.getLevel(), e.getPos());
             }
         }
     }
@@ -67,7 +68,7 @@ public class GuiEvents {
     private void openUpdatedCraftingTable(Player player, Level level, BlockPos pos){
         MenuProvider provider = new SimpleMenuProvider((id, inv, p_52231_) ->
                 new JobsCraftingMenu(id, inv, ContainerLevelAccess.create(level, pos)),
-                new TranslatableComponent("container.crafting"));
+                Component.translatable("container.crafting"));
         player.openMenu(provider);
         player.awardStat(Stats.INTERACT_WITH_CRAFTING_TABLE);
     }

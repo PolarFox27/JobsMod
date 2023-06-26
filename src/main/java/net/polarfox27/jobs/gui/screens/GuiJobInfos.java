@@ -8,7 +8,6 @@ import net.minecraft.client.gui.screens.Screen;
 import net.minecraft.client.renderer.GameRenderer;
 import net.minecraft.client.renderer.entity.ItemRenderer;
 import net.minecraft.network.chat.Component;
-import net.minecraft.network.chat.TextComponent;
 import net.minecraft.resources.ResourceLocation;
 import net.polarfox27.jobs.ModJobs;
 import net.polarfox27.jobs.data.ClientJobsData;
@@ -18,6 +17,7 @@ import net.polarfox27.jobs.gui.buttons.ButtonXPCategory;
 import net.polarfox27.jobs.gui.buttons.SlideBarButton;
 import net.polarfox27.jobs.util.GuiUtil;
 import net.polarfox27.jobs.util.JobsUtil;
+import org.jetbrains.annotations.NotNull;
 
 import java.awt.Color;
 import java.util.ArrayList;
@@ -42,7 +42,7 @@ public class GuiJobInfos extends Screen implements SliderParent{
      * @param job the job
      */
     public GuiJobInfos(String job) {
-    	super(new TextComponent(""));
+    	super(Component.literal(""));
         this.job = job;
         this.offsetUnlock = 0;
         this.renderItem = Minecraft.getInstance().getItemRenderer();
@@ -84,7 +84,7 @@ public class GuiJobInfos extends Screen implements SliderParent{
      * @param partialTicks the rendering ticks
      */
     @Override
-    public void render(PoseStack mStack, int mouseX, int mouseY, float partialTicks) {
+    public void render(@NotNull PoseStack mStack, int mouseX, int mouseY, float partialTicks) {
     	super.render(mStack, mouseX, mouseY, partialTicks);
     	this.left = this.width/2 - 110 + offsetUnlock;
         this.top = this.height/2 - 90;
@@ -159,18 +159,18 @@ public class GuiJobInfos extends Screen implements SliderParent{
      */
     public List<Component> getItemToolTip(UnlockStack stack) {
         List<Component> tooltip = new ArrayList<>();
-        tooltip.add(new TextComponent(stack.getStack().getDisplayName().getString()
+        tooltip.add(Component.literal(stack.getStack().getDisplayName().getString()
                                                                   .replace("[", "")
                                                                   .replace("]", ""))
                                                                   );
         if(stack.getLevel() > ClientJobsData.playerJobs.getLevelByJob(this.job)) {
-            tooltip.add(new TextComponent(
+            tooltip.add(Component.literal(
                     ChatFormatting.RED  + GuiUtil.translate("text.unlock_" + stack.getType() + "_lvl")
                             + " " + stack.getLevel())
                     );
         }
         else
-            tooltip.add(new TextComponent(
+            tooltip.add(Component.literal(
                     ChatFormatting.GREEN  + GuiUtil.translate("text.unlock_" + stack.getType()))
                     );
         return tooltip;

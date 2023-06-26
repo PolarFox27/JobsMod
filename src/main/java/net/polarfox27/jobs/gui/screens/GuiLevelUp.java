@@ -8,13 +8,13 @@ import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.screens.Screen;
 import net.minecraft.client.renderer.GameRenderer;
 import net.minecraft.network.chat.Component;
-import net.minecraft.network.chat.TextComponent;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.resources.ResourceLocation;
 import net.polarfox27.jobs.ModJobs;
 import net.polarfox27.jobs.data.ClientJobsData;
 import net.polarfox27.jobs.data.registry.unlock.UnlockStack;
 import net.polarfox27.jobs.util.GuiUtil;
+import org.jetbrains.annotations.NotNull;
 
 
 import java.awt.Color;
@@ -32,7 +32,7 @@ public class GuiLevelUp extends Screen {
      * @param job the job that leveled up
      */
     public GuiLevelUp(String job) {
-    	super(new TextComponent(""));
+    	super(Component.literal(""));
         this.job = job;
     }
 
@@ -52,7 +52,7 @@ public class GuiLevelUp extends Screen {
      * @param partialTicks the rendering ticks
      */
     @Override
-    public void render(PoseStack mStack, int mouseX, int mouseY, float partialTicks) {
+    public void render(@NotNull PoseStack mStack, int mouseX, int mouseY, float partialTicks) {
         RenderSystem.setShader(GameRenderer::getPositionTexShader);
         RenderSystem.setShaderColor(1.0f, 1.0f, 1.0f, 1.0f);
         RenderSystem.setShaderTexture(0, TEXTURES);
@@ -95,7 +95,7 @@ public class GuiLevelUp extends Screen {
         int sizeX = stacks.size()*16 + (stacks.size()-1)*6;
         int x = this.width/2 - sizeX/2;
         for(int i = 0; i < stacks.size(); i++) {
-            this.itemRenderer.renderGuiItem(stacks.get(i).getStack(), x + i*22, y);
+            Minecraft.getInstance().getItemRenderer().renderGuiItem(stacks.get(i).getStack(), x + i*22, y);
             if(mouseX >= x + i*22 && mouseX < x + i*22 + 16 && mouseY >= y && mouseY < y + 16)
                 hovered = i;
         }
@@ -123,7 +123,7 @@ public class GuiLevelUp extends Screen {
         int sizeX = stacks.size()*16 + (stacks.size()-1)*6;
         int x = this.width/2 - sizeX/2;
         for(int i = 0; i < stacks.size(); i++) {
-            this.itemRenderer.renderGuiItem(stacks.get(i).copy(), x + i*22, y);
+            Minecraft.getInstance().getItemRenderer().renderGuiItem(stacks.get(i).copy(), x + i*22, y);
             if(mouseX >= x + i*22 && mouseX < x + i*22 + 16 && mouseY >= y && mouseY < y + 16)
                 hovered = i;
         }
@@ -141,8 +141,8 @@ public class GuiLevelUp extends Screen {
      */
     private void renderUnlockedCraftToolTip(PoseStack mStack, UnlockStack stack, int x, int y) {
         List<Component> tooltips = new ArrayList<>();
-        tooltips.add(new TextComponent(stack.getStack().getDisplayName().getString().replace("[", "").replace("]", "")));
-        tooltips.add(new TextComponent(ChatFormatting.GREEN + GuiUtil.translate("text.unlock_" + stack.getType())));
+        tooltips.add(Component.literal(stack.getStack().getDisplayName().getString().replace("[", "").replace("]", "")));
+        tooltips.add(Component.literal(ChatFormatting.GREEN + GuiUtil.translate("text.unlock_" + stack.getType())));
         this.renderComponentTooltip(mStack, tooltips, x, y, Minecraft.getInstance().font);
     }
 
@@ -156,8 +156,8 @@ public class GuiLevelUp extends Screen {
     protected void renderToolTipAndCount(PoseStack mStack, ItemStack stack, int x, int y) {
         List<Component> tooltips = new ArrayList<>();
 
-        tooltips.add(new TextComponent(stack.getDisplayName().getString().replace("[", "").replace("]", "")));
-        tooltips.add(new TextComponent(ChatFormatting.GREEN + Integer.toString(stack.getCount())));
+        tooltips.add(Component.literal(stack.getDisplayName().getString().replace("[", "").replace("]", "")));
+        tooltips.add(Component.literal(ChatFormatting.GREEN + Integer.toString(stack.getCount())));
 
         this.renderComponentTooltip(mStack, tooltips, x, y, Minecraft.getInstance().font);
     }

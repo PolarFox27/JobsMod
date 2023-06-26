@@ -37,7 +37,7 @@ public class PacketAskClientUpdate{
      * @param ctx the context of the packet
      */
     public static void handle(PacketAskClientUpdate message, Supplier<Context> ctx) {
-        if (ctx.get().getDirection() == NetworkDirection.PLAY_TO_SERVER &&
+        if (ctx.get() != null && ctx.get().getDirection() == NetworkDirection.PLAY_TO_SERVER &&
             ctx.get().getSender() != null) {
             PacketHandler.INSTANCE.sendTo(new PacketUpdateClientJob(PlayerData.getPlayerJobs(ctx.get().getSender())),
                                           ctx.get().getNetworkManager(),

@@ -5,7 +5,7 @@ import net.minecraft.ChatFormatting;
 import net.minecraft.commands.CommandSourceStack;
 import net.minecraft.commands.Commands;
 import net.minecraft.commands.arguments.EntityArgument;
-import net.minecraft.network.chat.TextComponent;
+import net.minecraft.network.chat.Component;
 import net.minecraft.server.level.ServerPlayer;
 import net.polarfox27.jobs.data.capabilities.PlayerData;
 import net.polarfox27.jobs.data.capabilities.PlayerJobs;
@@ -47,17 +47,17 @@ public class CommandInfo {
 
 		if(sender.getGameProfile().getId().equals(target.getGameProfile().getId()))
 			PacketHandler.sendMessageToClient(sender,
-					new TextComponent(ChatFormatting.BLUE + "Your Stats"));
+					Component.literal(ChatFormatting.BLUE + "Your Stats"));
 		else
 			PacketHandler.sendMessageToClient(sender,
-					new TextComponent(ChatFormatting.LIGHT_PURPLE + "Stats of " +
+					Component.literal(ChatFormatting.LIGHT_PURPLE + "Stats of " +
 							ChatFormatting.BLUE + target.getName().getString()));
 
 		for(String job : infos.getJobs()) {
             int lvl = infos.getLevelByJob(job);
             long xp = infos.getXPByJob(job);
             PacketHandler.sendMessageToClient(sender,
-					new TextComponent(ChatFormatting.LIGHT_PURPLE + job + " : lvl " +
+					Component.literal(ChatFormatting.LIGHT_PURPLE + job + " : lvl " +
                     ChatFormatting.BLUE + lvl + ChatFormatting.LIGHT_PURPLE + ", xp " + ChatFormatting.BLUE + xp));
         }
 	}

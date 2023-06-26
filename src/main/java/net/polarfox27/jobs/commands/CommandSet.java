@@ -7,7 +7,7 @@ import com.mojang.brigadier.arguments.StringArgumentType;
 import net.minecraft.commands.CommandSourceStack;
 import net.minecraft.commands.Commands;
 import net.minecraft.commands.arguments.EntityArgument;
-import net.minecraft.network.chat.TextComponent;
+import net.minecraft.network.chat.Component;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraftforge.network.NetworkDirection;
 import net.polarfox27.jobs.data.ServerJobsData;
@@ -75,7 +75,7 @@ public class CommandSet {
         	long xp = PlayerData.getPlayerJobs(target).getXPByJob(job);
 			String message = "Job " + job + " of " + target.getDisplayName().getString() + " set to lvl " + lvl + ", xp " + xp;
         	PacketHandler.INSTANCE.sendTo(
-					new PacketSendChatMessage(new TextComponent(message)),
+					new PacketSendChatMessage(Component.literal(message)),
 											  sender.connection.getConnection(),
 											  NetworkDirection.PLAY_TO_CLIENT);
         }

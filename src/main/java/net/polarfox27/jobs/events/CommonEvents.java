@@ -9,7 +9,6 @@ import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 import net.minecraftforge.common.capabilities.RegisterCapabilitiesEvent;
 import net.minecraftforge.event.AttachCapabilitiesEvent;
-import net.minecraftforge.event.entity.EntityJoinWorldEvent;
 import net.minecraftforge.event.entity.player.PlayerEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.common.Mod.EventBusSubscriber;
@@ -62,7 +61,7 @@ public class CommonEvents {
 											 .resolve();
 		if(capability.isPresent()) {
 			PlayerJobs old_jobs = capability.get();
-			PlayerJobs new_jobs = PlayerData.getPlayerJobs(event.getPlayer());
+			PlayerJobs new_jobs = PlayerData.getPlayerJobs(event.getEntity());
 			new_jobs.copy(old_jobs);
 		}
 	}
@@ -72,7 +71,7 @@ public class CommonEvents {
 	 * @param event the Join World Event
 	 */
 	@SubscribeEvent
-	public void onPlayerJoinedServer(EntityJoinWorldEvent event){
+	public void onPlayerJoinedServer(PlayerEvent.PlayerLoggedInEvent event){
 		if(!(event.getEntity() instanceof ServerPlayer))
 			return;
 		ServerJobsData.sendDataToClient((ServerPlayer)event.getEntity());
@@ -84,7 +83,7 @@ public class CommonEvents {
 	 */
 	@SubscribeEvent
 	@OnlyIn(Dist.CLIENT)
-	public void onPlayerJoinedClient(EntityJoinWorldEvent event) {
+	public void onPlayerJoinedClient(PlayerEvent.PlayerLoggedInEvent event) {
 		if(!(event.getEntity() instanceof AbstractClientPlayer))
 			return;
 		PacketHandler.INSTANCE.sendToServer(PacketAskClientUpdate.instance);

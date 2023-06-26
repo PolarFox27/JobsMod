@@ -2,7 +2,7 @@ package net.polarfox27.jobs.data.capabilities;
 
 import net.minecraft.ChatFormatting;
 import net.minecraft.nbt.CompoundTag;
-import net.minecraft.network.chat.TextComponent;
+import net.minecraft.network.chat.Component;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.network.FriendlyByteBuf;
@@ -159,10 +159,7 @@ public class PlayerJobs {
 			for(ServerPlayer mp : p.getServer().getPlayerList().getPlayers()) {
 				String message = ChatFormatting.DARK_PURPLE + p.getName().getString() +
 						ChatFormatting.BLUE + " has reached level " + levelData.getMaxLevel(j) + " for the job " + j + " !";
-				mp.sendMessage(new TextComponent(message),
-							   mp.getGameProfile().getId());
-				p.getServer().sendMessage(new TextComponent(message),
-							   mp.getGameProfile().getId());
+				mp.displayClientMessage(Component.literal(message), true);
 			}
 		}
 	}

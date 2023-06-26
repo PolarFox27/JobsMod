@@ -4,11 +4,12 @@ import com.mojang.blaze3d.systems.RenderSystem;
 import com.mojang.blaze3d.vertex.PoseStack;
 import net.minecraft.client.gui.components.Button;
 import net.minecraft.client.renderer.GameRenderer;
-import net.minecraft.network.chat.TextComponent;
+import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceLocation;
 import net.polarfox27.jobs.ModJobs;
 import net.polarfox27.jobs.gui.screens.SliderParent;
 import net.polarfox27.jobs.util.JobsUtil;
+import org.jetbrains.annotations.NotNull;
 
 public class SlideBarButton extends Button {
 
@@ -31,7 +32,7 @@ public class SlideBarButton extends Button {
     public SlideBarButton(int startPos, int endPos, int otherPos, SliderParent parent, boolean isVertical) {
         super((isVertical ? otherPos : startPos), (isVertical ? startPos : otherPos),
                 (isVertical ? 12 : 15), (isVertical ? 15 : 12),
-                new TextComponent(""), new OnPressed());
+                Component.literal(""), new OnPressed());
         this.parent = parent;
         this.isVertical = isVertical;
         this.endPos = endPos;
@@ -46,7 +47,7 @@ public class SlideBarButton extends Button {
      * @param partialTicks the rendering ticks
      */
     @Override
-    public void renderButton(PoseStack mStack, int mouseX, int mouseY, float partialTicks) {
+    public void renderButton(@NotNull PoseStack mStack, int mouseX, int mouseY, float partialTicks) {
         if (this.visible) {
             boolean disabled = this.parent.getLastPage(isVertical) == 0;
             RenderSystem.setShader(GameRenderer::getPositionTexShader);
@@ -91,7 +92,7 @@ public class SlideBarButton extends Button {
          * @param btn the button pressed
          */
         @Override
-		public void onPress(Button btn) {}    	
+		public void onPress(@NotNull Button btn) {}
     }
 }
 

@@ -4,7 +4,7 @@ import com.mojang.blaze3d.systems.RenderSystem;
 import com.mojang.blaze3d.vertex.PoseStack;
 import net.minecraft.client.gui.screens.Screen;
 import net.minecraft.client.renderer.GameRenderer;
-import net.minecraft.network.chat.TranslatableComponent;
+import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceLocation;
 import net.polarfox27.jobs.ModJobs;
 import net.polarfox27.jobs.data.ClientJobsData;
@@ -12,6 +12,7 @@ import net.polarfox27.jobs.gui.buttons.ButtonArrow;
 import net.polarfox27.jobs.gui.buttons.ButtonJob;
 import net.polarfox27.jobs.util.GuiUtil;
 import net.polarfox27.jobs.util.JobsUtil;
+import org.jetbrains.annotations.NotNull;
 
 import java.awt.Color;
 import java.util.ArrayList;
@@ -28,7 +29,7 @@ public class MainJobsMenu extends Screen {
      * Creates the Main Jobs Menu GUI
      */
     public MainJobsMenu() {
-		super(new TranslatableComponent("text.jobs.title"));
+		super(Component.translatable("text.jobs.title"));
         this.jobs = new ArrayList<>(ClientJobsData.JOBS_LEVELS.getJobs());
 	}
 
@@ -77,7 +78,7 @@ public class MainJobsMenu extends Screen {
      * @param partialTicks the rendering ticks
      */
     @Override
-    public void render(PoseStack mStack, int mouseX, int mouseY, float partialTicks) {
+    public void render(@NotNull PoseStack mStack, int mouseX, int mouseY, float partialTicks) {
         RenderSystem.setShader(GameRenderer::getPositionTexShader);
         RenderSystem.setShaderColor(1.0f, 1.0f, 1.0f, 1.0f);
         RenderSystem.setShaderTexture(0, BACKGROUND);

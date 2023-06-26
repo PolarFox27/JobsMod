@@ -2,15 +2,21 @@ package net.polarfox27.jobs.gui;
 
 import com.mojang.blaze3d.systems.RenderSystem;
 import com.mojang.blaze3d.vertex.PoseStack;
+import com.mojang.blaze3d.vertex.VertexFormat;
+import com.mojang.blaze3d.vertex.VertexFormatElement;
 import com.mojang.datafixers.util.Pair;
 import net.minecraft.ChatFormatting;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.Gui;
 import net.minecraft.client.gui.components.Widget;
 import net.minecraft.client.renderer.GameRenderer;
+import net.minecraft.client.renderer.RenderStateShard;
+import net.minecraft.client.renderer.RenderType;
 import net.minecraft.resources.ResourceLocation;
 import net.polarfox27.jobs.ModJobs;
 import net.polarfox27.jobs.data.ClientJobsData;
+import net.polarfox27.jobs.util.GuiUtil;
+import org.lwjgl.opengl.GL11;
 
 import java.awt.Color;
 import java.util.ArrayList;
@@ -41,28 +47,23 @@ public class GuiGainXP implements Widget {
      * @param partialTicks the rendering ticks
      */
     public void render(PoseStack mStack, int mouseX, int mouseY, float partialTicks) {
-    	mStack.pushPose();
-        RenderSystem.setShader(GameRenderer::getPositionTexShader);
-        RenderSystem.setShaderColor(1.0f, 1.0f, 1.0f, 1.0f);
-        RenderSystem.setShaderTexture(0, TEXTURE);
         int render_width = Minecraft.getInstance().getWindow().getGuiScaledWidth();
 
         long xp_progression = ClientJobsData.playerJobs.getXPByJob(job);
         long total = ClientJobsData.JOBS_LEVELS.getXPForLevel(job, ClientJobsData.playerJobs.getLevelByJob(job)+1);
-        int width = (int)(150 * ((double)xp_progression /(double)total));
 
         String title = ChatFormatting.WHITE + ClientJobsData.getJobName(job) + " (lvl " + ClientJobsData.playerJobs.getLevelByJob(job) + ") : " +
                 ChatFormatting.AQUA + "+" + xp + ChatFormatting.WHITE + " xp";
-        String xpTotal = xp_progression + "/" + total;
         int titleWidth = Minecraft.getInstance().font.width(title);
-        int xpTotalWidth = Minecraft.getInstance().font.width(xpTotal);
 
+        mStack.pushPose();
+        RenderSystem.setShader(GameRenderer::getPositionTexShader);
+        RenderSystem.setShaderColor(1.0f, 1.0f, 1.0f, 1.0f);
+        RenderSystem.setShaderTexture(0, TEXTURE);
         Gui gui = Minecraft.getInstance().gui;
         gui.blit(mStack, render_width/2 - 90, 5, 0, 0, 180, 50);//background
-        gui.blit(mStack, render_width/2 - 75, 35, 0, 50, 150, 12);//progress background
-        gui.blit(mStack, render_width/2 - 75, 35, 0, 62, width, 12);//progressbar
-        Minecraft.getInstance().font.draw(mStack, title, render_width/2.0F - titleWidth/2.0F, 15, Color.white.getRGB());
-        Minecraft.getInstance().font.draw(mStack, xpTotal, render_width/2.0F - xpTotalWidth/2.0F, 38, Color.black.getRGB());
+        GuiUtil.renderProgressBar(mStack, gui, render_width/2 - 75, 35, 150, 12, xp_progression, total); //progress bar
+        Minecraft.getInstance().font.draw(mStack, title, render_width/2.0F - titleWidth/2.0F, 15, Color.white.getRGB()); // text
         mStack.popPose();
     }
 

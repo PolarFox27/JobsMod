@@ -23,15 +23,15 @@ public class ItemInteractionEvents {
      */
     @SubscribeEvent
     public void onCraft(ItemCraftedEvent event) {
-    	if(event.getPlayer().level.isClientSide() || !(event.getPlayer() instanceof ServerPlayer))
+    	if(event.getEntity().level.isClientSide() || !(event.getEntity() instanceof ServerPlayer))
             return;
-        PlayerJobs jobs = PlayerData.getPlayerJobs(event.getPlayer());
+        PlayerJobs jobs = PlayerData.getPlayerJobs(event.getEntity());
         ItemStack stack = event.getCrafting();
 
         for(String job : jobs.getJobs()){
             int level = jobs.getLevelByJob(job);
             long xp = ServerJobsData.CRAFTING_ITEMS_XP.getXPByLevelAndJob(stack, level, job);
-            jobs.gainXP(job, xp*stack.getCount(), (ServerPlayer) event.getPlayer());
+            jobs.gainXP(job, xp*stack.getCount(), (ServerPlayer) event.getEntity());
         }
     }
 
@@ -41,15 +41,15 @@ public class ItemInteractionEvents {
      */
     @SubscribeEvent
     public void onSmelt(ItemSmeltedEvent event) {
-        if(event.getPlayer().level.isClientSide() || !(event.getPlayer() instanceof ServerPlayer))
+        if(event.getEntity().level.isClientSide() || !(event.getEntity() instanceof ServerPlayer))
             return;
-        PlayerJobs jobs = PlayerData.getPlayerJobs(event.getPlayer());
+        PlayerJobs jobs = PlayerData.getPlayerJobs(event.getEntity());
         ItemStack stack = event.getSmelting();
 
         for(String job : jobs.getJobs()){
             int level = jobs.getLevelByJob(job);
             long xp = ServerJobsData.SMELTING_ITEMS_XP.getXPByLevelAndJob(stack, level, job);
-            jobs.gainXP(job, xp*stack.getCount(), (ServerPlayer) event.getPlayer());
+            jobs.gainXP(job, xp*stack.getCount(), (ServerPlayer) event.getEntity());
         }
     }
 
@@ -59,14 +59,14 @@ public class ItemInteractionEvents {
      */
     @SubscribeEvent
     public void onFished(ItemFishedEvent event) {
-        if(event.getPlayer().level.isClientSide() || !(event.getPlayer() instanceof ServerPlayer))
+        if(event.getEntity().level.isClientSide() || !(event.getEntity() instanceof ServerPlayer))
             return;
-        PlayerJobs jobs = PlayerData.getPlayerJobs(event.getPlayer());
+        PlayerJobs jobs = PlayerData.getPlayerJobs(event.getEntity());
         for(ItemStack stack : event.getDrops()){
             for(String job : jobs.getJobs()){
                 int level = jobs.getLevelByJob(job);
                 long xp = ServerJobsData.FISHING_ITEMS_XP.getXPByLevelAndJob(stack, level, job);
-                jobs.gainXP(job, xp*stack.getCount(), (ServerPlayer) event.getPlayer());
+                jobs.gainXP(job, xp*stack.getCount(), (ServerPlayer) event.getEntity());
             }
         }
     }
@@ -77,9 +77,9 @@ public class ItemInteractionEvents {
      */
     @SubscribeEvent
     public void onRightClick(PlayerInteractEvent.RightClickItem event) {
-        if(event.getPlayer().level.isClientSide() || !(event.getPlayer() instanceof ServerPlayer))
+        if(event.getEntity().level.isClientSide() || !(event.getEntity() instanceof ServerPlayer))
             return;
-        PlayerJobs jobs = PlayerData.getPlayerJobs(event.getPlayer());
+        PlayerJobs jobs = PlayerData.getPlayerJobs(event.getEntity());
         if(ServerJobsData.BLOCKED_RIGHT_CLICKS.isBlocked(jobs, event.getItemStack()))
             event.setCanceled(true);
     }
@@ -90,9 +90,9 @@ public class ItemInteractionEvents {
      */
     @SubscribeEvent
     public void onLeftClickBlock(PlayerInteractEvent.LeftClickBlock event) {
-        if(event.getPlayer().level.isClientSide() || !(event.getPlayer() instanceof ServerPlayer))
+        if(event.getEntity().level.isClientSide() || !(event.getEntity() instanceof ServerPlayer))
             return;
-        PlayerJobs jobs = PlayerData.getPlayerJobs(event.getPlayer());
+        PlayerJobs jobs = PlayerData.getPlayerJobs(event.getEntity());
         if(ServerJobsData.BLOCKED_LEFT_CLICKS.isBlocked(jobs, event.getItemStack()))
             event.setCanceled(true);
     }

@@ -69,9 +69,10 @@ public class JsonUtil {
      * @return the registry name for the item, AIR otherwise
      */
     public static String getRegistryName(Item item){
-        if(item == null || item.getRegistryName() == null)
+        ResourceLocation name = ForgeRegistries.ITEMS.getKey(item);
+        if(item == null || name == null)
             return "minecraft:air";
-        return item.getRegistryName().toString();
+        return name.toString();
     }
 
     /**
@@ -80,9 +81,10 @@ public class JsonUtil {
      * @return the registry name for the block, AIR otherwise
      */
     public static String getRegistryName(Block block){
-        if(block == null || block.getRegistryName() == null)
+        ResourceLocation name = ForgeRegistries.BLOCKS.getKey(block);
+        if(block == null || name == null)
             return "minecraft:air";
-        return block.getRegistryName().toString();
+        return name.toString();
     }
 
     /**

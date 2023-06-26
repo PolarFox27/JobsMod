@@ -13,7 +13,6 @@ import net.polarfox27.jobs.gui.containers.GuiCraft;
 import net.polarfox27.jobs.util.config.ReadConfigManager;
 import net.polarfox27.jobs.util.handler.PacketHandler;
 import net.polarfox27.jobs.util.handler.RegistryHandler;
-import net.polarfox27.jobs.util.keybindings.KeyBindings;
 
 @Mod(ModJobs.MOD_ID)
 public class ModJobs {
@@ -42,8 +41,6 @@ public class ModJobs {
 
     @SubscribeEvent
     public void clientSetup(final FMLClientSetupEvent event) {
-        KeyBindings.register();
-        info("Keybindings Registered", false);
         MenuScreens.register(RegistryHandler.JOBS_CRAFT.get(), GuiCraft::new);
         info("Container GUIs Registered", false);
     }

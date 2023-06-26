@@ -6,7 +6,7 @@ import com.mojang.brigadier.arguments.StringArgumentType;
 import net.minecraft.commands.CommandSourceStack;
 import net.minecraft.commands.Commands;
 import net.minecraft.commands.arguments.EntityArgument;
-import net.minecraft.network.chat.TextComponent;
+import net.minecraft.network.chat.Component;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraftforge.network.NetworkDirection;
 import net.polarfox27.jobs.data.capabilities.PlayerData;
@@ -53,7 +53,7 @@ public class CommandAdd {
 			String message = xp + " xp added to " + target.getName().getString() + " for job " + job;
         	PacketHandler.INSTANCE.sendTo(
 					new PacketSendChatMessage(
-							new TextComponent(message)),
+							Component.literal(message)),
     				sender.connection.getConnection(), NetworkDirection.PLAY_TO_CLIENT);
         }
 	}
