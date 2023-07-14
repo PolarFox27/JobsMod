@@ -41,6 +41,7 @@ public class ModJobs {
 
     @SubscribeEvent
     public void clientSetup(final FMLClientSetupEvent event) {
+        FMLJavaModLoadingContext.get().getModEventBus().addListener(new RegistryHandler()::registerKeyBindings);
         MenuScreens.register(RegistryHandler.JOBS_CRAFT.get(), GuiCraft::new);
         info("Container GUIs Registered", false);
     }

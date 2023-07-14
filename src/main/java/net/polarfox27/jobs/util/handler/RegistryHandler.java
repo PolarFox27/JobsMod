@@ -1,6 +1,8 @@
 package net.polarfox27.jobs.util.handler;
 
 import net.minecraft.world.inventory.MenuType;
+import net.minecraftforge.api.distmarker.Dist;
+import net.minecraftforge.api.distmarker.OnlyIn;
 import net.minecraftforge.client.event.RegisterKeyMappingsEvent;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.common.capabilities.RegisterCapabilitiesEvent;
@@ -47,7 +49,6 @@ public class RegistryHandler {
 	 * Registers the Event Listeners of the mod
 	 */
 	public static void registerListeners() {
-		FMLJavaModLoadingContext.get().getModEventBus().addListener(new RegistryHandler()::registerKeyBindings);
 		MinecraftForge.EVENT_BUS.register(new GuiEvents());
 		MinecraftForge.EVENT_BUS.register(new RegistryHandler());
 		MinecraftForge.EVENT_BUS.register(new CommonEvents());
@@ -79,6 +80,7 @@ public class RegistryHandler {
 	 * @param event the registry event
 	 */
 	@SubscribeEvent
+	@OnlyIn(Dist.CLIENT)
 	public void registerKeyBindings(RegisterKeyMappingsEvent event){
 		event.register(KeyBindings.open_gui.get());
 		ModJobs.info("Keybindings Registered", false);
