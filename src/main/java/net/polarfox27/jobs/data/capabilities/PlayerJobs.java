@@ -201,12 +201,4 @@ public class PlayerJobs {
 			nbt.putLong(e.getKey(), e.getValue());
 		return nbt;
 	}
-
-	/**
-	 * Copies the values of the other Jobs
-	 * @param other the Jobs to copy
-	 */
-	public void copy(PlayerJobs other) {
-		this.fromNBT(other.toNBT());
-	}
 }

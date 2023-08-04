@@ -1,6 +1,8 @@
 package net.polarfox27.jobs.events;
 
 import net.minecraft.client.player.AbstractClientPlayer;
+import net.minecraft.nbt.CompoundTag;
+import net.minecraft.nbt.NbtIo;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.player.Player;
@@ -9,6 +11,7 @@ import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 import net.minecraftforge.common.capabilities.RegisterCapabilitiesEvent;
 import net.minecraftforge.event.AttachCapabilitiesEvent;
+import net.minecraftforge.event.entity.living.LivingDeathEvent;
 import net.minecraftforge.event.entity.player.PlayerEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.common.Mod.EventBusSubscriber;
@@ -17,8 +20,11 @@ import net.polarfox27.jobs.data.ServerJobsData;
 import net.polarfox27.jobs.data.capabilities.PlayerData;
 import net.polarfox27.jobs.data.capabilities.PlayerJobs;
 import net.polarfox27.jobs.network.PacketAskClientUpdate;
+import net.polarfox27.jobs.util.config.FileUtil;
 import net.polarfox27.jobs.util.handler.PacketHandler;
 
+import java.io.File;
+import java.io.IOException;
 import java.util.Optional;
 
 @EventBusSubscriber
@@ -49,20 +55,51 @@ public class CommonEvents {
 	}
 
 	/**
+	 * Stores capabilities when the player dies to restore them in the Clone event
+	 * @param event the death event
+	 */
+	@SubscribeEvent
+	public void onPlayerDeath(LivingDeathEvent event) {
+		if(event.getEntity().level.isClientSide())
+			return;
+		if(event.getEntity() instanceof Player p){
+			PlayerJobs capability = PlayerData.getPlayerJobs(p);
+			if (capability != null) {
+				String folder = FileUtil.getCapsFolder(event.getEntity().level.getServer());
+				if(!new File(folder).exists())
+					if(!new File(folder).mkdirs())
+						return;
+				try {
+					NbtIo.writeCompressed(capability.toNBT(), FileUtil.join(folder, p.getGameProfile().getId().toString() + ".dat"));
+				} catch (IOException e) {
+					ModJobs.info("Error when storing jobs of player " + p.getName().getString() + "(" + p.getGameProfile().getId()
+							+ ") -> " + e.getMessage(), true);
+				}
+			}
+		}
+	}
+
+
+	/**
 	 * Fired when a player dies to attach his Jobs to him again, so that the progress is not lost.
 	 * @param event Player Clone Event
 	 */
 	@SubscribeEvent
 	public void onEntityCloned(PlayerEvent.Clone event) {
-		if(!event.isWasDeath())
+		if(!event.isWasDeath() || event.getEntity().level.isClientSide())
 			return;
-		Optional<PlayerJobs> capability = event.getOriginal()
-											 .getCapability(PlayerData.JOBS, null)
-											 .resolve();
-		if(capability.isPresent()) {
-			PlayerJobs old_jobs = capability.get();
-			PlayerJobs new_jobs = PlayerData.getPlayerJobs(event.getEntity());
-			new_jobs.copy(old_jobs);
+		Player p = event.getEntity();
+		String folder = FileUtil.getCapsFolder(p.level.getServer());
+		try {
+			File data = FileUtil.join(folder, p.getGameProfile().getId().toString() + ".dat");
+			CompoundTag tag = NbtIo.readCompressed(data);
+			if(!data.delete())
+				ModJobs.warning("Failed to delete temporary jobs file : <" + data.getAbsolutePath() + "> !");
+
+			PlayerData.getPlayerJobs(p).fromNBT(tag);
+		} catch (IOException e) {
+			ModJobs.info("Error when storing jobs of player " + p.getName().getString() + "(" + p.getGameProfile().getId()
+					+ ") -> " + e.getMessage(), true);
 		}
 	}
 

@@ -46,6 +46,14 @@ public class FileUtil {
     }
 
     /**
+     * @param server the server where the temporary capabilities are stored
+     * @return the path to the Caps Folder
+     */
+    public static String getCapsFolder(MinecraftServer server) {
+        return getBaseFolder(server) + "/caps";
+    }
+
+    /**
      * @param server the server where the config is stored
      * @return the path to the Base Config Folder
      */
