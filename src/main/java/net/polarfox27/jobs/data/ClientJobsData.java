@@ -13,7 +13,6 @@ import net.polarfox27.jobs.data.registry.unlock.UnlockStack;
 import net.polarfox27.jobs.data.registry.xp.XPData;
 import net.polarfox27.jobs.data.registry.xp.XPRegistry;
 import net.polarfox27.jobs.gui.GuiGainXP;
-import net.polarfox27.jobs.gui.screens.GuiLevelUp;
 
 import java.util.*;
 import java.util.stream.Collectors;
@@ -34,6 +33,7 @@ public class ClientJobsData {
     public static GuiGainXP.GuiAddXpInfos addXPInfos = new GuiGainXP.GuiAddXpInfos();
     public static final List<ItemStack> CURRENT_REWARDS = new ArrayList<>();
     public static PlayerJobs playerJobs = null;
+    public static String shouldLevelUp = "";
 
     /**
      * Shows the Gain XP GUI
@@ -49,7 +49,7 @@ public class ClientJobsData {
      * @param job the job for which the player has received xp
      */
     public static void showLevelUpGui(String job) {
-        Minecraft.getInstance().setScreen(new GuiLevelUp(job));
+        shouldLevelUp = job;
     }
 
 

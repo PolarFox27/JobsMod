@@ -21,6 +21,7 @@ import net.minecraftforge.fml.common.Mod.EventBusSubscriber;
 import net.polarfox27.jobs.data.ClientJobsData;
 import net.polarfox27.jobs.gui.GuiGainXP;
 import net.polarfox27.jobs.gui.containers.JobsCraftingMenu;
+import net.polarfox27.jobs.gui.screens.GuiLevelUp;
 
 @EventBusSubscriber
 public class GuiEvents {
@@ -34,6 +35,11 @@ public class GuiEvents {
     public void clientTick(RenderGuiOverlayEvent e) {
         if(Minecraft.getInstance().player == null)
             return;
+        if(!ClientJobsData.shouldLevelUp.isEmpty()){
+            Minecraft.getInstance().setScreen(new GuiLevelUp(ClientJobsData.shouldLevelUp));
+            ClientJobsData.shouldLevelUp = "";
+            return;
+        }
         if(e.getOverlay() == VanillaGuiOverlay.HOTBAR.type()) {
             ClientJobsData.addXPInfos.update();
             if(!ClientJobsData.addXPInfos.shouldShow())
