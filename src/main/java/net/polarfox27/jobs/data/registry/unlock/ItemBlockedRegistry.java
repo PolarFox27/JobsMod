@@ -95,6 +95,8 @@ public class ItemBlockedRegistry {
      * @return true if the player is allowed the stack
      */
     public boolean isBlocked(PlayerJobs jobs, ItemStack stack){
+        if(jobs == null || stack == null)
+            return false;
         for(Map.Entry<String, List<ItemBlockedData>> e : this.DATA.entrySet())
             for(ItemBlockedData d : e.getValue()) {
                 if (d.matches(stack)) {
