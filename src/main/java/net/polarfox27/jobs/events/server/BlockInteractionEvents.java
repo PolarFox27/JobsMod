@@ -1,8 +1,10 @@
 package net.polarfox27.jobs.events.server;
 
 import net.minecraft.server.level.ServerPlayer;
+import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.block.CropBlock;
 import net.minecraft.world.level.block.state.BlockState;
+import net.minecraftforge.event.entity.player.PlayerInteractEvent;
 import net.minecraftforge.event.world.BlockEvent.BreakEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.common.Mod.EventBusSubscriber;
@@ -47,6 +49,22 @@ public class BlockInteractionEvents {
             if(xp2 > 0)
                 jobs.gainXP(job, xp2, player);
         }
+    }
 
+    /**
+     * Fired when a player right-clicks a block. If the player can't right-click using the item, event is canceled.
+     * @param event the right click event.
+     */
+    @SubscribeEvent
+    public void onRightClickBlock(PlayerInteractEvent.RightClickBlock event){
+        if(event.getWorld().isClientSide() || !(event.getPlayer() instanceof ServerPlayer player))
+            return;
+        PlayerJobs jobs = PlayerData.getPlayerJobs(player);
+
+        ItemStack stack = player.getMainHandItem() == ItemStack.EMPTY ? player.getOffhandItem() :
+                                                                        player.getMainHandItem();
+
+        if(stack != ItemStack.EMPTY && ServerJobsData.BLOCKED_RIGHT_CLICKS.isBlocked(PlayerData.getPlayerJobs(player), stack))
+            event.setCanceled(true);
     }
 }
