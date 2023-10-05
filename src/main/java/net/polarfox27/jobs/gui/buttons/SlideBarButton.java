@@ -9,6 +9,7 @@ import net.minecraft.resources.ResourceLocation;
 import net.polarfox27.jobs.ModJobs;
 import net.polarfox27.jobs.gui.screens.SliderParent;
 import net.polarfox27.jobs.util.JobsUtil;
+import org.jetbrains.annotations.NotNull;
 
 public class SlideBarButton extends Button {
 
@@ -46,7 +47,7 @@ public class SlideBarButton extends Button {
      * @param partialTicks the rendering ticks
      */
     @Override
-    public void renderButton(PoseStack mStack, int mouseX, int mouseY, float partialTicks) {
+    public void renderButton(@NotNull PoseStack mStack, int mouseX, int mouseY, float partialTicks) {
         if (this.visible) {
             boolean disabled = this.parent.getLastPage(isVertical) == 0;
             RenderSystem.setShader(GameRenderer::getPositionTexShader);
@@ -91,7 +92,7 @@ public class SlideBarButton extends Button {
          * @param btn the button pressed
          */
         @Override
-		public void onPress(Button btn) {}    	
+		public void onPress(@NotNull Button btn) {}
     }
 }
 

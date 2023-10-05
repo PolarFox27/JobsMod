@@ -1,5 +1,6 @@
 package net.polarfox27.jobs.data.registry.xp;
 
+import net.minecraft.client.resources.language.I18n;
 import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.EntityType;
@@ -11,7 +12,6 @@ import net.minecraft.world.level.block.CropBlock;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
-import net.polarfox27.jobs.util.GuiUtil;
 import net.polarfox27.jobs.util.JobsUtil;
 import net.polarfox27.jobs.util.config.JsonUtil;
 
@@ -282,7 +282,7 @@ public abstract class  XPData {
          */
         @OnlyIn(Dist.CLIENT)
         public String getEntityName(){
-            return GuiUtil.translate("entity.minecraft." + EntityType.getKey(entity).getPath());
+            return I18n.get("entity.minecraft." + EntityType.getKey(entity).getPath());
         }
 
         /**

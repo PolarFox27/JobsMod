@@ -5,10 +5,12 @@ import com.mojang.blaze3d.vertex.PoseStack;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.components.Button;
 import net.minecraft.client.renderer.GameRenderer;
+import net.minecraft.client.resources.language.I18n;
 import net.minecraft.network.chat.TextComponent;
 import net.polarfox27.jobs.data.ClientJobsData;
 import net.polarfox27.jobs.gui.screens.GuiJobInfos;
 import net.polarfox27.jobs.util.GuiUtil;
+import org.jetbrains.annotations.NotNull;
 
 import java.awt.Color;
 
@@ -40,7 +42,7 @@ public class ButtonJob extends Button {
      * @param partialTicks the rendering ticks
      */
     @Override
-    public void renderButton(PoseStack mStack, int mouseX, int mouseY, float partialTicks) {
+    public void renderButton(@NotNull PoseStack mStack, int mouseX, int mouseY, float partialTicks) {
     	if (this.visible) {
             float f = 1.0f;
 
@@ -63,7 +65,7 @@ public class ButtonJob extends Button {
      */
     private void drawName(PoseStack mStack) {
         int lvl = ClientJobsData.playerJobs.getLevelByJob(this.job);
-        String name = this.title + " (" + GuiUtil.translate("text.level") + " " + lvl + ")";
+        String name = I18n.get("text.job.button", this.title, lvl);
         int x = 120 - Minecraft.getInstance().font.width(name)/2;
         int y = Minecraft.getInstance().font.lineHeight/2;
         Minecraft.getInstance().font.draw(mStack, name, this.x + x, this.y + y, Color.black.getRGB());
@@ -76,7 +78,7 @@ public class ButtonJob extends Button {
          * @param btn the button clicked
          */
         @Override
-		public void onPress(Button btn) {
+		public void onPress(@NotNull Button btn) {
 			if(!(btn instanceof ButtonJob b))
                 return;
             Minecraft.getInstance().setScreen(new GuiJobInfos(b.job));

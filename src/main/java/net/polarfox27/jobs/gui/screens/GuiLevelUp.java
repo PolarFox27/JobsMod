@@ -7,14 +7,17 @@ import net.minecraft.ChatFormatting;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.screens.Screen;
 import net.minecraft.client.renderer.GameRenderer;
+import net.minecraft.client.resources.language.I18n;
 import net.minecraft.network.chat.Component;
 import net.minecraft.network.chat.TextComponent;
+import net.minecraft.network.chat.TranslatableComponent;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.resources.ResourceLocation;
 import net.polarfox27.jobs.ModJobs;
 import net.polarfox27.jobs.data.ClientJobsData;
 import net.polarfox27.jobs.data.registry.unlock.UnlockStack;
 import net.polarfox27.jobs.util.GuiUtil;
+import org.jetbrains.annotations.NotNull;
 
 
 import java.awt.Color;
@@ -52,7 +55,7 @@ public class GuiLevelUp extends Screen {
      * @param partialTicks the rendering ticks
      */
     @Override
-    public void render(PoseStack mStack, int mouseX, int mouseY, float partialTicks) {
+    public void render(@NotNull PoseStack mStack, int mouseX, int mouseY, float partialTicks) {
         RenderSystem.setShader(GameRenderer::getPositionTexShader);
         RenderSystem.setShaderColor(1.0f, 1.0f, 1.0f, 1.0f);
         RenderSystem.setShaderTexture(0, TEXTURES);
@@ -61,13 +64,13 @@ public class GuiLevelUp extends Screen {
 
         
         GuiUtil.drawJobIcon(mStack, job, this.width/2, this.height/2-47, 40);
-        String lvl = GuiUtil.translate("text.level") + " " + ClientJobsData.playerJobs.getLevelByJob(job);
+        String lvl = I18n.get("text.level", ClientJobsData.playerJobs.getLevelByJob(job));
         GuiUtil.renderProgressBarWithText(mStack, this, this.width/2 - 75, this.height/2 - 25, 150, 12, 1, 1, lvl);
 
-        String unlock = GuiUtil.translate("text.unlocked");
+        String unlock = I18n.get("text.unlocked");
         GuiUtil.renderCenteredString(mStack, unlock, Color.BLACK.getRGB(), this.width/2, this.height/2, 1.0f);
         this.drawUnlockedStacks(mStack, mouseX, mouseY);
-        String reward = GuiUtil.translate("text.rewards");
+        String reward = I18n.get("text.rewards");
         GuiUtil.renderCenteredString(mStack, reward, Color.BLACK.getRGB(), this.width/2, this.height/2 + 36, 1.0f);
         this.drawRewardStacks(mStack, mouseX, mouseY);
         super.render(mStack, mouseX, mouseY, partialTicks);
@@ -85,7 +88,7 @@ public class GuiLevelUp extends Screen {
         stacks.removeIf(x -> x.getLevel() != ClientJobsData.playerJobs.getLevelByJob(job));
 
         if(stacks.isEmpty()){
-            String text = GuiUtil.translate("text.no_unlock");
+            String text = I18n.get("text.no_unlock");
             GuiUtil.renderCenteredString(mStack, text, Color.RED.getRGB(), this.width/2, this.height/2 + 19, 0.75f);
             return;
         }
@@ -113,7 +116,7 @@ public class GuiLevelUp extends Screen {
         List<ItemStack> stacks = ClientJobsData.CURRENT_REWARDS;
 
         if(stacks.isEmpty()){
-            String text = GuiUtil.translate("text.no_reward");
+            String text = I18n.get("text.no_reward");
             GuiUtil.renderCenteredString(mStack, text, Color.RED.getRGB(), this.width/2, this.height/2 + 56, 0.75f);
             return;
         }
@@ -142,7 +145,8 @@ public class GuiLevelUp extends Screen {
     private void renderUnlockedCraftToolTip(PoseStack mStack, UnlockStack stack, int x, int y) {
         List<Component> tooltips = new ArrayList<>();
         tooltips.add(new TextComponent(stack.getStack().getDisplayName().getString().replace("[", "").replace("]", "")));
-        tooltips.add(new TextComponent(ChatFormatting.GREEN + GuiUtil.translate("text.unlock_" + stack.getType())));
+        for(String t : stack.getTypes())
+            tooltips.add(new TranslatableComponent("text.unlock_" + t));
         this.renderComponentTooltip(mStack, tooltips, x, y, Minecraft.getInstance().font);
     }
 

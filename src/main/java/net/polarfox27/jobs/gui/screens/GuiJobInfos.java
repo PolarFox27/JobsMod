@@ -2,13 +2,14 @@ package net.polarfox27.jobs.gui.screens;
 
 import com.mojang.blaze3d.systems.RenderSystem;
 import com.mojang.blaze3d.vertex.PoseStack;
-import net.minecraft.ChatFormatting;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.screens.Screen;
 import net.minecraft.client.renderer.GameRenderer;
 import net.minecraft.client.renderer.entity.ItemRenderer;
+import net.minecraft.client.resources.language.I18n;
 import net.minecraft.network.chat.Component;
 import net.minecraft.network.chat.TextComponent;
+import net.minecraft.network.chat.TranslatableComponent;
 import net.minecraft.resources.ResourceLocation;
 import net.polarfox27.jobs.ModJobs;
 import net.polarfox27.jobs.data.ClientJobsData;
@@ -18,6 +19,7 @@ import net.polarfox27.jobs.gui.buttons.ButtonXPCategory;
 import net.polarfox27.jobs.gui.buttons.SlideBarButton;
 import net.polarfox27.jobs.util.GuiUtil;
 import net.polarfox27.jobs.util.JobsUtil;
+import org.jetbrains.annotations.NotNull;
 
 import java.awt.Color;
 import java.util.ArrayList;
@@ -84,7 +86,7 @@ public class GuiJobInfos extends Screen implements SliderParent{
      * @param partialTicks the rendering ticks
      */
     @Override
-    public void render(PoseStack mStack, int mouseX, int mouseY, float partialTicks) {
+    public void render(@NotNull PoseStack mStack, int mouseX, int mouseY, float partialTicks) {
     	super.render(mStack, mouseX, mouseY, partialTicks);
     	this.left = this.width/2 - 110 + offsetUnlock;
         this.top = this.height/2 - 90;
@@ -136,7 +138,7 @@ public class GuiJobInfos extends Screen implements SliderParent{
         GuiUtil.renderCenteredString(mStack, ClientJobsData.getJobName(job), Color.BLACK.getRGB(), this.width/2 + offsetUnlock, this.top+15, 1.5f);
         GuiUtil.drawJobIcon(mStack, this.job, this.width/2 + offsetUnlock, this.top + 48, 48);
 
-        String title1 = GuiUtil.translate("text.level") + " " + lvl;
+        String title1 = I18n.get("text.level", lvl);
         long progress1 = ClientJobsData.playerJobs.getXPByJob(job);
         long total1 = ClientJobsData.JOBS_LEVELS.getXPForLevel(job, lvl+1);
         GuiUtil.renderProgressBar(mStack, this, this.width/2 - 75 + offsetUnlock, this.top + 90, 150, 12, progress1, total1);
@@ -147,7 +149,7 @@ public class GuiJobInfos extends Screen implements SliderParent{
 
         long progress2 = ClientJobsData.playerJobs.getTotalXPByJob(job);
         long total2 = ClientJobsData.JOBS_LEVELS.getTotalXPForJob(job);
-        String title2 = lvl < ClientJobsData.JOBS_LEVELS.getMaxLevel(job) ? GuiUtil.translate("text.total_progression") : "";
+        String title2 = lvl < ClientJobsData.JOBS_LEVELS.getMaxLevel(job) ? I18n.get("text.total_progression") : "";
         GuiUtil.renderProgressBar(mStack, this, this.width / 2 - 75 + offsetUnlock, this.top + 115, 150, 12, progress2, total2);
         GuiUtil.renderCenteredString(mStack, title2, Color.BLACK.getRGB(), this.width/2 + offsetUnlock, this.top + 111, 1.0f);
     }
@@ -163,16 +165,14 @@ public class GuiJobInfos extends Screen implements SliderParent{
                                                                   .replace("[", "")
                                                                   .replace("]", ""))
                                                                   );
+
         if(stack.getLevel() > ClientJobsData.playerJobs.getLevelByJob(this.job)) {
-            tooltip.add(new TextComponent(
-                    ChatFormatting.RED  + GuiUtil.translate("text.unlock_" + stack.getType() + "_lvl")
-                            + " " + stack.getLevel())
-                    );
+            for(String t : stack.getTypes())
+                tooltip.add(new TranslatableComponent("text.unlock_" + t + "_lvl", stack.getLevel()));
         }
         else
-            tooltip.add(new TextComponent(
-                    ChatFormatting.GREEN  + GuiUtil.translate("text.unlock_" + stack.getType()))
-                    );
+            for(String t : stack.getTypes())
+                tooltip.add(new TranslatableComponent("text.unlock_" + t));
         return tooltip;
     }
 

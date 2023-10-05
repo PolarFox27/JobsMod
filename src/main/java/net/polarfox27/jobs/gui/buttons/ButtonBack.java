@@ -12,6 +12,7 @@ import net.polarfox27.jobs.ModJobs;
 import net.polarfox27.jobs.gui.screens.GuiHowXP;
 import net.polarfox27.jobs.gui.screens.GuiJobInfos;
 import net.polarfox27.jobs.gui.screens.MainJobsMenu;
+import org.jetbrains.annotations.NotNull;
 
 public class ButtonBack extends Button {
 
@@ -43,7 +44,7 @@ public class ButtonBack extends Button {
      * @param partialTicks the rendering ticks
      */
     @Override
-    public void renderButton(PoseStack mStack, int mouseX, int mouseY, float partialTicks) {
+    public void renderButton(@NotNull PoseStack mStack, int mouseX, int mouseY, float partialTicks) {
         if (this.visible) {
             boolean hovered = mouseX >= this.x && mouseY >= this.y && mouseX < this.x + this.width && mouseY < this.y + this.height;
             RenderSystem.setShader(GameRenderer::getPositionTexShader);
@@ -63,7 +64,7 @@ public class ButtonBack extends Button {
          * @param btn the button clicked
          */
         @Override
-		public void onPress(Button btn) {
+		public void onPress(@NotNull Button btn) {
 			if(!(btn instanceof ButtonBack button))
                 return;
             if(button.parent instanceof GuiJobInfos)

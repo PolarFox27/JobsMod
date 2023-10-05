@@ -3,11 +3,11 @@ package net.polarfox27.jobs.gui;
 import com.mojang.blaze3d.systems.RenderSystem;
 import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.datafixers.util.Pair;
-import net.minecraft.ChatFormatting;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.Gui;
 import net.minecraft.client.gui.components.Widget;
 import net.minecraft.client.renderer.GameRenderer;
+import net.minecraft.client.resources.language.I18n;
 import net.minecraft.resources.ResourceLocation;
 import net.polarfox27.jobs.ModJobs;
 import net.polarfox27.jobs.data.ClientJobsData;
@@ -51,8 +51,8 @@ public class GuiGainXP implements Widget {
         long total = ClientJobsData.JOBS_LEVELS.getXPForLevel(job, ClientJobsData.playerJobs.getLevelByJob(job)+1);
         int width = (int)(150 * ((double)xp_progression /(double)total));
 
-        String title = ChatFormatting.WHITE + ClientJobsData.getJobName(job) + " (lvl " + ClientJobsData.playerJobs.getLevelByJob(job) + ") : " +
-                ChatFormatting.AQUA + "+" + xp + ChatFormatting.WHITE + " xp";
+        String title = I18n.get("text.gain_xp", ClientJobsData.getJobName(job),
+                ClientJobsData.playerJobs.getLevelByJob(job), xp);
         String xpTotal = xp_progression + "/" + total;
         int titleWidth = Minecraft.getInstance().font.width(title);
         int xpTotalWidth = Minecraft.getInstance().font.width(xpTotal);

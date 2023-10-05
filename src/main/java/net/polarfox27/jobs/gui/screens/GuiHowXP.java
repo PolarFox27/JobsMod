@@ -3,12 +3,13 @@ package net.polarfox27.jobs.gui.screens;
 
 import com.mojang.blaze3d.systems.RenderSystem;
 import com.mojang.blaze3d.vertex.PoseStack;
-import net.minecraft.ChatFormatting;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.screens.Screen;
 import net.minecraft.client.renderer.GameRenderer;
+import net.minecraft.client.resources.language.I18n;
 import net.minecraft.network.chat.Component;
 import net.minecraft.network.chat.TextComponent;
+import net.minecraft.network.chat.TranslatableComponent;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.LivingEntity;
@@ -23,6 +24,7 @@ import net.polarfox27.jobs.gui.buttons.ButtonBack;
 import net.polarfox27.jobs.gui.buttons.SlideBarButton;
 import net.polarfox27.jobs.util.GuiUtil;
 import net.polarfox27.jobs.util.JobsUtil;
+import org.jetbrains.annotations.NotNull;
 
 
 import java.awt.Color;
@@ -97,7 +99,7 @@ public class GuiHowXP extends Screen implements SliderParent {
      * @param partialTicks the rendering ticks
      */
     @Override
-    public void render(PoseStack mStack, int mouseX, int mouseY, float partialTicks) {
+    public void render(@NotNull PoseStack mStack, int mouseX, int mouseY, float partialTicks) {
         this.tooltip.clear();
         this.left = this.width/2 - 88;
         this.top = this.height/2 - 75;
@@ -114,7 +116,7 @@ public class GuiHowXP extends Screen implements SliderParent {
             this.drawCategoriesStacks(mouseX, mouseY);
         }
         else{
-            GuiUtil.renderCenteredString(mStack, GuiUtil.translate("text.no_way_of_gaining_xp"), Color.RED.getRGB(), this.width/2-10, this.height/2, 0.65f);
+            GuiUtil.renderCenteredString(mStack, I18n.get("text.no_way_of_gaining_xp"), Color.RED.getRGB(), this.width/2-10, this.height/2, 0.65f);
             return;
         }
 
@@ -152,7 +154,7 @@ public class GuiHowXP extends Screen implements SliderParent {
             }
         }
         if(renderIndex != -1)
-            this.tooltip.add(new TextComponent(GuiUtil.translate("category." + this.categories.get(renderIndex).getName())));
+            this.tooltip.add(new TranslatableComponent("category." + this.categories.get(renderIndex).getName()));
     }
 
     /**
@@ -204,19 +206,17 @@ public class GuiHowXP extends Screen implements SliderParent {
                 if (lvl < ClientJobsData.JOBS_LEVELS.getMaxLevel(job)) {
                     xp =  data.getXPByLevel(lvl);
                     if(xp != 0L)
-                        tooltip.add(new TextComponent(ChatFormatting.GREEN + Long.toString(xp) + " xp"));
+                        tooltip.add(new TranslatableComponent("text.xp", xp));
                     else {
                         int unlockLevel = data.unlockingLevel(lvl);
                         if(unlockLevel > 0)
-                            tooltip.add(new TextComponent(ChatFormatting.RED + GuiUtil.translate("text.unlock_xp_lvl") + " " + unlockLevel)
-                                    );
+                            tooltip.add(new TranslatableComponent("text.unlock_xp_lvl", unlockLevel));
                         else
-                            tooltip.add(new TextComponent(ChatFormatting.RED + "0 xp")
-                                    );
+                            tooltip.add(new TranslatableComponent("text.0xp.red"));
                     }
                 }
                 else
-                    tooltip.add(new TextComponent(ChatFormatting.DARK_PURPLE + "0 xp"));
+                    tooltip.add(new TranslatableComponent("text.0xp.purple"));
             }
         }
     }

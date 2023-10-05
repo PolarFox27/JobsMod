@@ -8,6 +8,7 @@ import net.minecraft.resources.ResourceLocation;
 import net.polarfox27.jobs.ModJobs;
 import net.polarfox27.jobs.gui.screens.MainJobsMenu;
 import net.polarfox27.jobs.util.GuiUtil;
+import org.jetbrains.annotations.NotNull;
 
 public class ButtonArrow extends Button {
 
@@ -37,7 +38,7 @@ public class ButtonArrow extends Button {
      * @param partialTicks the rendering ticks
      */
     @Override
-    public void renderButton(PoseStack mStack, int mouseX, int mouseY, float partialTicks) {
+    public void renderButton(@NotNull PoseStack mStack, int mouseX, int mouseY, float partialTicks) {
         if (this.visible) {
             RenderSystem.setShaderTexture(0, BACKGROUND);
             int x = this.isHoveredOrFocused() ? 17 : 0;
@@ -53,7 +54,7 @@ public class ButtonArrow extends Button {
          * @param btn the button clicked
          */
         @Override
-        public void onPress(Button btn) {
+        public void onPress(@NotNull Button btn) {
             if(!(btn instanceof ButtonArrow b))
                 return;
             double direction = b.isUp ? 1 : -1;

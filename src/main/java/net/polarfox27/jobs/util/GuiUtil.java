@@ -10,7 +10,7 @@ import net.minecraft.client.gui.screens.Screen;
 import net.minecraft.client.renderer.GameRenderer;
 import net.minecraft.client.renderer.MultiBufferSource;
 import net.minecraft.client.renderer.entity.EntityRenderDispatcher;
-import net.minecraft.network.chat.TranslatableComponent;
+import net.minecraft.client.resources.language.I18n;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.LivingEntity;
@@ -185,7 +185,7 @@ public class GuiUtil {
      * @param total the maximum progression that the progress bar could have
      */
     public static void renderProgressBar(PoseStack mStack, Screen gui, int x, int y, int width, int height, long progress, long total) {
-        String info = progress < total ? progress + "/" + total : GuiUtil.translate("text.level.max");
+        String info = progress < total ? progress + "/" + total : I18n.get("text.level.max");
         renderProgressBarWithText(mStack, gui, x, y, width, height, progress, total, info);
     }
 
@@ -215,9 +215,4 @@ public class GuiUtil {
         }
         renderCenteredString(mStack, text, Color.white.getRGB(), x + width / 2, y + height / 2 + 1, 0.6f);
     }
-
-    public static String translate(String key) {
-        return new TranslatableComponent(key).getString();
-    }
-
 }
