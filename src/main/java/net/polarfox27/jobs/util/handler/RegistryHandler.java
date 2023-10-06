@@ -11,6 +11,7 @@ import net.polarfox27.jobs.commands.CommandSet;
 import net.polarfox27.jobs.events.CommonEvents;
 import net.polarfox27.jobs.events.client.GuiEvents;
 import net.polarfox27.jobs.events.server.BlockInteractionEvents;
+import net.polarfox27.jobs.events.server.ContainerEvents;
 import net.polarfox27.jobs.events.server.EntityInteractionEvents;
 import net.polarfox27.jobs.events.server.ItemInteractionEvents;
 
@@ -39,6 +40,7 @@ public class RegistryHandler {
 		MinecraftForge.EVENT_BUS.register(new BlockInteractionEvents());
 		MinecraftForge.EVENT_BUS.register(new EntityInteractionEvents());
 		MinecraftForge.EVENT_BUS.register(new ItemInteractionEvents());
+		MinecraftForge.EVENT_BUS.register(new ContainerEvents());
 	}
 
 }

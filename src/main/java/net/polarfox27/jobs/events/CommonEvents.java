@@ -16,6 +16,7 @@ import net.polarfox27.jobs.ModJobs;
 import net.polarfox27.jobs.data.ServerJobsData;
 import net.polarfox27.jobs.data.capabilities.PlayerData;
 import net.polarfox27.jobs.data.capabilities.PlayerJobs;
+import net.polarfox27.jobs.events.server.ContainerEvents;
 import net.polarfox27.jobs.network.PacketAskClientUpdate;
 import net.polarfox27.jobs.util.handler.PacketHandler;
 
@@ -69,7 +70,10 @@ public class CommonEvents {
 	public void onPlayerJoinedServer(EntityJoinWorldEvent event){
 		if(!(event.getEntity() instanceof ServerPlayerEntity))
 			return;
+		ServerPlayerEntity player = (ServerPlayerEntity)event.getEntity();
 		ServerJobsData.sendDataToClient((ServerPlayerEntity)event.getEntity());
+		if(player.gameMode.isSurvival())
+			ContainerEvents.changePlayerInventoryCraftingSlot(player);
 	}
 
 	/**
