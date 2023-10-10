@@ -144,7 +144,7 @@ public class GuiLevelUp extends Screen {
      */
     private void renderUnlockedCraftToolTip(PoseStack mStack, UnlockStack stack, int x, int y) {
         List<Component> tooltips = new ArrayList<>();
-        tooltips.add(new TextComponent(stack.getStack().getDisplayName().getString().replace("[", "").replace("]", "")));
+        tooltips.add(stack.getStack().getHoverName());
         for(String t : stack.getTypes())
             tooltips.add(new TranslatableComponent("text.unlock_" + t));
         this.renderComponentTooltip(mStack, tooltips, x, y, Minecraft.getInstance().font);
@@ -160,7 +160,7 @@ public class GuiLevelUp extends Screen {
     protected void renderToolTipAndCount(PoseStack mStack, ItemStack stack, int x, int y) {
         List<Component> tooltips = new ArrayList<>();
 
-        tooltips.add(new TextComponent(stack.getDisplayName().getString().replace("[", "").replace("]", "")));
+        tooltips.add(stack.getHoverName());
         tooltips.add(new TextComponent(ChatFormatting.GREEN + Integer.toString(stack.getCount())));
 
         this.renderComponentTooltip(mStack, tooltips, x, y, Minecraft.getInstance().font);

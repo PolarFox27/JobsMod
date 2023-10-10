@@ -5,12 +5,14 @@ import com.mojang.blaze3d.systems.RenderSystem;
 import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.math.Quaternion;
 import com.mojang.math.Vector3f;
+import net.minecraft.ChatFormatting;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.screens.Screen;
 import net.minecraft.client.renderer.GameRenderer;
 import net.minecraft.client.renderer.MultiBufferSource;
 import net.minecraft.client.renderer.entity.EntityRenderDispatcher;
 import net.minecraft.client.resources.language.I18n;
+import net.minecraft.network.chat.*;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.LivingEntity;
@@ -214,5 +216,15 @@ public class GuiUtil {
             drawTexture(mStack, gui, x, y, 0, 62, size, height);  // progress
         }
         renderCenteredString(mStack, text, Color.white.getRGB(), x + width / 2, y + height / 2 + 1, 0.6f);
+    }
+
+    /**
+     * Colors a component using the specified formatting.
+     * @param formatting the formatting to apply to the component
+     * @param component the text component to modify
+     * @return the formatted text component
+     */
+    public static MutableComponent coloredComponent(ChatFormatting formatting, MutableComponent component){
+        return component.setStyle(Style.EMPTY.withColor(TextColor.fromLegacyFormat(formatting)));
     }
 }

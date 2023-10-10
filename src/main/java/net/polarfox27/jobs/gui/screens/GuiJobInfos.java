@@ -2,6 +2,7 @@ package net.polarfox27.jobs.gui.screens;
 
 import com.mojang.blaze3d.systems.RenderSystem;
 import com.mojang.blaze3d.vertex.PoseStack;
+import net.minecraft.ChatFormatting;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.screens.Screen;
 import net.minecraft.client.renderer.GameRenderer;
@@ -161,14 +162,11 @@ public class GuiJobInfos extends Screen implements SliderParent{
      */
     public List<Component> getItemToolTip(UnlockStack stack) {
         List<Component> tooltip = new ArrayList<>();
-        tooltip.add(new TextComponent(stack.getStack().getDisplayName().getString()
-                                                                  .replace("[", "")
-                                                                  .replace("]", ""))
-                                                                  );
+        tooltip.add(stack.getStack().getHoverName());
 
         if(stack.getLevel() > ClientJobsData.playerJobs.getLevelByJob(this.job)) {
             for(String t : stack.getTypes())
-                tooltip.add(new TranslatableComponent("text.unlock_" + t + "_lvl", stack.getLevel()));
+                tooltip.add(GuiUtil.coloredComponent(ChatFormatting.RED, new TranslatableComponent("text.unlock_" + t + "_lvl", stack.getLevel())));
         }
         else
             for(String t : stack.getTypes())

@@ -3,6 +3,7 @@ package net.polarfox27.jobs.gui.screens;
 
 import com.mojang.blaze3d.systems.RenderSystem;
 import com.mojang.blaze3d.vertex.PoseStack;
+import net.minecraft.ChatFormatting;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.screens.Screen;
 import net.minecraft.client.renderer.GameRenderer;
@@ -197,26 +198,26 @@ public class GuiHowXP extends Screen implements SliderParent {
                 if(data instanceof XPData.EntityXPData)
                     tooltip.add(new TextComponent(((XPData.EntityXPData)data).getEntityName()));
                 else
-                    tooltip.add(new TextComponent(data.createStack().getDisplayName().getString()
-                            .replace("[", "")
-                            .replace("]", ""))
-                            );
+                    tooltip.add(data.createStack().getHoverName());
                 long xp;
                 int lvl = ClientJobsData.playerJobs.getLevelByJob(this.job);
                 if (lvl < ClientJobsData.JOBS_LEVELS.getMaxLevel(job)) {
                     xp =  data.getXPByLevel(lvl);
                     if(xp != 0L)
-                        tooltip.add(new TranslatableComponent("text.xp", xp));
+                        tooltip.add(GuiUtil.coloredComponent(ChatFormatting.GREEN, new TranslatableComponent("text.xp", xp)));
                     else {
                         int unlockLevel = data.unlockingLevel(lvl);
                         if(unlockLevel > 0)
-                            tooltip.add(new TranslatableComponent("text.unlock_xp_lvl", unlockLevel));
+                            tooltip.add(GuiUtil.coloredComponent(ChatFormatting.RED,
+                                    new TranslatableComponent("text.unlock_xp_lvl", unlockLevel)));
                         else
-                            tooltip.add(new TranslatableComponent("text.0xp.red"));
+                            tooltip.add(GuiUtil.coloredComponent(ChatFormatting.RED,
+                                    new TranslatableComponent("text.xp",  0)));
                     }
                 }
                 else
-                    tooltip.add(new TranslatableComponent("text.0xp.purple"));
+                    tooltip.add(GuiUtil.coloredComponent(ChatFormatting.DARK_PURPLE,
+                            new TranslatableComponent("text.xp",  0)));
             }
         }
     }

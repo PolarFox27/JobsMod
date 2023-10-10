@@ -46,10 +46,18 @@ public class UnlockStack implements Comparable<UnlockStack>{
         return stack;
     }
 
+    /**
+     * @return the names of the unlock types of this unlock stack.
+     */
     public List<String> getTypes() {
         return types.stream().map(x -> x.name().toLowerCase()).toList();
     }
 
+    /**
+     * Adds the unlock types of the other UnlockStack if they have the same level and Item.
+     * @param other the other unlock stack to merge with this one.
+     * @return this.
+     */
     public UnlockStack merge(UnlockStack other){
         if(compareTo(other) != 0 || !this.stack.getItem().equals(other.stack.getItem()))
             return null;
