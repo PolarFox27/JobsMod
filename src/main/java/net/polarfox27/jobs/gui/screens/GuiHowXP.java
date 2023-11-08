@@ -11,10 +11,8 @@ import net.minecraft.entity.EntityType;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.Items;
-import net.minecraft.util.IReorderingProcessor;
 import net.minecraft.util.ResourceLocation;
-import net.minecraft.util.text.StringTextComponent;
-import net.minecraft.util.text.TextFormatting;
+import net.minecraft.util.text.*;
 import net.polarfox27.jobs.ModJobs;
 import net.polarfox27.jobs.data.ClientJobsData;
 import net.polarfox27.jobs.data.registry.xp.XPData;
@@ -25,10 +23,11 @@ import net.polarfox27.jobs.util.GuiUtil;
 import net.polarfox27.jobs.util.JobsUtil;
 import org.lwjgl.opengl.GL11;
 
-import java.awt.*;
+import java.awt.Color;
 import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.List;
+import java.util.stream.Collectors;
 
 public class GuiHowXP extends Screen implements SliderParent {
 
@@ -42,7 +41,7 @@ public class GuiHowXP extends Screen implements SliderParent {
     private SlideBarButton horizontalSlideBar;
     private final List<XPRegistry<? extends XPData>> categories = new ArrayList<>();
     private final List<List<XPData>> xpLists = new ArrayList<>();
-    private final List<IReorderingProcessor> tooltip = new ArrayList<>();
+    private final List<ITextComponent> tooltip = new ArrayList<>();
 
     /**
      * Creates the How XP GUI for a job
@@ -120,7 +119,7 @@ public class GuiHowXP extends Screen implements SliderParent {
         }
 
         if(!tooltip.isEmpty())
-            this.renderToolTip(mStack, tooltip, mouseX, mouseY, Minecraft.getInstance().font);
+            this.renderToolTip(mStack, tooltip.stream().map(ITextComponent::getVisualOrderText).collect(Collectors.toList()), mouseX, mouseY, Minecraft.getInstance().font);
 
         if(isDragging(verticalSlideBar, mouseX, mouseY))
             updateSlider(verticalSlideBar, mouseY);
@@ -150,7 +149,7 @@ public class GuiHowXP extends Screen implements SliderParent {
             }
         }
         if(renderIndex != -1)
-            this.tooltip.add(new StringTextComponent(I18n.get("category." + this.categories.get(renderIndex).getName())).getVisualOrderText());
+            this.tooltip.add(new StringTextComponent(I18n.get("category." + this.categories.get(renderIndex).getName())));
     }
 
     /**
@@ -192,30 +191,28 @@ public class GuiHowXP extends Screen implements SliderParent {
             if(hoveredIndex != -1) {
                 XPData data = xps.get(hoveredIndex);
                 if(data instanceof XPData.EntityXPData)
-                    tooltip.add(new StringTextComponent(((XPData.EntityXPData)data).getEntityName()).getVisualOrderText());
+                    tooltip.add(new TranslationTextComponent(((XPData.EntityXPData)data).getEntityName()));
                 else
-                    tooltip.add(new StringTextComponent(data.createStack().getDisplayName().getString()
-                            .replace("[", "")
-                            .replace("]", ""))
-                            .getVisualOrderText());
+                    tooltip.add(data.createStack().getHoverName());
                 long xp;
                 int lvl = ClientJobsData.playerJobs.getLevelByJob(this.job);
                 if (lvl < ClientJobsData.JOBS_LEVELS.getMaxLevel(job)) {
                     xp =  data.getXPByLevel(lvl);
                     if(xp != 0L)
-                        tooltip.add(new StringTextComponent(TextFormatting.GREEN + Long.toString(xp) + " xp").getVisualOrderText());
+                        tooltip.add(GuiUtil.coloredComponent(TextFormatting.GREEN, new TranslationTextComponent("text.xp", xp)));
                     else {
                         int unlockLevel = data.unlockingLevel(lvl);
                         if(unlockLevel > 0)
-                            tooltip.add(new StringTextComponent(TextFormatting.RED + I18n.get("text.unlock_xp_lvl") + " " + unlockLevel)
-                                    .getVisualOrderText());
+                            tooltip.add(GuiUtil.coloredComponent(TextFormatting.RED,
+                                    new TranslationTextComponent("text.unlock_xp_lvl", unlockLevel)));
                         else
-                            tooltip.add(new StringTextComponent(TextFormatting.RED + "0 xp")
-                                    .getVisualOrderText());
+                            tooltip.add(GuiUtil.coloredComponent(TextFormatting.RED,
+                                    new TranslationTextComponent("text.xp",  0)));
                     }
                 }
                 else
-                    tooltip.add(new StringTextComponent(TextFormatting.DARK_PURPLE + "0 xp").getVisualOrderText());
+                    tooltip.add(GuiUtil.coloredComponent(TextFormatting.DARK_PURPLE,
+                            new TranslationTextComponent("text.xp",  0)));
             }
             RenderHelper.setupFor3DItems();
         }

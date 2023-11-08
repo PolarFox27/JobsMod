@@ -12,13 +12,17 @@ import net.minecraft.entity.LivingEntity;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.math.vector.Quaternion;
 import net.minecraft.util.math.vector.Vector3f;
+import net.minecraft.util.text.IFormattableTextComponent;
+import net.minecraft.util.text.Style;
+import net.minecraft.util.text.TextComponent;
+import net.minecraft.util.text.TextFormatting;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 import net.polarfox27.jobs.ModJobs;
 import net.polarfox27.jobs.data.ClientJobsData;
 import org.lwjgl.opengl.GL11;
 
-import java.awt.*;
+import java.awt.Color;
 
 @OnlyIn(Dist.CLIENT)
 public class GuiUtil {
@@ -202,6 +206,16 @@ public class GuiUtil {
 			drawTexture(mStack, gui, x, y, 0, 62, size, height);  // progress
 		}
 		renderCenteredString(mStack, text, Color.white.getRGB(), x+width/2, y+height/2+1, 0.6f);
+	}
+
+	/**
+	 * Colors a component using the specified formatting.
+	 * @param formatting the formatting to apply to the component
+	 * @param component the text component to modify
+	 * @return the formatted text component
+	 */
+	public static IFormattableTextComponent coloredComponent(TextFormatting formatting, TextComponent component){
+		return component.setStyle(Style.EMPTY.withColor(formatting));
 	}
 
 }

@@ -60,7 +60,7 @@ public class ButtonJob extends Button {
      */
     private void drawName(MatrixStack mStack) {
         int lvl = ClientJobsData.playerJobs.getLevelByJob(this.job);
-        String name = this.title + " (" + I18n.get("text.level") + " " + lvl + ")";
+        String name = I18n.get("text.job.button", this.title, lvl);
         int x = 120 - Minecraft.getInstance().font.width(name)/2;
         int y = Minecraft.getInstance().font.lineHeight/2;
         Minecraft.getInstance().font.draw(mStack, name, this.x + x, this.y + y, Color.black.getRGB());

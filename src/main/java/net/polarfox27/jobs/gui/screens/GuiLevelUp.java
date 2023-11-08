@@ -7,10 +7,11 @@ import net.minecraft.client.gui.screen.Screen;
 import net.minecraft.client.renderer.RenderHelper;
 import net.minecraft.client.resources.I18n;
 import net.minecraft.item.ItemStack;
-import net.minecraft.util.IReorderingProcessor;
 import net.minecraft.util.ResourceLocation;
+import net.minecraft.util.text.ITextComponent;
 import net.minecraft.util.text.StringTextComponent;
 import net.minecraft.util.text.TextFormatting;
+import net.minecraft.util.text.TranslationTextComponent;
 import net.polarfox27.jobs.ModJobs;
 import net.polarfox27.jobs.data.ClientJobsData;
 import net.polarfox27.jobs.data.registry.unlock.UnlockStack;
@@ -20,6 +21,7 @@ import org.lwjgl.opengl.GL11;
 import java.awt.*;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
 
 
 public class GuiLevelUp extends Screen {
@@ -145,11 +147,12 @@ public class GuiLevelUp extends Screen {
      * @param y the y coordinate of the mouse
      */
     private void renderUnlockedCraftToolTip(MatrixStack mStack, UnlockStack stack, int x, int y) {
-        List<IReorderingProcessor> tooltips = new ArrayList<>();
-        tooltips.add(new StringTextComponent(stack.getStack().getDisplayName().getString().replace("[", "").replace("]", "")).getVisualOrderText());
-        tooltips.add(new StringTextComponent(TextFormatting.GREEN + I18n.get("text.unlock_" + stack.getType())).getVisualOrderText());
+        List<ITextComponent> tooltips = new ArrayList<>();
+        tooltips.add(stack.getStack().getHoverName());
+        for(String t : stack.getTypes())
+            tooltips.add(new TranslationTextComponent("text.unlock_" + t));
 
-        this.renderToolTip(mStack, tooltips, x, y, Minecraft.getInstance().font);
+        this.renderToolTip(mStack, tooltips.stream().map(ITextComponent::getVisualOrderText).collect(Collectors.toList()), x, y, Minecraft.getInstance().font);
     }
 
     /**
@@ -160,11 +163,11 @@ public class GuiLevelUp extends Screen {
      * @param y the y coordinate of the mouse
      */
     protected void renderToolTipAndCount(MatrixStack mStack, ItemStack stack, int x, int y) {
-        List<IReorderingProcessor> tooltips = new ArrayList<>();
+        List<ITextComponent> tooltips = new ArrayList<>();
 
-        tooltips.add(new StringTextComponent(stack.getDisplayName().getString().replace("[", "").replace("]", "")).getVisualOrderText());
-        tooltips.add(new StringTextComponent(TextFormatting.GREEN + Integer.toString(stack.getCount())).getVisualOrderText());
+        tooltips.add(stack.getHoverName());
+        tooltips.add(new StringTextComponent(TextFormatting.GREEN + Integer.toString(stack.getCount())));
 
-        this.renderToolTip(mStack, tooltips, x, y, Minecraft.getInstance().font);
+        this.renderToolTip(mStack, tooltips.stream().map(ITextComponent::getVisualOrderText).collect(Collectors.toList()), x, y, Minecraft.getInstance().font);
     }
 }

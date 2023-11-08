@@ -8,8 +8,10 @@ import net.minecraft.client.renderer.RenderHelper;
 import net.minecraft.client.resources.I18n;
 import net.minecraft.util.IReorderingProcessor;
 import net.minecraft.util.ResourceLocation;
+import net.minecraft.util.text.ITextComponent;
 import net.minecraft.util.text.StringTextComponent;
 import net.minecraft.util.text.TextFormatting;
+import net.minecraft.util.text.TranslationTextComponent;
 import net.polarfox27.jobs.ModJobs;
 import net.polarfox27.jobs.data.ClientJobsData;
 import net.polarfox27.jobs.data.registry.unlock.UnlockStack;
@@ -23,6 +25,7 @@ import org.lwjgl.opengl.GL11;
 import java.awt.*;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
 
 public class GuiJobInfos extends Screen implements SliderParent{
 
@@ -160,22 +163,16 @@ public class GuiJobInfos extends Screen implements SliderParent{
      * @return the list of tooltip of the stack
      */
     public List<IReorderingProcessor> getItemToolTip(UnlockStack stack) {
-        List<IReorderingProcessor> tooltip = new ArrayList<>();
-        tooltip.add(new StringTextComponent(stack.getStack().getDisplayName().getString()
-                                                                  .replace("[", "")
-                                                                  .replace("]", ""))
-                                                                  .getVisualOrderText());
+        List<ITextComponent> tooltip = new ArrayList<>();
+        tooltip.add(stack.getStack().getHoverName());
         if(stack.getLevel() > ClientJobsData.playerJobs.getLevelByJob(this.job)) {
-            tooltip.add(new StringTextComponent(
-                    TextFormatting.RED  + I18n.get("text.unlock_" + stack.getType() + "_lvl")
-                            + " " + stack.getLevel())
-                    .getVisualOrderText());
+            for(String t : stack.getTypes())
+                tooltip.add(GuiUtil.coloredComponent(TextFormatting.RED, new TranslationTextComponent("text.unlock_" + t + "_lvl", stack.getLevel())));
         }
         else
-            tooltip.add(new StringTextComponent(
-                    TextFormatting.GREEN  + I18n.get("text.unlock_" + stack.getType()))
-                    .getVisualOrderText());
-        return tooltip;
+            for(String t : stack.getTypes())
+                tooltip.add(new TranslationTextComponent("text.unlock_" + t));
+        return tooltip.stream().map(ITextComponent::getVisualOrderText).collect(Collectors.toList());
     }
 
     /**

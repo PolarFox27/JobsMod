@@ -88,17 +88,31 @@ public class ClientJobsData {
      * @return a sorted list of UnlockStacks, ready to be rendered in the GUI
      */
     public static List<UnlockStack> getUnlockedStacksSorted(String job){
-        return Stream.concat(
-                BLOCKED_ITEMS_REGISTRIES.values()
-                                        .stream()
-                                        .flatMap(r -> r.getBlockedData(job).stream())
-                                        .map(BlockedData.ItemBlockedData::createUnlockStack),
-                BLOCKED_BLOCKS_REGISTRIES.values()
-                                         .stream()
-                                         .flatMap(r -> r.getBlockedData(job).stream())
-                                         .map(BlockedData.BlockBlockedData::createUnlockStack))
-                .sorted()
-                .collect(Collectors.toList());
+        List<UnlockStack> blockedItems = new ArrayList<>(Stream.concat(
+                        BLOCKED_ITEMS_REGISTRIES.values()
+                                .stream()
+                                .flatMap(r -> r.getBlockedData(job).stream())
+                                .map(BlockedData.ItemBlockedData::createUnlockStack),
+                        BLOCKED_BLOCKS_REGISTRIES.values()
+                                .stream()
+                                .flatMap(r -> r.getBlockedData(job).stream())
+                                .map(BlockedData.BlockBlockedData::createUnlockStack))
+                .sorted().collect(Collectors.toList()));
+
+        boolean flag = true;
+        while(flag){
+            for(int i = 0; i < blockedItems.size()-1; i++){
+                UnlockStack merged = blockedItems.get(i).merge(blockedItems.get(i+1));
+                if(merged != null){
+                    blockedItems.set(i, merged);
+                    blockedItems.remove(i+1);
+                    break;
+                }
+                if(i == blockedItems.size() - 2)
+                    flag = false;
+            }
+        }
+        return blockedItems;
     }
 
     /**
