@@ -9,6 +9,7 @@ import net.polarfox27.jobs.commands.CommandAdd;
 import net.polarfox27.jobs.commands.CommandInfo;
 import net.polarfox27.jobs.commands.CommandSet;
 import net.polarfox27.jobs.events.CommonEvents;
+import net.polarfox27.jobs.events.client.ClientBlockEvents;
 import net.polarfox27.jobs.events.client.GuiEvents;
 import net.polarfox27.jobs.events.server.BlockInteractionEvents;
 import net.polarfox27.jobs.events.server.ContainerEvents;
@@ -35,6 +36,7 @@ public class RegistryHandler {
 	 */
 	public static void registerListeners() {
 		MinecraftForge.EVENT_BUS.register(new GuiEvents());
+		MinecraftForge.EVENT_BUS.register(new ClientBlockEvents());
 		MinecraftForge.EVENT_BUS.register(new RegistryHandler());
 		MinecraftForge.EVENT_BUS.register(new CommonEvents());
 		MinecraftForge.EVENT_BUS.register(new BlockInteractionEvents());
