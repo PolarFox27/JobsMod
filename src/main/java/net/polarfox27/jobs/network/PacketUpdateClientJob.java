@@ -8,7 +8,7 @@ import net.polarfox27.jobs.data.capabilities.PlayerJobs;
 
 import java.util.function.Supplier;
 
-public class PacketUpdateClientJob{
+public class PacketUpdateClientJob implements JobsPacket {
 
     private final PlayerJobs jobs;
 

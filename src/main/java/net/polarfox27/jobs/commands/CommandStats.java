@@ -6,7 +6,7 @@ import net.minecraft.util.text.*;
 import net.polarfox27.jobs.data.ServerJobsData;
 import net.polarfox27.jobs.data.capabilities.PlayerData;
 import net.polarfox27.jobs.data.capabilities.PlayerJobs;
-import net.polarfox27.jobs.util.GuiUtil;
+import net.polarfox27.jobs.util.TextUtil;
 import net.polarfox27.jobs.util.handler.PacketHandler;
 
 import java.util.*;
@@ -23,14 +23,16 @@ public class CommandStats {
 		if(!(source.getEntity() instanceof ServerPlayerEntity))
 			return;
 		ServerPlayerEntity sender = (ServerPlayerEntity)source.getEntity();
-		IFormattableTextComponent message = new StringTextComponent("");
+
+		List<IFormattableTextComponent> lines = new ArrayList<>(targets.size() * ServerJobsData.JOBS_LEVELS.getJobs().size());
+
 
 		for(ServerPlayerEntity target : targets){
 			PlayerJobs infos = PlayerData.getPlayerJobs(target);
 			if(sender.getGameProfile().getId().equals(target.getGameProfile().getId()))
-				message = message.append(new TranslationTextComponent("command.job.stats.you"));
+				lines.add(new TranslationTextComponent("command.job.stats.you"));
 			else
-				message = message.append(new TranslationTextComponent("command.job.stats.of",
+				lines.add(new TranslationTextComponent("command.job.stats.of",
 						TextFormatting.AQUA + target.getName().getString()));
 
 			for(String job : infos.getJobs()) {
@@ -38,15 +40,15 @@ public class CommandStats {
 				long xp = infos.getXPByJob(job);
 				boolean isMax = infos.isMax(job);
 				if(isMax)
-					message = message.append(new TranslationTextComponent("command.job.stats.player.row.maxlevel", job,
-							GuiUtil.coloredNum(TextFormatting.LIGHT_PURPLE, lvl)));
+					lines.add(new TranslationTextComponent("command.job.stats.player.row.maxlevel", job,
+							TextUtil.coloredNum(TextFormatting.LIGHT_PURPLE, lvl)));
 				else
-					message = message.append(new TranslationTextComponent("command.job.stats.player.row", job,
-							GuiUtil.coloredNum(TextFormatting.LIGHT_PURPLE, lvl),
-							GuiUtil.coloredNum(TextFormatting.LIGHT_PURPLE, xp)));
+					lines.add(new TranslationTextComponent("command.job.stats.player.row", job,
+							TextUtil.coloredNum(TextFormatting.LIGHT_PURPLE, lvl),
+							TextUtil.coloredNum(TextFormatting.LIGHT_PURPLE, xp)));
 			}
 		}
-		PacketHandler.sendMessageToClient(sender, message);
+		PacketHandler.sendMessageToClient(sender, TextUtil.appendAllLines(lines));
 	}
 
 	/**
@@ -59,15 +61,12 @@ public class CommandStats {
 			return;
 		ServerPlayerEntity sender = (ServerPlayerEntity)source.getEntity();
 		if(!ServerJobsData.JOBS_LEVELS.exists(job)){
-			PacketHandler.sendMessageToClient(sender, GuiUtil.coloredComponent(TextFormatting.RED,
+			PacketHandler.sendMessageToClient(sender, TextUtil.coloredComponent(TextFormatting.RED,
 					new TranslationTextComponent("argument.job.invalid", job)));
 			return;
 		}
 
-		IFormattableTextComponent message = new TranslationTextComponent(
-				"command.job.stats.job", job);
-
-		List<JobStats> stats = source.getServer().getPlayerList().getPlayers()
+		List<IFormattableTextComponent> stats = source.getServer().getPlayerList().getPlayers()
 				.stream()
 				.filter(p -> PlayerData.getPlayerJobs(p) != null)
 				.map(p -> {
@@ -76,12 +75,11 @@ public class CommandStats {
 							jobs.getXPByJob(job), jobs.isMax(job));
 				})
 				.sorted(Comparator.reverseOrder())
+				.map(JobStats::toTextComponent)
 				.collect(Collectors.toList());
 
-		for(JobStats s : stats){
-			message = message.append(s.toTextComponent());
-		}
-		PacketHandler.sendMessageToClient(sender, message);
+		stats.add(0, new TranslationTextComponent("command.job.stats.job", job));
+		PacketHandler.sendMessageToClient(sender, TextUtil.appendAllLines(stats));
 	}
 
 
@@ -111,11 +109,11 @@ public class CommandStats {
 		public TranslationTextComponent toTextComponent() {
 			if(isMax)
 				return new TranslationTextComponent("command.job.stats.player.row.maxlevel",
-						TextFormatting.AQUA + player, GuiUtil.coloredNum(TextFormatting.LIGHT_PURPLE, level));
+						TextFormatting.AQUA + player, TextUtil.coloredNum(TextFormatting.LIGHT_PURPLE, level));
 			else
 				return new TranslationTextComponent("command.job.stats.player.row",
-						TextFormatting.AQUA + player, GuiUtil.coloredNum(TextFormatting.LIGHT_PURPLE, level),
-						GuiUtil.coloredNum(TextFormatting.LIGHT_PURPLE, xp));
+						TextFormatting.AQUA + player, TextUtil.coloredNum(TextFormatting.LIGHT_PURPLE, level),
+						TextUtil.coloredNum(TextFormatting.LIGHT_PURPLE, xp));
 
 		}
 	}

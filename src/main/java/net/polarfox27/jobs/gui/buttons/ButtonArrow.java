@@ -8,6 +8,7 @@ import net.minecraft.util.text.StringTextComponent;
 import net.polarfox27.jobs.ModJobs;
 import net.polarfox27.jobs.gui.screens.MainJobsMenu;
 import net.polarfox27.jobs.util.GuiUtil;
+import net.polarfox27.jobs.util.TextUtil;
 import org.lwjgl.opengl.GL11;
 
 public class ButtonArrow extends Button {
@@ -25,7 +26,7 @@ public class ButtonArrow extends Button {
      * @param isUp sets the direction of the arrow to be up or down
      */
     public ButtonArrow(int posX, int posY, MainJobsMenu gui, boolean isUp) {
-        super(posX, posY, 17, 10, new StringTextComponent(""), new OnPressed());
+        super(posX, posY, 17, 10, TextUtil.EMPTY, new OnPressed());
         this.gui = gui;
         this.isUp = isUp;
     }

@@ -10,6 +10,7 @@ import net.polarfox27.jobs.ModJobs;
 import net.polarfox27.jobs.gui.screens.GuiHowXP;
 import net.polarfox27.jobs.gui.screens.GuiJobInfos;
 import net.polarfox27.jobs.gui.screens.MainJobsMenu;
+import net.polarfox27.jobs.util.TextUtil;
 import org.lwjgl.opengl.GL11;
 
 public class ButtonBack extends Button {
@@ -27,7 +28,7 @@ public class ButtonBack extends Button {
      * @param parent the parent GUI
      */
     public ButtonBack(int x, int y, Screen parent) {
-        super(x, y, 18, 10, new StringTextComponent(""), new OnPressed());
+        super(x, y, 18, 10, TextUtil.EMPTY, new OnPressed());
         this.xTexStart = 0;
         this.yTexStart = 212;
         this.xDiffText = 18;

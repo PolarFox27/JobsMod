@@ -12,7 +12,6 @@ import net.minecraft.entity.LivingEntity;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.math.vector.Quaternion;
 import net.minecraft.util.math.vector.Vector3f;
-import net.minecraft.util.text.*;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 import net.polarfox27.jobs.ModJobs;
@@ -204,35 +203,4 @@ public class GuiUtil {
 		}
 		renderCenteredString(mStack, text, Color.white.getRGB(), x+width/2, y+height/2+1, 0.6f);
 	}
-
-	/**
-	 * Colors a component using the specified formatting.
-	 * @param formatting the formatting to apply to the component
-	 * @param component the text component to modify
-	 * @return the formatted text component
-	 */
-	public static IFormattableTextComponent coloredComponent(TextFormatting formatting, TextComponent component){
-		return component.setStyle(Style.EMPTY.withColor(formatting));
-	}
-
-	/**
-	 * Returns a colored string of the provided number
-	 * @param formatting the formatting/color used
-	 * @param number the number we want to represent
-	 * @return a colored string of the provided number
-	 */
-	public static String coloredNum(TextFormatting formatting, long number){
-		return formatting + Long.toString(number);
-	}
-
-	/**
-	 * Returns a colored string of the provided number
-	 * @param formatting the formatting/color used
-	 * @param number the number we want to represent
-	 * @return a colored string of the provided number
-	 */
-	public static String coloredNum(TextFormatting formatting, int number){
-		return formatting + Integer.toString(number);
-	}
-
 }

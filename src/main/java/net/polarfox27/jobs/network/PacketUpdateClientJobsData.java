@@ -18,7 +18,7 @@ import java.util.Map;
 import java.util.Set;
 import java.util.function.Supplier;
 
-public class PacketUpdateClientJobsData{
+public class PacketUpdateClientJobsData implements JobsPacket {
 
     public Set<XPRegistry<? extends XPData>> registries;
     public LevelData JOBS_LEVELS;

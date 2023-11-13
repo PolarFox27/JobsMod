@@ -10,6 +10,7 @@ import net.minecraft.util.text.StringTextComponent;
 import net.polarfox27.jobs.ModJobs;
 import net.polarfox27.jobs.gui.screens.GuiHowXP;
 import net.polarfox27.jobs.gui.screens.GuiJobInfos;
+import net.polarfox27.jobs.util.TextUtil;
 import org.lwjgl.opengl.GL11;
 
 import java.awt.*;
@@ -30,7 +31,7 @@ public class ButtonXPCategory extends Button {
      * @param parent the parent GUI
      */
     public ButtonXPCategory(int x, int y, Type type, GuiJobInfos parent) {
-        super(x, y, 80, 16, new StringTextComponent(""), new OnPressed());
+        super(x, y, 80, 16, TextUtil.EMPTY, new OnPressed());
         this.type = type;
         this.xTexStart = type == Type.XP ? 0 : 16;
         this.yTexStart = 196;

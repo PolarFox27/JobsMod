@@ -81,8 +81,6 @@ public class ServerJobsData {
                 blockBlockedRegistries,
                 JOBS_ICONS,
                 TRANSLATIONS);
-        PacketHandler.INSTANCE.sendTo(packet1,
-                player.connection.getConnection(),
-                NetworkDirection.PLAY_TO_CLIENT);
+        PacketHandler.sendPacketToClient(player, packet1);
     }
 }

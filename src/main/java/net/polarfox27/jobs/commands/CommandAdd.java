@@ -5,14 +5,15 @@ import net.minecraft.entity.player.ServerPlayerEntity;
 import net.minecraft.util.text.IFormattableTextComponent;
 import net.minecraft.util.text.TextFormatting;
 import net.minecraft.util.text.TranslationTextComponent;
-import net.minecraftforge.fml.network.NetworkDirection;
 import net.polarfox27.jobs.data.ServerJobsData;
 import net.polarfox27.jobs.data.capabilities.PlayerData;
 import net.polarfox27.jobs.data.capabilities.PlayerJobs;
 import net.polarfox27.jobs.network.PacketUpdateClientJob;
-import net.polarfox27.jobs.util.GuiUtil;
+import net.polarfox27.jobs.util.TextUtil;
 import net.polarfox27.jobs.util.handler.PacketHandler;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Collection;
 
 public class CommandAdd {
@@ -29,24 +30,22 @@ public class CommandAdd {
 			return;
 		ServerPlayerEntity sender = (ServerPlayerEntity)source.getEntity();
 		if(!ServerJobsData.JOBS_LEVELS.exists(job)){
-			PacketHandler.sendMessageToClient(sender, GuiUtil.coloredComponent(TextFormatting.RED,
+			PacketHandler.sendMessageToClient(sender, TextUtil.coloredComponent(TextFormatting.RED,
 					new TranslationTextComponent("argument.job.invalid", job)));
 			return;
 		}
 
-		IFormattableTextComponent message = new TranslationTextComponent("command.job.add", job);
+		List<IFormattableTextComponent> lines = new ArrayList<>(1 + targets.size());
+		lines.add(new TranslationTextComponent("command.job.add", job));
 		for(ServerPlayerEntity target : targets){
 			PlayerJobs jobs = PlayerData.getPlayerJobs(target);
 			if(jobs == null || !jobs.getJobs().contains(job))
 				continue;
 			jobs.gainXP(job, xp, target);
-			message = message.append(new TranslationTextComponent("command.job.add.row",
-					TextFormatting.AQUA + target.getName().getString(), GuiUtil.coloredNum(TextFormatting.LIGHT_PURPLE, xp)));
-			PacketHandler.INSTANCE.sendTo(
-					new PacketUpdateClientJob(PlayerData.getPlayerJobs(target)),
-					target.connection.getConnection(),
-					NetworkDirection.PLAY_TO_CLIENT);
+			lines.add(new TranslationTextComponent("command.job.add.row",
+					TextFormatting.AQUA + target.getName().getString(), TextUtil.coloredNum(TextFormatting.LIGHT_PURPLE, xp)));
+			PacketHandler.sendPacketToClient(target, new PacketUpdateClientJob(PlayerData.getPlayerJobs(target)));
 		}
-		PacketHandler.sendMessageToClient(sender, message);
+		PacketHandler.sendMessageToClient(sender, TextUtil.appendAllLines(lines));
 	}
 }

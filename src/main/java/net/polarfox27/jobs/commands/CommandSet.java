@@ -5,15 +5,16 @@ import net.minecraft.entity.player.ServerPlayerEntity;
 import net.minecraft.util.text.IFormattableTextComponent;
 import net.minecraft.util.text.TextFormatting;
 import net.minecraft.util.text.TranslationTextComponent;
-import net.minecraftforge.fml.network.NetworkDirection;
 import net.polarfox27.jobs.data.ServerJobsData;
 import net.polarfox27.jobs.data.capabilities.PlayerData;
 import net.polarfox27.jobs.data.capabilities.PlayerJobs;
 import net.polarfox27.jobs.network.PacketUpdateClientJob;
-import net.polarfox27.jobs.util.GuiUtil;
+import net.polarfox27.jobs.util.TextUtil;
 import net.polarfox27.jobs.util.handler.PacketHandler;
 
+import java.util.ArrayList;
 import java.util.Collection;
+import java.util.List;
 
 public class CommandSet {
 
@@ -41,28 +42,27 @@ public class CommandSet {
 			return;
 		ServerPlayerEntity sender = (ServerPlayerEntity)source.getEntity();
 		if(!ServerJobsData.JOBS_LEVELS.exists(job)){
-			PacketHandler.sendMessageToClient(sender, GuiUtil.coloredComponent(TextFormatting.RED,
+			PacketHandler.sendMessageToClient(sender, TextUtil.coloredComponent(TextFormatting.RED,
 					new TranslationTextComponent("argument.job.invalid", job)));
 			return;
 		}
 
-		IFormattableTextComponent message = new TranslationTextComponent("command.job.set", job);
+		List<IFormattableTextComponent> lines = new ArrayList<>(1 + targets.size());
+		lines.add(new TranslationTextComponent("command.job.set", job));
+
 		for(ServerPlayerEntity target : targets){
 			PlayerJobs jobs = PlayerData.getPlayerJobs(target);
 			if(jobs == null || !jobs.getJobs().contains(job))
 				continue;
 			jobs.set(job, total);
-			PacketHandler.INSTANCE.sendTo(
-					new PacketUpdateClientJob(PlayerData.getPlayerJobs(target)),
-					target.connection.getConnection(),
-					NetworkDirection.PLAY_TO_CLIENT);
+			PacketHandler.sendPacketToClient(target, new PacketUpdateClientJob(PlayerData.getPlayerJobs(target)));
 			int lvl = jobs.getLevelByJob(job);
 			long xp = jobs.getXPByJob(job);
-			message.append(new TranslationTextComponent("command.job.set.row",
+			lines.add(new TranslationTextComponent("command.job.set.row",
 					TextFormatting.AQUA + target.getDisplayName().getString(),
-					GuiUtil.coloredNum(TextFormatting.LIGHT_PURPLE, lvl), GuiUtil.coloredNum(TextFormatting.LIGHT_PURPLE, xp)));
+					TextUtil.coloredNum(TextFormatting.LIGHT_PURPLE, lvl), TextUtil.coloredNum(TextFormatting.LIGHT_PURPLE, xp)));
 		}
-        PacketHandler.sendMessageToClient(sender, message);
+        PacketHandler.sendMessageToClient(sender, TextUtil.appendAllLines(lines));
 	}
 
 }

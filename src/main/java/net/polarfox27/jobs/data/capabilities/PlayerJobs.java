@@ -7,15 +7,14 @@ import net.minecraft.network.PacketBuffer;
 import net.minecraft.util.text.IFormattableTextComponent;
 import net.minecraft.util.text.TextFormatting;
 import net.minecraft.util.text.TranslationTextComponent;
-import net.minecraftforge.fml.network.NetworkDirection;
 import net.polarfox27.jobs.data.ServerJobsData;
 import net.polarfox27.jobs.data.registry.LevelData;
 import net.polarfox27.jobs.network.PacketAddXP;
 import net.polarfox27.jobs.network.PacketLevelUp;
 import net.polarfox27.jobs.network.PacketSendRewardsClient;
 import net.polarfox27.jobs.network.PacketUpdateClientJob;
-import net.polarfox27.jobs.util.GuiUtil;
 import net.polarfox27.jobs.util.JobsUtil;
+import net.polarfox27.jobs.util.TextUtil;
 import net.polarfox27.jobs.util.handler.PacketHandler;
 
 import java.util.HashMap;
@@ -143,17 +142,11 @@ public class PlayerJobs {
 			return;
 		int previousLVL = this.getLevelByJob(j);
 		addXP(j, xp);
-		PacketHandler.INSTANCE.sendTo(new PacketUpdateClientJob(this),
-									  p.connection.getConnection(),
-									  NetworkDirection.PLAY_TO_CLIENT);
-		PacketHandler.INSTANCE.sendTo(new PacketAddXP(j, xp),
-									  p.connection.getConnection(),
-									  NetworkDirection.PLAY_TO_CLIENT);
+		PacketHandler.sendPacketToClient(p, new PacketUpdateClientJob(this));
+		PacketHandler.sendPacketToClient(p, new PacketAddXP(j, xp));
 		int LVL = this.getLevelByJob(j);
 		if(LVL > previousLVL) {
-			PacketHandler.INSTANCE.sendTo(new PacketLevelUp(j),
-										  p.connection.getConnection(),
-										  NetworkDirection.PLAY_TO_CLIENT);
+			PacketHandler.sendPacketToClient(p, new PacketLevelUp(j));
 			giveReward(p, j, LVL);
 		}
 
@@ -161,7 +154,7 @@ public class PlayerJobs {
 			for(ServerPlayerEntity mp : p.getServer().getPlayerList().getPlayers()) {
 				IFormattableTextComponent message = new TranslationTextComponent("text.reached.maxlevel",
 						TextFormatting.DARK_PURPLE + p.getName().getString(), TextFormatting.BLUE + j,
-						GuiUtil.coloredNum(TextFormatting.BLUE, levelData.getMaxLevel(j)));
+						TextUtil.coloredNum(TextFormatting.BLUE, levelData.getMaxLevel(j)));
 				mp.sendMessage(message,
 							   mp.getGameProfile().getId());
 				p.getServer().sendMessage(message,
@@ -180,9 +173,7 @@ public class PlayerJobs {
 		if(!levelData.exists(j))
 			return;
 		List<ItemStack> list = ServerJobsData.REWARDS.getRewards(j, lvl);
-		PacketHandler.INSTANCE.sendTo(new PacketSendRewardsClient(list),
-									  p.connection.getConnection(),
-									  NetworkDirection.PLAY_TO_CLIENT);
+		PacketHandler.sendPacketToClient(p, new PacketSendRewardsClient(list));
 		for(ItemStack s : list)
 			p.inventory.add(s.copy());
 		p.inventory.setChanged();

@@ -8,7 +8,7 @@ import net.minecraftforge.fml.network.NetworkEvent.Context;
 
 import java.util.function.Supplier;
 
-public class PacketSendChatMessage {
+public class PacketSendChatMessage implements JobsPacket {
 	
 	private final ITextComponent message;
 

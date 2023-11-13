@@ -20,6 +20,7 @@ import net.polarfox27.jobs.gui.buttons.ButtonXPCategory;
 import net.polarfox27.jobs.gui.buttons.SlideBarButton;
 import net.polarfox27.jobs.util.GuiUtil;
 import net.polarfox27.jobs.util.JobsUtil;
+import net.polarfox27.jobs.util.TextUtil;
 import org.lwjgl.opengl.GL11;
 
 import java.awt.*;
@@ -46,7 +47,7 @@ public class GuiJobInfos extends Screen implements SliderParent{
      * @param job the job
      */
     public GuiJobInfos(String job) {
-    	super(new StringTextComponent(""));
+    	super(TextUtil.EMPTY);
         this.job = job;
         this.offsetUnlock = 0;
         this.renderItem = Minecraft.getInstance().getItemRenderer();
@@ -167,7 +168,7 @@ public class GuiJobInfos extends Screen implements SliderParent{
         tooltip.add(stack.getStack().getHoverName());
         if(stack.getLevel() > ClientJobsData.playerJobs.getLevelByJob(this.job)) {
             for(String t : stack.getTypes())
-                tooltip.add(GuiUtil.coloredComponent(TextFormatting.RED, new TranslationTextComponent("text.unlock_" + t + "_lvl", stack.getLevel())));
+                tooltip.add(TextUtil.coloredComponent(TextFormatting.RED, new TranslationTextComponent("text.unlock_" + t + "_lvl", stack.getLevel())));
         }
         else
             for(String t : stack.getTypes())

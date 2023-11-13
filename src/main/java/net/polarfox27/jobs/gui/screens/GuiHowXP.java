@@ -21,6 +21,7 @@ import net.polarfox27.jobs.gui.buttons.ButtonBack;
 import net.polarfox27.jobs.gui.buttons.SlideBarButton;
 import net.polarfox27.jobs.util.GuiUtil;
 import net.polarfox27.jobs.util.JobsUtil;
+import net.polarfox27.jobs.util.TextUtil;
 import org.lwjgl.opengl.GL11;
 
 import java.awt.Color;
@@ -48,7 +49,7 @@ public class GuiHowXP extends Screen implements SliderParent {
      * @param j the job
      */
     public GuiHowXP(String j) {
-    	super(new StringTextComponent(""));
+    	super(TextUtil.EMPTY);
         this.job = j;
         for(XPRegistry<? extends XPData> c : ClientJobsData.XP_REGISTRIES) {
         	if(!c.getXPDataByJob(job).isEmpty()) {
@@ -199,19 +200,19 @@ public class GuiHowXP extends Screen implements SliderParent {
                 if (lvl < ClientJobsData.JOBS_LEVELS.getMaxLevel(job)) {
                     xp =  data.getXPByLevel(lvl);
                     if(xp != 0L)
-                        tooltip.add(GuiUtil.coloredComponent(TextFormatting.GREEN, new TranslationTextComponent("text.xp", xp)));
+                        tooltip.add(TextUtil.coloredComponent(TextFormatting.GREEN, new TranslationTextComponent("text.xp", xp)));
                     else {
                         int unlockLevel = data.unlockingLevel(lvl);
                         if(unlockLevel > 0)
-                            tooltip.add(GuiUtil.coloredComponent(TextFormatting.RED,
+                            tooltip.add(TextUtil.coloredComponent(TextFormatting.RED,
                                     new TranslationTextComponent("text.unlock_xp_lvl", unlockLevel)));
                         else
-                            tooltip.add(GuiUtil.coloredComponent(TextFormatting.RED,
+                            tooltip.add(TextUtil.coloredComponent(TextFormatting.RED,
                                     new TranslationTextComponent("text.xp",  0)));
                     }
                 }
                 else
-                    tooltip.add(GuiUtil.coloredComponent(TextFormatting.DARK_PURPLE,
+                    tooltip.add(TextUtil.coloredComponent(TextFormatting.DARK_PURPLE,
                             new TranslationTextComponent("text.xp",  0)));
             }
             RenderHelper.setupFor3DItems();

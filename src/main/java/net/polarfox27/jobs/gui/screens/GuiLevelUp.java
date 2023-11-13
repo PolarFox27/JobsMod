@@ -16,6 +16,7 @@ import net.polarfox27.jobs.ModJobs;
 import net.polarfox27.jobs.data.ClientJobsData;
 import net.polarfox27.jobs.data.registry.unlock.UnlockStack;
 import net.polarfox27.jobs.util.GuiUtil;
+import net.polarfox27.jobs.util.TextUtil;
 import org.lwjgl.opengl.GL11;
 
 import java.awt.*;
@@ -34,7 +35,7 @@ public class GuiLevelUp extends Screen {
      * @param job the job that leveled up
      */
     public GuiLevelUp(String job) {
-    	super(new StringTextComponent(""));
+    	super(TextUtil.EMPTY);
         this.job = job;
     }
 

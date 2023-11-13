@@ -8,6 +8,7 @@ import net.minecraft.util.text.StringTextComponent;
 import net.polarfox27.jobs.ModJobs;
 import net.polarfox27.jobs.gui.screens.SliderParent;
 import net.polarfox27.jobs.util.JobsUtil;
+import net.polarfox27.jobs.util.TextUtil;
 import org.lwjgl.opengl.GL11;
 
 public class SlideBarButton extends Button {
@@ -31,7 +32,7 @@ public class SlideBarButton extends Button {
     public SlideBarButton(int startPos, int endPos, int otherPos, SliderParent parent, boolean isVertical) {
         super((isVertical ? otherPos : startPos), (isVertical ? startPos : otherPos),
                 (isVertical ? 12 : 15), (isVertical ? 15 : 12),
-                new StringTextComponent(""), new OnPressed());
+                TextUtil.EMPTY, new OnPressed());
         this.parent = parent;
         this.isVertical = isVertical;
         this.endPos = endPos;

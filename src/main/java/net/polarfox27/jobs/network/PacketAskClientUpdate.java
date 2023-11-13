@@ -8,7 +8,7 @@ import net.polarfox27.jobs.util.handler.PacketHandler;
 
 import java.util.function.Supplier;
 
-public class PacketAskClientUpdate{
+public class PacketAskClientUpdate implements JobsPacket{
 
     public static final PacketAskClientUpdate instance = new PacketAskClientUpdate();
 

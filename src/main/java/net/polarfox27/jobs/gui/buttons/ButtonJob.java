@@ -8,6 +8,7 @@ import net.minecraft.util.text.StringTextComponent;
 import net.polarfox27.jobs.data.ClientJobsData;
 import net.polarfox27.jobs.gui.screens.GuiJobInfos;
 import net.polarfox27.jobs.util.GuiUtil;
+import net.polarfox27.jobs.util.TextUtil;
 import org.lwjgl.opengl.GL11;
 
 import java.awt.*;
@@ -26,7 +27,7 @@ public class ButtonJob extends Button {
      * @param j the job the button is representing
      */
     public ButtonJob(int posX, int posY, String j) {
-        super(posX, posY, 200, 40, new StringTextComponent(""),new OnPressed());
+        super(posX, posY, 200, 40, TextUtil.EMPTY,new OnPressed());
         this.title = ClientJobsData.getJobName(j);
         this.job = j;
     }
