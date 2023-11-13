@@ -40,6 +40,8 @@ public class ModJobs {
 	public void setup(final FMLCommonSetupEvent event) {
 		PlayerData.register();
 		info("Jobs Capability Registered", false);
+		RegistryHandler.registerCommandArguments();
+		info("Command Arguments Registered", false);
 	}
 
 	@SubscribeEvent

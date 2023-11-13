@@ -4,8 +4,9 @@ import net.minecraft.entity.player.ServerPlayerEntity;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.network.PacketBuffer;
-import net.minecraft.util.text.StringTextComponent;
+import net.minecraft.util.text.IFormattableTextComponent;
 import net.minecraft.util.text.TextFormatting;
+import net.minecraft.util.text.TranslationTextComponent;
 import net.minecraftforge.fml.network.NetworkDirection;
 import net.polarfox27.jobs.data.ServerJobsData;
 import net.polarfox27.jobs.data.registry.LevelData;
@@ -13,6 +14,7 @@ import net.polarfox27.jobs.network.PacketAddXP;
 import net.polarfox27.jobs.network.PacketLevelUp;
 import net.polarfox27.jobs.network.PacketSendRewardsClient;
 import net.polarfox27.jobs.network.PacketUpdateClientJob;
+import net.polarfox27.jobs.util.GuiUtil;
 import net.polarfox27.jobs.util.JobsUtil;
 import net.polarfox27.jobs.util.handler.PacketHandler;
 
@@ -157,11 +159,12 @@ public class PlayerJobs {
 
 		if(LVL == levelData.getMaxLevel(j) && p.getServer() != null) {
 			for(ServerPlayerEntity mp : p.getServer().getPlayerList().getPlayers()) {
-				String message = TextFormatting.DARK_PURPLE + p.getName().getString() +
-						TextFormatting.BLUE + " has reached level " + levelData.getMaxLevel(j) + "for the job " + j + " !";
-				mp.sendMessage(new StringTextComponent(message),
+				IFormattableTextComponent message = new TranslationTextComponent("text.reached.maxlevel",
+						TextFormatting.DARK_PURPLE + p.getName().getString(), TextFormatting.BLUE + j,
+						GuiUtil.coloredNum(TextFormatting.BLUE, levelData.getMaxLevel(j)));
+				mp.sendMessage(message,
 							   mp.getGameProfile().getId());
-				p.getServer().sendMessage(new StringTextComponent(message),
+				p.getServer().sendMessage(message,
 							   mp.getGameProfile().getId());
 			}
 		}

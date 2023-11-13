@@ -64,7 +64,7 @@ public class GuiLevelUp extends Screen {
 
         
         GuiUtil.drawJobIcon(mStack, job, this.width/2, this.height/2-47, 40);
-        String lvl = I18n.get("text.level") + " " + ClientJobsData.playerJobs.getLevelByJob(job);
+        String lvl = I18n.get("text.level", ClientJobsData.playerJobs.getLevelByJob(job));
         GuiUtil.renderProgressBarWithText(mStack, this, this.width/2 - 75, this.height/2 - 25, 150, 12, 1, 1, lvl);
 
         String unlock = I18n.get("text.unlocked");
