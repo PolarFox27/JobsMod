@@ -29,14 +29,17 @@ public class GuiLevelUp extends Screen {
 
     public static final ResourceLocation TEXTURES = new ResourceLocation(ModJobs.MOD_ID, "textures/gui/gui_level_up.png");
     private final String job;
+    private final int previousLevel;
 
     /**
      * Creates a Level Up GUI for a job
      * @param job the job that leveled up
+     * @param previousLevel the previous level the player was at
      */
-    public GuiLevelUp(String job) {
+    public GuiLevelUp(String job, int previousLevel) {
     	super(TextUtil.EMPTY);
         this.job = job;
+        this.previousLevel = previousLevel;
     }
 
     /**
@@ -87,7 +90,7 @@ public class GuiLevelUp extends Screen {
     private void drawUnlockedStacks(MatrixStack mStack, int mouseX, int mouseY) {
         RenderHelper.setupForFlatItems();
         List<UnlockStack> stacks = ClientJobsData.getUnlockedStacksSorted(this.job);
-        stacks.removeIf(x -> x.getLevel() != ClientJobsData.playerJobs.getLevelByJob(job));
+        stacks.removeIf(x -> x.getLevel() > ClientJobsData.playerJobs.getLevelByJob(job) || x.getLevel() <= this.previousLevel);
 
         if(stacks.isEmpty()){
             String text = I18n.get("text.no_unlock");

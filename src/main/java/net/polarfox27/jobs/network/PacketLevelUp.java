@@ -12,13 +12,16 @@ import java.util.function.Supplier;
 public class PacketLevelUp implements JobsPacket {
 
     private final String job;
+    private final int previousLevel;
 
     /**
      * Constructs a packet
      * @param j the job contained in the packet
+     * @param previous the previous level the player was at
      */
-    public PacketLevelUp(String j) {
+    public PacketLevelUp(String j, int previous) {
         this.job = j;
+        this.previousLevel = previous;
     }
 
     /**
@@ -28,7 +31,7 @@ public class PacketLevelUp implements JobsPacket {
      */
     public static PacketLevelUp fromBytes(PacketBuffer buf) {
         int length = buf.readInt();
-        return new PacketLevelUp(buf.readUtf(length));
+        return new PacketLevelUp(buf.readUtf(length), buf.readInt());
     }
 
     /**
@@ -39,6 +42,7 @@ public class PacketLevelUp implements JobsPacket {
     public static void toBytes(PacketLevelUp packet, PacketBuffer buf) {
         buf.writeInt(packet.job.getBytes(StandardCharsets.UTF_8).length);
         buf.writeUtf(packet.job);
+        buf.writeInt(packet.previousLevel);
     }
 
     /**
@@ -50,7 +54,7 @@ public class PacketLevelUp implements JobsPacket {
         if(ctx.get().getDirection() == NetworkDirection.PLAY_TO_CLIENT) {
             if(Minecraft.getInstance().player == null)
                 return;
-            ClientJobsData.showLevelUpGui(message.job);
+            ClientJobsData.showLevelUpGui(message.job, message.previousLevel);
         }
         ctx.get().setPacketHandled(true);
     }

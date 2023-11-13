@@ -21,6 +21,8 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
+import java.util.stream.Collectors;
+import java.util.stream.IntStream;
 
 public class PlayerJobs {
 
@@ -146,8 +148,8 @@ public class PlayerJobs {
 		PacketHandler.sendPacketToClient(p, new PacketAddXP(j, xp));
 		int LVL = this.getLevelByJob(j);
 		if(LVL > previousLVL) {
-			PacketHandler.sendPacketToClient(p, new PacketLevelUp(j));
-			giveReward(p, j, LVL);
+			PacketHandler.sendPacketToClient(p, new PacketLevelUp(j, previousLVL));
+			giveReward(p, j, previousLVL, LVL);
 		}
 
 		if(LVL == levelData.getMaxLevel(j) && p.getServer() != null) {
@@ -167,12 +169,18 @@ public class PlayerJobs {
 	 * Gives the rewards to a player when he reaches a new level
 	 * @param p the player to reward
 	 * @param j the job for which the player has leveled up
-	 * @param lvl the level the player reached
+	 * @param previous the level the player was before
+	 * @param current the level the player reached
 	 */
-	private void giveReward(ServerPlayerEntity p, String j, int lvl) {
+	private void giveReward(ServerPlayerEntity p, String j, int previous, int current) {
+		if(current - 1 <= previous)
+			return;
 		if(!levelData.exists(j))
 			return;
-		List<ItemStack> list = ServerJobsData.REWARDS.getRewards(j, lvl);
+		List<ItemStack> list = IntStream.range(previous+1, current+1)
+				.boxed()
+				.flatMap(lvl -> ServerJobsData.REWARDS.getRewards(j, lvl).stream())
+				.collect(Collectors.toList());
 		PacketHandler.sendPacketToClient(p, new PacketSendRewardsClient(list));
 		for(ItemStack s : list)
 			p.inventory.add(s.copy());

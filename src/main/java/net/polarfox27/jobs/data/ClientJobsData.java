@@ -47,9 +47,10 @@ public class ClientJobsData {
     /**
      * Shows the Level Up GUI
      * @param job the job for which the player has received xp
+     * @param previous the previous level the player was at
      */
-    public static void showLevelUpGui(String job) {
-        Minecraft.getInstance().setScreen(new GuiLevelUp(job));
+    public static void showLevelUpGui(String job, int previous) {
+        Minecraft.getInstance().setScreen(new GuiLevelUp(job, previous));
     }
 
 
@@ -88,7 +89,7 @@ public class ClientJobsData {
      * @return a sorted list of UnlockStacks, ready to be rendered in the GUI
      */
     public static List<UnlockStack> getUnlockedStacksSorted(String job){
-        List<UnlockStack> blockedItems = new ArrayList<>(Stream.concat(
+        List<UnlockStack> blockedItems = Stream.concat(
                         BLOCKED_ITEMS_REGISTRIES.values()
                                 .stream()
                                 .flatMap(r -> r.getBlockedData(job).stream())
@@ -97,7 +98,7 @@ public class ClientJobsData {
                                 .stream()
                                 .flatMap(r -> r.getBlockedData(job).stream())
                                 .map(BlockedData.BlockBlockedData::createUnlockStack))
-                .sorted().collect(Collectors.toList()));
+                .sorted().collect(Collectors.toList());
 
         boolean flag = true;
         while(flag){

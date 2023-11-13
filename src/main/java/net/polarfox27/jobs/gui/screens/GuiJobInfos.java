@@ -142,7 +142,7 @@ public class GuiJobInfos extends Screen implements SliderParent{
         GuiUtil.renderCenteredString(mStack, ClientJobsData.getJobName(job), Color.BLACK.getRGB(), this.width/2 + offsetUnlock, this.top+15, 1.5f);
         GuiUtil.drawJobIcon(mStack, this.job, this.width/2 + offsetUnlock, this.top + 48, 48);
 
-        String title1 = I18n.get("text.level") + " " + lvl;
+        String title1 = I18n.get("text.level", lvl);
         long progress1 = ClientJobsData.playerJobs.getXPByJob(job);
         long total1 = ClientJobsData.JOBS_LEVELS.getXPForLevel(job, lvl+1);
         GuiUtil.renderProgressBar(mStack, this, this.width/2 - 75 + offsetUnlock, this.top + 90, 150, 12, progress1, total1);
