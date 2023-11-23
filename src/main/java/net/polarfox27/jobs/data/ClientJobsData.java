@@ -46,9 +46,10 @@ public class ClientJobsData {
     /**
      * Shows the Level Up GUI
      * @param job the job for which the player has received xp
+     * @param previousLevel the level the player was at before leveling up
      */
-    public static void showLevelUpGui(String job) {
-        Minecraft.getInstance().setScreen(new GuiLevelUp(job));
+    public static void showLevelUpGui(String job, int previousLevel) {
+        Minecraft.getInstance().setScreen(new GuiLevelUp(job, previousLevel));
     }
 
 

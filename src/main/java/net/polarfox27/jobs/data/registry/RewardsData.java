@@ -30,16 +30,17 @@ public class RewardsData {
     }
 
     /**
-     * Gets the list of rewards the player receives when he reaches a new level for a job
+     * Gets the list of rewards the player receives when they reach a new level for a job
      * @param job the job for which the player should receive rewards
      * @param level the level reached in the job
+     * @param previous the previous level the player was at.
      * @return the list of rewards associated with that job and level
      */
-    public List<ItemStack> getRewards(String job, int level){
+    public List<ItemStack> getRewards(String job, int level, int previous){
         if(!REWARDS_BY_JOB.containsKey(job))
             return new ArrayList<>();
         return REWARDS_BY_JOB.get(job).stream()
-                .filter(x -> x.level == level)
+                .filter(x -> x.level <= level && x.level > previous)
                 .flatMap(x -> x.rewards().stream())
                 .collect(Collectors.toList());
     }
