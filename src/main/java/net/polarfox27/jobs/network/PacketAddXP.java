@@ -8,7 +8,7 @@ import net.polarfox27.jobs.data.ClientJobsData;
 import java.nio.charset.StandardCharsets;
 import java.util.function.Supplier;
 
-public class PacketAddXP{
+public class PacketAddXP implements JobsPacket{
 
     private final String job;
     private final long xpAdded;

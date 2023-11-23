@@ -34,6 +34,8 @@ public class ModJobs {
 
     @SubscribeEvent
     public void setup(final FMLCommonSetupEvent event) {
+        RegistryHandler.registerCommandArguments();
+        info("Command Arguments Registered", false);
     }
 
     @SubscribeEvent

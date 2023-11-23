@@ -2,6 +2,19 @@
   "keys.jobs.category" : "Métiers",
   "keys.jobs.open_gui" : "Ouvrir le Menu",
 
+  "argument.job.invalid": "Métier invalide : %s",
+  "command.job.stats.of": "Stats de §b%s",
+  "command.job.stats.you": "§bVos Stats",
+  "command.job.stats.job": "Stats du métier '%s'",
+  "command.job.stats.job.row.maxlevel": "  %s : niv %s §d(niveau max)",
+  "command.job.stats.job.row": "  %s : niv %s§f, xp %s",
+  "command.job.stats.player.row.maxlevel": "  %s : niv %s §d(niveau max)",
+  "command.job.stats.player.row": "  %s : niv %s§f, xp %s",
+  "command.job.add": "Ajout d'xp pour le métier '%s'",
+  "command.job.add.row": "  %s§f : + %s §fxp",
+  "command.job.set": "Nouvelle progression du métier '%s':",
+  "command.job.set.row": "  %s§f : -> niv %s§f, xp %s",
+
   "text.level" : "niveau %d",
   "text.levelup" : "Niveau Superieur",
   "text.job.button" : "%s (niv %d)",
@@ -26,6 +39,7 @@
   "text.no_unlock": "Rien de debloqué",
   "text.no_reward": "Pas de Récompenses",
   "text.gain_xp": "§f%s (niv %d) : §b%d§f xp",
+  "text.reached.maxlevel": "%s § atteint %s §de niveau %s §9!",
 
   "category.unlock" : "Items Bloqués",
   "category.xp" : "Comment XP ?",

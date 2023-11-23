@@ -2,6 +2,19 @@
   "keys.jobs.category" : "Jobs",
   "keys.jobs.open_gui" : "Open Jobs Menu",
 
+  "argument.job.invalid": "Invalid Job : %s",
+  "command.job.stats.of": "Stats of §b%s",
+  "command.job.stats.you": "§bYour Stats",
+  "command.job.stats.job": "Stats for job '%s'",
+  "command.job.stats.job.row.maxlevel": "  %s : lvl %s §d(max level)",
+  "command.job.stats.job.row": "  %s : lvl %s§f, xp %s",
+  "command.job.stats.player.row.maxlevel": "  %s : lvl %s §d(max level)",
+  "command.job.stats.player.row": "  %s : lvl %s§f, xp %s",
+  "command.job.add": "Adding xp to job '%s'",
+  "command.job.add.row": "  %s§f : + %s §fxp",
+  "command.job.set": "Setting new job progression for '%s' :",
+  "command.job.set.row": "  %s§f : -> lvl %s§f, xp %s",
+
   "text.level" : "level %d",
   "text.levelup" : "Level Up",
   "text.job.button" : "%s (level %d)",
@@ -26,6 +39,7 @@
   "text.no_unlock": "Nothing Unlocked",
   "text.no_reward": "No Rewards",
   "text.gain_xp": "§f%s (lvl %d) : §b%d§f xp",
+  "text.reached.maxlevel": "%s §9has reached %s §9level %s §9!",
 
   "category.unlock" : "Locked Items",
   "category.xp" : "How to XP ?",
@@ -38,4 +52,3 @@
   "category.breeding": "Breeding",
   "category.fishing": "Fishing"
 }
-

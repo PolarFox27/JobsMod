@@ -1,14 +1,15 @@
 package net.polarfox27.jobs.util.handler;
 
+import net.minecraft.commands.synchronization.ArgumentTypes;
+import net.minecraft.commands.synchronization.EmptyArgumentSerializer;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.common.capabilities.RegisterCapabilitiesEvent;
 import net.minecraftforge.event.RegisterCommandsEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.common.Mod.EventBusSubscriber;
 import net.polarfox27.jobs.ModJobs;
-import net.polarfox27.jobs.commands.CommandAdd;
-import net.polarfox27.jobs.commands.CommandInfo;
-import net.polarfox27.jobs.commands.CommandSet;
+import net.polarfox27.jobs.commands.JobCommand;
+import net.polarfox27.jobs.commands.arguments.JobArgumentType;
 import net.polarfox27.jobs.data.capabilities.PlayerJobs;
 import net.polarfox27.jobs.events.CommonEvents;
 import net.polarfox27.jobs.events.client.GuiEvents;
@@ -26,10 +27,15 @@ public class RegistryHandler {
 	 */
 	@SubscribeEvent
 	public void onCommandsRegistered(RegisterCommandsEvent event) {
-		CommandInfo.register(event.getDispatcher());
-		CommandSet.register(event.getDispatcher());
-		CommandAdd.register(event.getDispatcher());
+		JobCommand.register(event.getDispatcher());
 		ModJobs.info("Commands Registered", false);
+	}
+
+	/**
+	 * Registers the command argument types used by the mod's commands
+	 */
+	public static void registerCommandArguments(){
+		ArgumentTypes.register("jobs:job_argument", JobArgumentType.class, new EmptyArgumentSerializer<>(JobArgumentType::job));
 	}
 
 	/**

@@ -20,6 +20,7 @@ import net.polarfox27.jobs.gui.buttons.ButtonXPCategory;
 import net.polarfox27.jobs.gui.buttons.SlideBarButton;
 import net.polarfox27.jobs.util.GuiUtil;
 import net.polarfox27.jobs.util.JobsUtil;
+import net.polarfox27.jobs.util.TextUtil;
 import org.jetbrains.annotations.NotNull;
 
 import java.awt.Color;
@@ -166,7 +167,7 @@ public class GuiJobInfos extends Screen implements SliderParent{
 
         if(stack.getLevel() > ClientJobsData.playerJobs.getLevelByJob(this.job)) {
             for(String t : stack.getTypes())
-                tooltip.add(GuiUtil.coloredComponent(ChatFormatting.RED, new TranslatableComponent("text.unlock_" + t + "_lvl", stack.getLevel())));
+                tooltip.add(TextUtil.coloredComponent(ChatFormatting.RED, new TranslatableComponent("text.unlock_" + t + "_lvl", stack.getLevel())));
         }
         else
             for(String t : stack.getTypes())

@@ -25,6 +25,7 @@ import net.polarfox27.jobs.gui.buttons.ButtonBack;
 import net.polarfox27.jobs.gui.buttons.SlideBarButton;
 import net.polarfox27.jobs.util.GuiUtil;
 import net.polarfox27.jobs.util.JobsUtil;
+import net.polarfox27.jobs.util.TextUtil;
 import org.jetbrains.annotations.NotNull;
 
 
@@ -204,19 +205,19 @@ public class GuiHowXP extends Screen implements SliderParent {
                 if (lvl < ClientJobsData.JOBS_LEVELS.getMaxLevel(job)) {
                     xp =  data.getXPByLevel(lvl);
                     if(xp != 0L)
-                        tooltip.add(GuiUtil.coloredComponent(ChatFormatting.GREEN, new TranslatableComponent("text.xp", xp)));
+                        tooltip.add(TextUtil.coloredComponent(ChatFormatting.GREEN, new TranslatableComponent("text.xp", xp)));
                     else {
                         int unlockLevel = data.unlockingLevel(lvl);
                         if(unlockLevel > 0)
-                            tooltip.add(GuiUtil.coloredComponent(ChatFormatting.RED,
+                            tooltip.add(TextUtil.coloredComponent(ChatFormatting.RED,
                                     new TranslatableComponent("text.unlock_xp_lvl", unlockLevel)));
                         else
-                            tooltip.add(GuiUtil.coloredComponent(ChatFormatting.RED,
+                            tooltip.add(TextUtil.coloredComponent(ChatFormatting.RED,
                                     new TranslatableComponent("text.xp",  0)));
                     }
                 }
                 else
-                    tooltip.add(GuiUtil.coloredComponent(ChatFormatting.DARK_PURPLE,
+                    tooltip.add(TextUtil.coloredComponent(ChatFormatting.DARK_PURPLE,
                             new TranslatableComponent("text.xp",  0)));
             }
         }

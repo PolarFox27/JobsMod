@@ -141,17 +141,11 @@ public class PlayerJobs {
 			return;
 		int previousLVL = this.getLevelByJob(j);
 		addXP(j, xp);
-		PacketHandler.INSTANCE.sendTo(new PacketUpdateClientJob(this),
-									  p.connection.getConnection(),
-									  NetworkDirection.PLAY_TO_CLIENT);
-		PacketHandler.INSTANCE.sendTo(new PacketAddXP(j, xp),
-									  p.connection.getConnection(),
-									  NetworkDirection.PLAY_TO_CLIENT);
+		PacketHandler.sendPacketToClient(p, new PacketUpdateClientJob(this));
+		PacketHandler.sendPacketToClient(p, new PacketAddXP(j, xp));
 		int LVL = this.getLevelByJob(j);
 		if(LVL > previousLVL) {
-			PacketHandler.INSTANCE.sendTo(new PacketLevelUp(j),
-										  p.connection.getConnection(),
-										  NetworkDirection.PLAY_TO_CLIENT);
+			PacketHandler.sendPacketToClient(p, new PacketLevelUp(j));
 			giveReward(p, j, LVL);
 		}
 
@@ -177,9 +171,7 @@ public class PlayerJobs {
 		if(!levelData.exists(j))
 			return;
 		List<ItemStack> list = ServerJobsData.REWARDS.getRewards(j, lvl);
-		PacketHandler.INSTANCE.sendTo(new PacketSendRewardsClient(list),
-									  p.connection.getConnection(),
-									  NetworkDirection.PLAY_TO_CLIENT);
+		PacketHandler.sendPacketToClient(p, new PacketSendRewardsClient(list));
 		for(ItemStack s : list)
 			p.getInventory().add(s.copy());
 		p.getInventory().setChanged();

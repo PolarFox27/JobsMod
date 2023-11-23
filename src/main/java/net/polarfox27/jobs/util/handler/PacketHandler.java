@@ -38,9 +38,18 @@ public class PacketHandler {
 	 * @param message the message to send
 	 */
 	public static void sendMessageToClient(ServerPlayer player, Component message) {
-		INSTANCE.sendTo(new PacketSendChatMessage(message),
-						player.connection.getConnection(),
-						NetworkDirection.PLAY_TO_CLIENT);
+		sendPacketToClient(player, new PacketSendChatMessage(message));
+	}
+
+	/**
+	 * Sends a packet to the client
+	 * @param player the client who will receive the packet
+	 * @param packet the packet to send
+	 */
+	public static void sendPacketToClient(ServerPlayer player, JobsPacket packet){
+		INSTANCE.sendTo(packet,
+				player.connection.getConnection(),
+				NetworkDirection.PLAY_TO_CLIENT);
 	}
 
 }
