@@ -1,9 +1,7 @@
 package net.polarfox27.jobs.gui.screens;
 
-import com.mojang.blaze3d.systems.RenderSystem;
-import com.mojang.blaze3d.vertex.PoseStack;
+import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.client.gui.screens.Screen;
-import net.minecraft.client.renderer.GameRenderer;
 import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceLocation;
 import net.polarfox27.jobs.ModJobs;
@@ -14,7 +12,7 @@ import net.polarfox27.jobs.util.GuiUtil;
 import net.polarfox27.jobs.util.JobsUtil;
 import org.jetbrains.annotations.NotNull;
 
-import java.awt.Color;
+import java.awt.*;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -72,20 +70,17 @@ public class MainJobsMenu extends Screen {
 
     /**
      * Renders the GUI on the screen
-     * @param mStack the render stack
+     * @param gui the render object
      * @param mouseX the x coordinate of the mouse
      * @param mouseY the y coordinate of the mouse
      * @param partialTicks the rendering ticks
      */
     @Override
-    public void render(@NotNull PoseStack mStack, int mouseX, int mouseY, float partialTicks) {
-        RenderSystem.setShader(GameRenderer::getPositionTexShader);
-        RenderSystem.setShaderColor(1.0f, 1.0f, 1.0f, 1.0f);
-        RenderSystem.setShaderTexture(0, BACKGROUND);
-        this.blit(mStack, this.width/2 - 128, this.height/2 - 110, 0, 0, 256, 220);
-        GuiUtil.renderCenteredString(mStack, GuiUtil.translate("text.jobs.title"),
+    public void render(@NotNull GuiGraphics gui, int mouseX, int mouseY, float partialTicks) {
+        GuiUtil.drawTexture(gui, BACKGROUND, this.width/2 - 128, this.height/2 - 110, 0, 0, 256, 220);
+        GuiUtil.renderCenteredString(gui, GuiUtil.translate("text.jobs.title"),
                 Color.black.getRGB(), this.width/2, this.height/2 - 95, 2.0f);
-    	super.render(mStack, mouseX, mouseY, partialTicks);
+    	super.render(gui, mouseX, mouseY, partialTicks);
     }
 
     /**

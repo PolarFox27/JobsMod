@@ -9,16 +9,18 @@ import net.polarfox27.jobs.data.ClientJobsData;
 import java.nio.charset.StandardCharsets;
 import java.util.function.Supplier;
 
-public class PacketLevelUp{
+public class PacketLevelUp implements JobsPacket{
 
     private final String job;
+    private final int previousLevel;
 
     /**
      * Constructs a packet
      * @param j the job contained in the packet
      */
-    public PacketLevelUp(String j) {
+    public PacketLevelUp(String j, int previousLevel) {
         this.job = j;
+        this.previousLevel = previousLevel;
     }
 
     /**
@@ -27,8 +29,9 @@ public class PacketLevelUp{
      * @return the packet read
      */
     public static PacketLevelUp fromBytes(FriendlyByteBuf buf) {
+        int previous = buf.readInt();
         int length = buf.readInt();
-        return new PacketLevelUp(buf.readUtf(length));
+        return new PacketLevelUp(buf.readUtf(length), previous);
     }
 
     /**
@@ -37,6 +40,7 @@ public class PacketLevelUp{
      * @param buf the buffer where to write
      */
     public static void toBytes(PacketLevelUp packet, FriendlyByteBuf buf) {
+        buf.writeInt(packet.previousLevel);
         buf.writeInt(packet.job.getBytes(StandardCharsets.UTF_8).length);
         buf.writeUtf(packet.job);
     }
@@ -50,7 +54,7 @@ public class PacketLevelUp{
         if(ctx.get().getDirection() == NetworkDirection.PLAY_TO_CLIENT) {
             if(Minecraft.getInstance().player == null)
                 return;
-            ClientJobsData.showLevelUpGui(message.job);
+            ClientJobsData.showLevelUpGui(message.job, message.previousLevel);
         }
         ctx.get().setPacketHandled(true);
     }

@@ -10,13 +10,13 @@ import net.polarfox27.jobs.ModJobs;
 import net.polarfox27.jobs.network.*;
 
 public class PacketHandler {
-	
+
 	private static final String PROTOCOL_VERSION = "1";
 	public static final SimpleChannel INSTANCE = NetworkRegistry.newSimpleChannel(
-	    new ResourceLocation(ModJobs.MOD_ID, "main"),
-	    () -> PROTOCOL_VERSION,
-	    PROTOCOL_VERSION::equals,
-	    PROTOCOL_VERSION::equals
+			new ResourceLocation(ModJobs.MOD_ID, "main"),
+			() -> PROTOCOL_VERSION,
+			PROTOCOL_VERSION::equals,
+			PROTOCOL_VERSION::equals
 	);
 
 	/**
@@ -38,9 +38,17 @@ public class PacketHandler {
 	 * @param message the message to send
 	 */
 	public static void sendMessageToClient(ServerPlayer player, Component message) {
-		INSTANCE.sendTo(new PacketSendChatMessage(message),
-						player.connection.getConnection(),
-						NetworkDirection.PLAY_TO_CLIENT);
+		sendPacketToClient(player, new PacketSendChatMessage(message));
 	}
 
+	/**
+	 * Sends a packet to the client
+	 * @param player the client who will receive the packet
+	 * @param packet the packet to send
+	 */
+	public static void sendPacketToClient(ServerPlayer player, JobsPacket packet){
+		INSTANCE.sendTo(packet,
+				player.connection.connection,
+				NetworkDirection.PLAY_TO_CLIENT);
+	}
 }

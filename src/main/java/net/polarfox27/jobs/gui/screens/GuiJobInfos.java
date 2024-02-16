@@ -1,12 +1,9 @@
 package net.polarfox27.jobs.gui.screens;
 
-import com.mojang.blaze3d.systems.RenderSystem;
-import com.mojang.blaze3d.vertex.PoseStack;
 import net.minecraft.ChatFormatting;
 import net.minecraft.client.Minecraft;
+import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.client.gui.screens.Screen;
-import net.minecraft.client.renderer.GameRenderer;
-import net.minecraft.client.renderer.entity.ItemRenderer;
 import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceLocation;
 import net.polarfox27.jobs.ModJobs;
@@ -17,9 +14,10 @@ import net.polarfox27.jobs.gui.buttons.ButtonXPCategory;
 import net.polarfox27.jobs.gui.buttons.SlideBarButton;
 import net.polarfox27.jobs.util.GuiUtil;
 import net.polarfox27.jobs.util.JobsUtil;
+import net.polarfox27.jobs.util.TextUtil;
 import org.jetbrains.annotations.NotNull;
 
-import java.awt.Color;
+import java.awt.*;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -31,7 +29,6 @@ public class GuiJobInfos extends Screen implements SliderParent{
     public int left;
     public int top;
     public int offsetUnlock;
-    private final ItemRenderer renderItem;
     public int page;
     private final List<UnlockStack> unlocked_stacks;
 
@@ -42,10 +39,9 @@ public class GuiJobInfos extends Screen implements SliderParent{
      * @param job the job
      */
     public GuiJobInfos(String job) {
-    	super(Component.literal(""));
+    	super(TextUtil.EMPTY);
         this.job = job;
         this.offsetUnlock = 0;
-        this.renderItem = Minecraft.getInstance().getItemRenderer();
         this.page = 0;
         this.unlocked_stacks = ClientJobsData.getUnlockedStacksSorted(this.job);
     }
@@ -78,69 +74,65 @@ public class GuiJobInfos extends Screen implements SliderParent{
 
     /**
      * Renders the GUI on the screen
-     * @param mStack the render stack
+     * @param gui the render object
      * @param mouseX the x coordinate of the mouse
      * @param mouseY the y coordinate of the mouse
      * @param partialTicks the rendering ticks
      */
     @Override
-    public void render(@NotNull PoseStack mStack, int mouseX, int mouseY, float partialTicks) {
-    	super.render(mStack, mouseX, mouseY, partialTicks);
+    public void render(@NotNull GuiGraphics gui, int mouseX, int mouseY, float partialTicks) {
     	this.left = this.width/2 - 110 + offsetUnlock;
         this.top = this.height/2 - 90;
-        RenderSystem.setShader(GameRenderer::getPositionTexShader);
-        RenderSystem.setShaderColor(1.0f, 1.0f, 1.0f, 1.0f);
-        RenderSystem.setShaderTexture(0, BACKGROUND);
-        this.blit(mStack, this.left, this.top, 0, 0, 220, 180);//background
-        this.drawGradients(mStack);
+        GuiUtil.drawTexture(gui, BACKGROUND, this.left, this.top, 0, 0, 220, 180);//background
+        this.drawGradients(gui);
 
         if(offsetUnlock != 0) {
-            RenderSystem.setShader(GameRenderer::getPositionTexShader);
-            RenderSystem.setShaderColor(1.0f, 1.0f, 1.0f, 1.0f);
-            RenderSystem.setShaderTexture(0, UNLOCK_BACKGROUND);
-            this.blit(mStack, this.left + 225, this.top + 14, 0, 0, 70, 152);
+            GuiUtil.drawTexture(gui, UNLOCK_BACKGROUND, this.left + 225, this.top + 14, 0, 0, 70, 152);
         }
-        super.render(mStack, mouseX, mouseY, partialTicks);
+        super.render(gui, mouseX, mouseY, partialTicks);
         if(offsetUnlock != 0)
-            this.drawUnlockedItems(mStack, mouseX, mouseY);
+            this.drawUnlockedItems(gui, mouseX, mouseY);
 
         if(isDragging(slideBar, mouseX, mouseY))
             updateSlider(slideBar, mouseY);
+
+        super.render(gui, mouseX, mouseY, partialTicks);
     }
 
     /**
      * Renders the Unlocked Stacks
-     * @param mStack the render stack
+     * @param gui the render object
      * @param mouseX the x coordinate of the mouse, used to find the tooltip to render
      * @param mouseY the y coordinate of the mouse, used to find the tooltip to render
      */
-    private void drawUnlockedItems(PoseStack mStack, int mouseX, int mouseY) {
+    private void drawUnlockedItems(GuiGraphics gui, int mouseX, int mouseY) {
         int renderIndex = -1;
         for(int i = 0; i < (unlocked_stacks.size() >= 7 ? 7 : unlocked_stacks.size() - page); i++) {
-            renderItem.renderGuiItem(unlocked_stacks.get(i + page).getStack(), this.left + 242, this.top + 27 + i*18);
+            gui.renderItem(unlocked_stacks.get(i + page).getStack(), this.left + 242, this.top + 27 + i*18);
             if(mouseX >= this.left + 242      && mouseX < this.left + 258 &&
                mouseY >= this.top + 27 + i*18 && mouseY < this.top + 27 + 16 + i*18)
                 renderIndex = i;
         }
-        if(renderIndex != -1) renderComponentTooltip(mStack, getItemToolTip(unlocked_stacks.get(renderIndex + page)), mouseX, mouseY,
-                Minecraft.getInstance().font);
+        if(renderIndex != -1)
+            gui.renderComponentTooltip(Minecraft.getInstance().font,
+                    getItemToolTip(unlocked_stacks.get(renderIndex + page)), mouseX, mouseY);
     }
 
     /**
      * Renders the progress bars of the Job
-     * @param mStack the render stack
+     * @param gui the render object
      */
-    private void drawGradients(PoseStack mStack) {
+    private void drawGradients(GuiGraphics gui) {
         int lvl = ClientJobsData.playerJobs.getLevelByJob(job);
         boolean isMaxLevel = ClientJobsData.playerJobs.isMax(job);
-        GuiUtil.renderCenteredString(mStack, ClientJobsData.getJobName(job), Color.BLACK.getRGB(), this.width/2 + offsetUnlock, this.top+15, 1.5f);
-        GuiUtil.drawJobIcon(mStack, this.job, this.width/2 + offsetUnlock, this.top + 48, 48);
+        GuiUtil.renderCenteredString(gui, ClientJobsData.getJobName(job), Color.BLACK.getRGB(), this.width/2 + offsetUnlock, this.top+15, 1.5f);
+        GuiUtil.drawJobIcon(gui, this.job, this.width/2 + offsetUnlock, this.top + 48, 48);
 
-        String title1 = GuiUtil.translate("text.level") + " " + lvl;
+        String title1 = GuiUtil.translate("text.level", lvl);
         long progress1 = ClientJobsData.playerJobs.getXPByJob(job);
         long total1 = ClientJobsData.JOBS_LEVELS.getXPForLevel(job, lvl+1);
-        GuiUtil.renderProgressBar(mStack, this, this.width/2 - 75 + offsetUnlock, this.top + 90, 150, 12, progress1, total1);
-        GuiUtil.renderCenteredString(mStack, title1, Color.BLACK.getRGB(), this.width/2 + offsetUnlock, this.top + 86, 1.0f);
+        GuiUtil.renderProgressBar(gui, this.width/2 - 75 + offsetUnlock, this.top + 90, 150, 12, progress1, total1);
+        GuiUtil.renderCenteredString(gui, title1, Color.BLACK.getRGB(), this.width/2 + offsetUnlock, this.top + 86, 1.0f);
 
         if(isMaxLevel)
             return;
@@ -148,8 +140,8 @@ public class GuiJobInfos extends Screen implements SliderParent{
         long progress2 = ClientJobsData.playerJobs.getTotalXPByJob(job);
         long total2 = ClientJobsData.JOBS_LEVELS.getTotalXPForJob(job);
         String title2 = lvl < ClientJobsData.JOBS_LEVELS.getMaxLevel(job) ? GuiUtil.translate("text.total_progression") : "";
-        GuiUtil.renderProgressBar(mStack, this, this.width / 2 - 75 + offsetUnlock, this.top + 115, 150, 12, progress2, total2);
-        GuiUtil.renderCenteredString(mStack, title2, Color.BLACK.getRGB(), this.width/2 + offsetUnlock, this.top + 111, 1.0f);
+        GuiUtil.renderProgressBar(gui, this.width / 2 - 75 + offsetUnlock, this.top + 115, 150, 12, progress2, total2);
+        GuiUtil.renderCenteredString(gui, title2, Color.BLACK.getRGB(), this.width/2 + offsetUnlock, this.top + 111, 1.0f);
     }
 
 
@@ -159,20 +151,15 @@ public class GuiJobInfos extends Screen implements SliderParent{
      */
     public List<Component> getItemToolTip(UnlockStack stack) {
         List<Component> tooltip = new ArrayList<>();
-        tooltip.add(Component.literal(stack.getStack().getDisplayName().getString()
-                                                                  .replace("[", "")
-                                                                  .replace("]", ""))
-                                                                  );
+        tooltip.add(stack.getStack().getHoverName());
+
         if(stack.getLevel() > ClientJobsData.playerJobs.getLevelByJob(this.job)) {
-            tooltip.add(Component.literal(
-                    ChatFormatting.RED  + GuiUtil.translate("text.unlock_" + stack.getType() + "_lvl")
-                            + " " + stack.getLevel())
-                    );
+            for(String t : stack.getTypes())
+                tooltip.add(TextUtil.coloredComponent(ChatFormatting.RED, Component.translatable("text.unlock_" + t + "_lvl", stack.getLevel())));
         }
         else
-            tooltip.add(Component.literal(
-                    ChatFormatting.GREEN  + GuiUtil.translate("text.unlock_" + stack.getType()))
-                    );
+            for(String t : stack.getTypes())
+                tooltip.add(Component.translatable("text.unlock_" + t));
         return tooltip;
     }
 

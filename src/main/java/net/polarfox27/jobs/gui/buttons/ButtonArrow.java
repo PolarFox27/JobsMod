@@ -1,13 +1,13 @@
 package net.polarfox27.jobs.gui.buttons;
 
 import com.mojang.blaze3d.systems.RenderSystem;
-import com.mojang.blaze3d.vertex.PoseStack;
+import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.client.gui.components.Button;
-import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceLocation;
 import net.polarfox27.jobs.ModJobs;
 import net.polarfox27.jobs.gui.screens.MainJobsMenu;
 import net.polarfox27.jobs.util.GuiUtil;
+import net.polarfox27.jobs.util.TextUtil;
 import org.jetbrains.annotations.NotNull;
 
 public class ButtonArrow extends Button {
@@ -25,25 +25,25 @@ public class ButtonArrow extends Button {
      * @param isUp sets the direction of the arrow to be up or down
      */
     public ButtonArrow(int posX, int posY, MainJobsMenu gui, boolean isUp) {
-        super(posX, posY, 17, 10, Component.literal(""), new OnPressed());
+        super(posX, posY, 17, 10, TextUtil.EMPTY, new OnPressed(), TextUtil.BUTTON_NARRATOR);
         this.gui = gui;
         this.isUp = isUp;
     }
 
     /**
      * Renders the widget on the screen
-     * @param mStack the render stack
+     * @param gui the render object
      * @param mouseX the x coordinate of the mouse
      * @param mouseY the y coordinate of the mouse
      * @param partialTicks the rendering ticks
      */
     @Override
-    public void renderButton(@NotNull PoseStack mStack, int mouseX, int mouseY, float partialTicks) {
+    public void renderWidget(@NotNull GuiGraphics gui, int mouseX, int mouseY, float partialTicks) {
         if (this.visible) {
             RenderSystem.setShaderTexture(0, BACKGROUND);
             int x = this.isHoveredOrFocused() ? 17 : 0;
             int y = isUp ? 220 : 230;
-            GuiUtil.drawTexture(mStack, gui, this.x, this.y, x, y, 17, 10);
+            GuiUtil.drawTexture(gui, BACKGROUND, this.getX(), this.getY(), x, y, 17, 10);
         }
     }
 

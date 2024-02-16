@@ -82,7 +82,7 @@ public class ServerJobsData {
                 JOBS_ICONS,
                 TRANSLATIONS);
         PacketHandler.INSTANCE.sendTo(packet1,
-                player.connection.getConnection(),
+                player.connection.connection,
                 NetworkDirection.PLAY_TO_CLIENT);
     }
 }

@@ -36,7 +36,7 @@ public class CommonEvents {
 	 */
 	@SubscribeEvent
 	public void onEntityCreating(AttachCapabilitiesEvent<Entity> event) {
-		if(event.getObject().level.isClientSide)
+		if(event.getObject().level().isClientSide)
 			return;
 		if(!(event.getObject() instanceof Player))
 			return;
@@ -60,12 +60,12 @@ public class CommonEvents {
 	 */
 	@SubscribeEvent
 	public void onPlayerDeath(LivingDeathEvent event) {
-		if(event.getEntity().level.isClientSide())
+		if(event.getEntity().level().isClientSide())
 			return;
 		if(event.getEntity() instanceof Player p){
 			PlayerJobs capability = PlayerData.getPlayerJobs(p);
 			if (capability != null) {
-				String folder = FileUtil.getCapsFolder(event.getEntity().level.getServer());
+				String folder = FileUtil.getCapsFolder(event.getEntity().level().getServer());
 				if(!new File(folder).exists())
 					if(!new File(folder).mkdirs())
 						return;
@@ -86,10 +86,10 @@ public class CommonEvents {
 	 */
 	@SubscribeEvent
 	public void onEntityCloned(PlayerEvent.Clone event) {
-		if(!event.isWasDeath() || event.getEntity().level.isClientSide())
+		if(!event.isWasDeath() || event.getEntity().level().isClientSide())
 			return;
 		Player p = event.getEntity();
-		String folder = FileUtil.getCapsFolder(p.level.getServer());
+		String folder = FileUtil.getCapsFolder(p.level().getServer());
 		try {
 			File data = FileUtil.join(folder, p.getGameProfile().getId().toString() + ".dat");
 			CompoundTag tag = NbtIo.readCompressed(data);

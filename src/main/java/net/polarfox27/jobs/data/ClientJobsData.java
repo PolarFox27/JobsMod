@@ -13,9 +13,9 @@ import net.polarfox27.jobs.data.registry.unlock.UnlockStack;
 import net.polarfox27.jobs.data.registry.xp.XPData;
 import net.polarfox27.jobs.data.registry.xp.XPRegistry;
 import net.polarfox27.jobs.gui.GuiGainXP;
+import net.polarfox27.jobs.gui.screens.GuiLevelUp;
 
 import java.util.*;
-import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
 public class ClientJobsData {
@@ -33,7 +33,6 @@ public class ClientJobsData {
     public static GuiGainXP.GuiAddXpInfos addXPInfos = new GuiGainXP.GuiAddXpInfos();
     public static final List<ItemStack> CURRENT_REWARDS = new ArrayList<>();
     public static PlayerJobs playerJobs = null;
-    public static String shouldLevelUp = "";
 
     /**
      * Shows the Gain XP GUI
@@ -47,9 +46,10 @@ public class ClientJobsData {
     /**
      * Shows the Level Up GUI
      * @param job the job for which the player has received xp
+     * @param previousLevel the level the player was at before leveling up
      */
-    public static void showLevelUpGui(String job) {
-        shouldLevelUp = job;
+    public static void showLevelUpGui(String job, int previousLevel) {
+        Minecraft.getInstance().setScreen(new GuiLevelUp(job, previousLevel));
     }
 
 
@@ -88,17 +88,31 @@ public class ClientJobsData {
      * @return a sorted list of UnlockStacks, ready to be rendered in the GUI
      */
     public static List<UnlockStack> getUnlockedStacksSorted(String job){
-        return Stream.concat(
+        List<UnlockStack> blockedItems = new ArrayList<>(Stream.concat(
                 BLOCKED_ITEMS_REGISTRIES.values()
-                                        .stream()
-                                        .flatMap(r -> r.getBlockedData(job).stream())
-                                        .map(BlockedData.ItemBlockedData::createUnlockStack),
+                                .stream()
+                                .flatMap(r -> r.getBlockedData(job).stream())
+                                .map(BlockedData.ItemBlockedData::createUnlockStack),
                 BLOCKED_BLOCKS_REGISTRIES.values()
-                                         .stream()
-                                         .flatMap(r -> r.getBlockedData(job).stream())
-                                         .map(BlockedData.BlockBlockedData::createUnlockStack))
-                .sorted()
-                .collect(Collectors.toList());
+                                .stream()
+                                .flatMap(r -> r.getBlockedData(job).stream())
+                                .map(BlockedData.BlockBlockedData::createUnlockStack))
+                .sorted().toList());
+
+        boolean flag = true;
+        while(flag){
+            for(int i = 0; i < blockedItems.size()-1; i++){
+                UnlockStack merged = blockedItems.get(i).merge(blockedItems.get(i+1));
+                if(merged != null){
+                    blockedItems.set(i, merged);
+                    blockedItems.remove(i+1);
+                    break;
+                }
+                if(i == blockedItems.size() - 2)
+                    flag = false;
+            }
+        }
+        return blockedItems;
     }
 
     /**
@@ -110,7 +124,6 @@ public class ClientJobsData {
         return TRANSLATIONS.getTranslation(job,
                 Minecraft.getInstance()
                         .getLanguageManager()
-                        .getSelected()
-                        .getCode());
+                        .getSelected());
     }
 }

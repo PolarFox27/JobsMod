@@ -23,7 +23,7 @@ public class ItemInteractionEvents {
      */
     @SubscribeEvent
     public void onCraft(ItemCraftedEvent event) {
-    	if(event.getEntity().level.isClientSide() || !(event.getEntity() instanceof ServerPlayer))
+    	if(event.getEntity().level().isClientSide() || !(event.getEntity() instanceof ServerPlayer))
             return;
         PlayerJobs jobs = PlayerData.getPlayerJobs(event.getEntity());
         ItemStack stack = event.getCrafting();
@@ -41,7 +41,7 @@ public class ItemInteractionEvents {
      */
     @SubscribeEvent
     public void onSmelt(ItemSmeltedEvent event) {
-        if(event.getEntity().level.isClientSide() || !(event.getEntity() instanceof ServerPlayer))
+        if(event.getEntity().level().isClientSide() || !(event.getEntity() instanceof ServerPlayer))
             return;
         PlayerJobs jobs = PlayerData.getPlayerJobs(event.getEntity());
         ItemStack stack = event.getSmelting();
@@ -59,7 +59,7 @@ public class ItemInteractionEvents {
      */
     @SubscribeEvent
     public void onFished(ItemFishedEvent event) {
-        if(event.getEntity().level.isClientSide() || !(event.getEntity() instanceof ServerPlayer))
+        if(event.getEntity().level().isClientSide() || !(event.getEntity() instanceof ServerPlayer))
             return;
         PlayerJobs jobs = PlayerData.getPlayerJobs(event.getEntity());
         for(ItemStack stack : event.getDrops()){
@@ -77,7 +77,7 @@ public class ItemInteractionEvents {
      */
     @SubscribeEvent
     public void onRightClick(PlayerInteractEvent.RightClickItem event) {
-        if(event.getEntity().level.isClientSide() || !(event.getEntity() instanceof ServerPlayer))
+        if(event.getEntity().level().isClientSide() || !(event.getEntity() instanceof ServerPlayer))
             return;
         PlayerJobs jobs = PlayerData.getPlayerJobs(event.getEntity());
         if(ServerJobsData.BLOCKED_RIGHT_CLICKS.isBlocked(jobs, event.getItemStack()))
@@ -90,7 +90,7 @@ public class ItemInteractionEvents {
      */
     @SubscribeEvent
     public void onLeftClickBlock(PlayerInteractEvent.LeftClickBlock event) {
-        if(event.getEntity().level.isClientSide() || !(event.getEntity() instanceof ServerPlayer))
+        if(event.getEntity().level().isClientSide() || !(event.getEntity() instanceof ServerPlayer))
             return;
         PlayerJobs jobs = PlayerData.getPlayerJobs(event.getEntity());
         if(ServerJobsData.BLOCKED_LEFT_CLICKS.isBlocked(jobs, event.getItemStack()))
@@ -103,7 +103,7 @@ public class ItemInteractionEvents {
      */
     @SubscribeEvent
     public void checkArmor(TickEvent.PlayerTickEvent event) {
-        if(event.player.level.isClientSide())
+        if(event.player.level().isClientSide())
             return;
         PlayerJobs jobs = PlayerData.getPlayerJobs(event.player);
         for(int i = 0; i < event.player.getInventory().armor.size(); i++) {

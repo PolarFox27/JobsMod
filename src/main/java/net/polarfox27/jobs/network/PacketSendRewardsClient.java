@@ -13,7 +13,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.function.Supplier;
 
-public class PacketSendRewardsClient{
+public class PacketSendRewardsClient implements JobsPacket{
 
     private final List<ItemStack> stacks = new ArrayList<>();
 

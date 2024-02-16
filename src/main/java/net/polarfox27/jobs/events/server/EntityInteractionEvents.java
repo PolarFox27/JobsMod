@@ -23,7 +23,7 @@ public class EntityInteractionEvents {
      */
     @SubscribeEvent
     public void onKill(LivingDeathEvent event) {
-    	if(event.getEntity().level.isClientSide() ||
+    	if(event.getEntity().level().isClientSide() ||
                 !(event.getSource().getEntity() instanceof ServerPlayer p))
             return;
         if(event.getEntity() instanceof Player &&
@@ -47,7 +47,7 @@ public class EntityInteractionEvents {
      */
     @SubscribeEvent
     public void onBreed(BabyEntitySpawnEvent event) {
-        if (event.getCausedByPlayer() == null || event.getCausedByPlayer().level.isClientSide()
+        if (event.getCausedByPlayer() == null || event.getCausedByPlayer().level().isClientSide()
                 || event.getChild() == null)
             return;
         EntityType<? extends Entity> type = event.getChild().getType();
@@ -67,7 +67,7 @@ public class EntityInteractionEvents {
      */
     @SubscribeEvent
     public void onLeftClickEntity(AttackEntityEvent event) {
-        if(event.getEntity().level.isClientSide() || !(event.getEntity() instanceof ServerPlayer))
+        if(event.getEntity().level().isClientSide() || !(event.getEntity() instanceof ServerPlayer))
             return;
         PlayerJobs jobs = PlayerData.getPlayerJobs(event.getEntity());
         if(ServerJobsData.BLOCKED_LEFT_CLICKS.isBlocked(jobs, event.getEntity().getMainHandItem()))

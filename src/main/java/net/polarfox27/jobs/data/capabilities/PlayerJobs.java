@@ -3,6 +3,7 @@ package net.polarfox27.jobs.data.capabilities;
 import net.minecraft.ChatFormatting;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.chat.Component;
+import net.minecraft.network.chat.MutableComponent;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.network.FriendlyByteBuf;
@@ -14,6 +15,7 @@ import net.polarfox27.jobs.network.PacketLevelUp;
 import net.polarfox27.jobs.network.PacketSendRewardsClient;
 import net.polarfox27.jobs.network.PacketUpdateClientJob;
 import net.polarfox27.jobs.util.JobsUtil;
+import net.polarfox27.jobs.util.TextUtil;
 import net.polarfox27.jobs.util.handler.PacketHandler;
 
 import java.util.HashMap;
@@ -141,42 +143,37 @@ public class PlayerJobs {
 			return;
 		int previousLVL = this.getLevelByJob(j);
 		addXP(j, xp);
-		PacketHandler.INSTANCE.sendTo(new PacketUpdateClientJob(this),
-									  p.connection.getConnection(),
-									  NetworkDirection.PLAY_TO_CLIENT);
-		PacketHandler.INSTANCE.sendTo(new PacketAddXP(j, xp),
-									  p.connection.getConnection(),
-									  NetworkDirection.PLAY_TO_CLIENT);
+		PacketHandler.sendPacketToClient(p, new PacketUpdateClientJob(this));
+		PacketHandler.sendPacketToClient(p, new PacketAddXP(j, xp));
 		int LVL = this.getLevelByJob(j);
 		if(LVL > previousLVL) {
-			PacketHandler.INSTANCE.sendTo(new PacketLevelUp(j),
-										  p.connection.getConnection(),
-										  NetworkDirection.PLAY_TO_CLIENT);
-			giveReward(p, j, LVL);
+			PacketHandler.sendPacketToClient(p, new PacketLevelUp(j, previousLVL));
+			giveReward(p, j, LVL, previousLVL);
 		}
 
 		if(LVL == levelData.getMaxLevel(j) && p.getServer() != null) {
 			for(ServerPlayer mp : p.getServer().getPlayerList().getPlayers()) {
-				String message = ChatFormatting.DARK_PURPLE + p.getName().getString() +
-						ChatFormatting.BLUE + " has reached level " + levelData.getMaxLevel(j) + " for the job " + j + " !";
-				mp.displayClientMessage(Component.literal(message), true);
+				MutableComponent message = Component.translatable("text.reached.maxlevel",
+						ChatFormatting.DARK_PURPLE + p.getName().getString(), ChatFormatting.BLUE + j,
+						TextUtil.coloredNum(ChatFormatting.BLUE, levelData.getMaxLevel(j)));
+				PacketHandler.sendMessageToClient(mp, message);
 			}
 		}
 	}
 
 	/**
-	 * Gives the rewards to a player when he reaches a new level
+	 * Gives the rewards to a player when they reach a new level. If multiple levels are gained at once, the player
+	 * receives all the rewards for all the levels.
 	 * @param p the player to reward
 	 * @param j the job for which the player has leveled up
 	 * @param lvl the level the player reached
+	 * @param previous the previous level the player was at
 	 */
-	private void giveReward(ServerPlayer p, String j, int lvl) {
+	private void giveReward(ServerPlayer p, String j, int lvl, int previous) {
 		if(!levelData.exists(j))
 			return;
-		List<ItemStack> list = ServerJobsData.REWARDS.getRewards(j, lvl);
-		PacketHandler.INSTANCE.sendTo(new PacketSendRewardsClient(list),
-									  p.connection.getConnection(),
-									  NetworkDirection.PLAY_TO_CLIENT);
+		List<ItemStack> list = ServerJobsData.REWARDS.getRewards(j, lvl, previous);
+		PacketHandler.sendPacketToClient(p, new PacketSendRewardsClient(list));
 		for(ItemStack s : list)
 			p.getInventory().add(s.copy());
 		p.getInventory().setChanged();

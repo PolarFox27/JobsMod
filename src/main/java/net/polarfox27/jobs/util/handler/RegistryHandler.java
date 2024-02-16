@@ -1,6 +1,7 @@
 package net.polarfox27.jobs.util.handler;
 
-import net.minecraft.world.inventory.MenuType;
+import com.mojang.brigadier.arguments.ArgumentType;
+import net.minecraft.commands.synchronization.ArgumentTypeInfos;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 import net.minecraftforge.client.event.RegisterKeyMappingsEvent;
@@ -9,29 +10,23 @@ import net.minecraftforge.common.capabilities.RegisterCapabilitiesEvent;
 import net.minecraftforge.event.RegisterCommandsEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.common.Mod.EventBusSubscriber;
-import net.minecraftforge.fml.javafmlmod.FMLJavaModLoadingContext;
-import net.minecraftforge.registries.DeferredRegister;
-import net.minecraftforge.registries.ForgeRegistries;
-import net.minecraftforge.registries.RegistryObject;
 import net.polarfox27.jobs.ModJobs;
-import net.polarfox27.jobs.commands.CommandAdd;
-import net.polarfox27.jobs.commands.CommandInfo;
-import net.polarfox27.jobs.commands.CommandSet;
+import net.polarfox27.jobs.commands.JobCommand;
+import net.polarfox27.jobs.commands.arguments.JobArgumentInfo;
+import net.polarfox27.jobs.commands.arguments.JobArgumentType;
 import net.polarfox27.jobs.data.capabilities.PlayerJobs;
 import net.polarfox27.jobs.events.CommonEvents;
+import net.polarfox27.jobs.events.client.ClientBlockEvents;
 import net.polarfox27.jobs.events.client.GuiEvents;
 import net.polarfox27.jobs.events.client.KeyBindingsEvent;
 import net.polarfox27.jobs.events.server.BlockInteractionEvents;
+import net.polarfox27.jobs.events.server.ContainerEvents;
 import net.polarfox27.jobs.events.server.EntityInteractionEvents;
 import net.polarfox27.jobs.events.server.ItemInteractionEvents;
-import net.polarfox27.jobs.gui.containers.JobsCraftingMenu;
 import net.polarfox27.jobs.util.keybindings.KeyBindings;
 
 @EventBusSubscriber
 public class RegistryHandler {
-
-	public static final DeferredRegister<MenuType<?>> CONTAINERS = DeferredRegister.create(ForgeRegistries.MENU_TYPES, ModJobs.MOD_ID);
-	public static final RegistryObject<MenuType<JobsCraftingMenu>> JOBS_CRAFT = CONTAINERS.register("jobs_crafting", () -> new MenuType<>(JobsCraftingMenu::new));
 
 	/**
 	 * Registers the Commands of the mod
@@ -39,10 +34,15 @@ public class RegistryHandler {
 	 */
 	@SubscribeEvent
 	public void onCommandsRegistered(RegisterCommandsEvent event) {
-		CommandInfo.register(event.getDispatcher());
-		CommandSet.register(event.getDispatcher());
-		CommandAdd.register(event.getDispatcher());
+		JobCommand.register(event.getDispatcher());
 		ModJobs.info("Commands Registered", false);
+	}
+
+	/**
+	 * Registers the command argument types used by the mod's commands
+	 */
+	public static void registerCommandArguments(){
+		ArgumentTypeInfos.registerByClass(JobArgumentType.class, new JobArgumentInfo());
 	}
 
 	/**
@@ -56,6 +56,8 @@ public class RegistryHandler {
 		MinecraftForge.EVENT_BUS.register(new EntityInteractionEvents());
 		MinecraftForge.EVENT_BUS.register(new ItemInteractionEvents());
 		MinecraftForge.EVENT_BUS.register(new KeyBindingsEvent());
+		MinecraftForge.EVENT_BUS.register(new ContainerEvents());
+		MinecraftForge.EVENT_BUS.register(new ClientBlockEvents());
 	}
 
 	/**
@@ -65,14 +67,6 @@ public class RegistryHandler {
 	@SubscribeEvent
 	public void registerCapabilities(RegisterCapabilitiesEvent event) {
 		event.register(PlayerJobs.class);
-	}
-
-
-	/**
-	 * Registers the Jobs crafting container
-	 */
-	public static void registerContainers(){
-		CONTAINERS.register(FMLJavaModLoadingContext.get().getModEventBus());
 	}
 
 	/**
