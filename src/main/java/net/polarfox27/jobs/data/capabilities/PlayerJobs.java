@@ -7,7 +7,6 @@ import net.minecraft.network.chat.MutableComponent;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.network.FriendlyByteBuf;
-import net.minecraftforge.network.NetworkDirection;
 import net.polarfox27.jobs.data.ServerJobsData;
 import net.polarfox27.jobs.data.registry.LevelData;
 import net.polarfox27.jobs.network.PacketAddXP;

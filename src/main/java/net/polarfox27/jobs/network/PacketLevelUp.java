@@ -54,7 +54,8 @@ public class PacketLevelUp implements JobsPacket{
         if(ctx.get().getDirection() == NetworkDirection.PLAY_TO_CLIENT) {
             if(Minecraft.getInstance().player == null)
                 return;
-            ClientJobsData.showLevelUpGui(message.job, message.previousLevel);
+            Minecraft.getInstance().execute(() ->
+                    ClientJobsData.showLevelUpGui(message.job, message.previousLevel));
         }
         ctx.get().setPacketHandled(true);
     }

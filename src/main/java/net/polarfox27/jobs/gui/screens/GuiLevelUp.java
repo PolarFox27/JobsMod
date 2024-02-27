@@ -36,6 +36,7 @@ public class GuiLevelUp extends Screen {
     	super(TextUtil.EMPTY);
         this.job = job;
         this.previousLevel = previousLevel;
+        this.minecraft = Minecraft.getInstance();
     }
 
     /**
