@@ -71,7 +71,9 @@ public abstract class BlockedData<T> {
         BREAKING(1),
         EQUIP(2),
         LEFT_CLICK(3),
-        RIGHT_CLICK(4);
+        RIGHT_CLICK(4),
+        PLACEMENT(5),
+        BLOCK_USE(6);
 
         public final int code;
         Type(int code) {

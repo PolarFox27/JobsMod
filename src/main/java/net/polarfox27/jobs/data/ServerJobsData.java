@@ -2,7 +2,6 @@ package net.polarfox27.jobs.data;
 
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.item.Items;
-import net.minecraftforge.network.NetworkDirection;
 import net.polarfox27.jobs.data.registry.LevelData;
 import net.polarfox27.jobs.data.registry.RewardsData;
 import net.polarfox27.jobs.data.registry.TranslationData;
@@ -40,6 +39,8 @@ public class ServerJobsData {
     public static final ItemBlockedRegistry BLOCKED_EQUIPMENTS = new ItemBlockedRegistry(BlockedData.Type.EQUIP);
     public static final ItemBlockedRegistry BLOCKED_LEFT_CLICKS = new ItemBlockedRegistry(BlockedData.Type.LEFT_CLICK);
     public static final ItemBlockedRegistry BLOCKED_RIGHT_CLICKS = new ItemBlockedRegistry(BlockedData.Type.RIGHT_CLICK);
+    public static final BlockBlockedRegistry BLOCKED_PLACEMENTS = new BlockBlockedRegistry(BlockedData.Type.PLACEMENT);
+    public static final BlockBlockedRegistry BLOCKED_BLOCK_USAGES = new BlockBlockedRegistry(BlockedData.Type.BLOCK_USE);
     private static final Set<XPRegistry<? extends XPData>> XP_REGISTRIES = new HashSet<>();
 
 
@@ -71,10 +72,13 @@ public class ServerJobsData {
      */
     public static void sendDataToClient(ServerPlayer player) {
         Set<ItemBlockedRegistry> itemBlockedRegistries = Arrays.stream(
-                new ItemBlockedRegistry[]{BLOCKED_CRAFTS, BLOCKED_EQUIPMENTS, BLOCKED_LEFT_CLICKS, BLOCKED_RIGHT_CLICKS}
-                ).collect(Collectors.toSet());
+                new ItemBlockedRegistry[]{BLOCKED_CRAFTS, BLOCKED_EQUIPMENTS, BLOCKED_LEFT_CLICKS, BLOCKED_RIGHT_CLICKS})
+            .collect(Collectors.toSet());
+
         Set<BlockBlockedRegistry> blockBlockedRegistries = Arrays.stream(
-                new BlockBlockedRegistry[]{BLOCKED_BLOCKS}).collect(Collectors.toSet());
+                new BlockBlockedRegistry[]{BLOCKED_BLOCKS, BLOCKED_PLACEMENTS, BLOCKED_BLOCK_USAGES})
+            .collect(Collectors.toSet());
+
         PacketUpdateClientJobsData packet1 = new PacketUpdateClientJobsData(XP_REGISTRIES,
                 JOBS_LEVELS,
                 itemBlockedRegistries,

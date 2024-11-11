@@ -8,7 +8,6 @@ import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Items;
 import net.minecraft.server.MinecraftServer;
-import net.minecraft.ChatFormatting;
 import net.polarfox27.jobs.ModJobs;
 import net.polarfox27.jobs.data.ServerJobsData;
 import net.polarfox27.jobs.data.registry.RewardsData;
@@ -44,6 +43,8 @@ public class WriteConfigManager {
         tryCreateEmptyBlockedItemsFile(blockedFolder, FileUtil.BLOCKED_LEFT_CLICKS_FILE);
         tryCreateEmptyBlockedItemsFile(blockedFolder, FileUtil.BLOCKED_RIGHT_CLICKS_FILE);
         tryCreateEmptyBlockedBlocksFile(blockedFolder, FileUtil.BLOCKED_BLOCKS_FILE);
+        tryCreateEmptyBlockedBlocksFile(blockedFolder, FileUtil.BLOCKED_PLACEMENTS_FILE);
+        tryCreateEmptyBlockedBlocksFile(blockedFolder, FileUtil.BLOCKED_BLOCK_USAGES_FILE);
         tryCreateEmptyTranslationFile(baseFolder, FileUtil.TRANSLATIONS_FILE);
     }
 

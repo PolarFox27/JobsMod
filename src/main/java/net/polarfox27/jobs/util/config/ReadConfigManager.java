@@ -49,6 +49,12 @@ public class ReadConfigManager {
         ModJobs.info("Loading blocked blocks...", false);
         FileUtil.safeReadJSONFromFile(FileUtil.join(blockedFolder, FileUtil.BLOCKED_BLOCKS_FILE))
                 .ifPresent(x -> loadBlockedBlocks(x, ServerJobsData.BLOCKED_BLOCKS));
+        ModJobs.info("Loading blocked placements...", false);
+        FileUtil.safeReadJSONFromFile(FileUtil.join(blockedFolder, FileUtil.BLOCKED_PLACEMENTS_FILE))
+            .ifPresent(x -> loadBlockedBlocks(x, ServerJobsData.BLOCKED_PLACEMENTS));
+        ModJobs.info("Loading blocked block usages...", false);
+        FileUtil.safeReadJSONFromFile(FileUtil.join(blockedFolder, FileUtil.BLOCKED_BLOCK_USAGES_FILE))
+            .ifPresent(x -> loadBlockedBlocks(x, ServerJobsData.BLOCKED_BLOCK_USAGES));
 
         ModJobs.info("Loading jobs xp...", false);
         FileUtil.safeReadJSONFromFile(FileUtil.join(xpFolder, ServerJobsData.CRAFTING_ITEMS_XP.getFileName()))

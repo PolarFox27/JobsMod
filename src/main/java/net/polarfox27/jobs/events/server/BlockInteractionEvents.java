@@ -5,6 +5,7 @@ import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.block.CropBlock;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraftforge.event.entity.player.PlayerInteractEvent;
+import net.minecraftforge.event.world.BlockEvent;
 import net.minecraftforge.event.world.BlockEvent.BreakEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.common.Mod.EventBusSubscriber;
@@ -52,7 +53,8 @@ public class BlockInteractionEvents {
     }
 
     /**
-     * Fired when a player right-clicks a block. If the player can't right-click using the item, event is canceled.
+     * Fired when a player right-clicks a block. If the player can't right-click using the item, event is cancelled.
+     * If the block usage is blocked, the event is cancelled too.
      * @param event the right click event.
      */
     @SubscribeEvent
@@ -60,11 +62,37 @@ public class BlockInteractionEvents {
         if(event.getWorld().isClientSide() || !(event.getPlayer() instanceof ServerPlayer player))
             return;
 
+        PlayerJobs jobs = PlayerData.getPlayerJobs(player);
+        BlockState state = event.getWorld().getBlockState(event.getHitVec().getBlockPos());
+
+        // Check block usage
+        if (ServerJobsData.BLOCKED_BLOCK_USAGES.isBlocked(jobs, state)) {
+            event.setCanceled(true);
+            return;
+        }
+
         ItemStack stack = player.getMainHandItem() == ItemStack.EMPTY ? player.getOffhandItem() :
                                                                         player.getMainHandItem();
 
+        // Check item usage
         if(stack != ItemStack.EMPTY &&
-            ServerJobsData.BLOCKED_RIGHT_CLICKS.isBlocked(PlayerData.getPlayerJobs(player), stack))
+            ServerJobsData.BLOCKED_RIGHT_CLICKS.isBlocked(jobs, stack))
             event.setCanceled(true);
+    }
+
+    /**
+     * Fired when a player places a block. If the player can't place the block, the event is cancelled.
+     *
+     * @param event the placement event.
+     */
+    @SubscribeEvent
+    public void onPlaceBlock(BlockEvent.EntityPlaceEvent event){
+        if(event.getWorld().isClientSide() || !(event.getEntity() instanceof ServerPlayer player))
+            return;
+
+        PlayerJobs jobs = PlayerData.getPlayerJobs(player);
+        if (ServerJobsData.BLOCKED_PLACEMENTS.isBlocked(jobs, event.getPlacedBlock())) {
+            event.setCanceled(true);
+        }
     }
 }
