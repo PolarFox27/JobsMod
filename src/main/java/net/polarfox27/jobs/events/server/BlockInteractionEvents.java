@@ -26,7 +26,7 @@ public class BlockInteractionEvents {
         BlockState state = event.getState();
         PlayerJobs jobs = PlayerData.getPlayerJobs(player);
 
-        if(!ServerJobsData.BLOCKED_BLOCKS.isAllowed(PlayerData.getPlayerJobs(player), state)){
+        if(ServerJobsData.BLOCKED_BLOCKS.isBlocked(PlayerData.getPlayerJobs(player), state)){
             event.setCanceled(true);
             return;
         }
@@ -59,12 +59,12 @@ public class BlockInteractionEvents {
     public void onRightClickBlock(PlayerInteractEvent.RightClickBlock event){
         if(event.getWorld().isClientSide() || !(event.getPlayer() instanceof ServerPlayer player))
             return;
-        PlayerJobs jobs = PlayerData.getPlayerJobs(player);
 
         ItemStack stack = player.getMainHandItem() == ItemStack.EMPTY ? player.getOffhandItem() :
                                                                         player.getMainHandItem();
 
-        if(stack != ItemStack.EMPTY && ServerJobsData.BLOCKED_RIGHT_CLICKS.isBlocked(PlayerData.getPlayerJobs(player), stack))
+        if(stack != ItemStack.EMPTY &&
+            ServerJobsData.BLOCKED_RIGHT_CLICKS.isBlocked(PlayerData.getPlayerJobs(player), stack))
             event.setCanceled(true);
     }
 }
