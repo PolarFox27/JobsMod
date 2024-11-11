@@ -19,7 +19,7 @@ public class ClientBlockEvents {
         BlockBlockedRegistry blocked_blocks = ClientJobsData.BLOCKED_BLOCKS_REGISTRIES.get(BlockedData.Type.BREAKING);
         ItemBlockedRegistry blocked_tools = ClientJobsData.BLOCKED_ITEMS_REGISTRIES.get(BlockedData.Type.LEFT_CLICK);
 
-        if(blocked_blocks != null && !blocked_blocks.isAllowed(ClientJobsData.playerJobs, event.getState())){
+        if(blocked_blocks != null && blocked_blocks.isBlocked(ClientJobsData.playerJobs, event.getState())){
             event.setCanceled(true);
         }
         if(blocked_tools != null && blocked_tools.isBlocked(ClientJobsData.playerJobs,

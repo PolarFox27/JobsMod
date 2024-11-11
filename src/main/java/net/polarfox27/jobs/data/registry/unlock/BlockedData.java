@@ -7,7 +7,12 @@ import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.state.BlockState;
 
-public abstract class BlockedData {
+/**
+ * Blocked Data Class.
+ *
+ * @param <T> The type that can be matched against the blocked data.
+ */
+public abstract class BlockedData<T> {
 
     private final int level;
     private final Type type;
@@ -53,6 +58,14 @@ public abstract class BlockedData {
      */
     public abstract UnlockStack createUnlockStack();
 
+    /**
+     * Checks if an object matches.
+     *
+     * @param object the object to check
+     * @return true if the object matches this blocked data
+     */
+    public abstract boolean matches(T object);
+
     public enum Type{
         CRAFTING(0),
         BREAKING(1),
@@ -78,7 +91,7 @@ public abstract class BlockedData {
         }
     }
 
-    public static class BlockBlockedData extends BlockedData{
+    public static class BlockBlockedData extends BlockedData<BlockState> {
 
         private final Block block;
 
@@ -129,12 +142,13 @@ public abstract class BlockedData {
          * @param state the state to check
          * @return true if the state matches this blocked block data
          */
+        @Override
         public boolean matches(BlockState state){
             return block == state.getBlock();
         }
     }
 
-    public static class ItemBlockedData extends BlockedData{
+    public static class ItemBlockedData extends BlockedData<ItemStack> {
 
         private final Item item;
         private final int metadata;
@@ -194,6 +208,7 @@ public abstract class BlockedData {
          * @param stack the stack to check
          * @return true if the stacks matches this blocked item data
          */
+        @Override
         public boolean matches(ItemStack stack){
             return item == stack.getItem() && (metadata < 0 || metadata == stack.getDamageValue());
         }
