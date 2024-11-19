@@ -13,6 +13,7 @@ import net.minecraft.network.chat.TextComponent;
 import net.minecraft.network.chat.TranslatableComponent;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.resources.ResourceLocation;
+import net.minecraft.world.item.TooltipFlag;
 import net.polarfox27.jobs.ModJobs;
 import net.polarfox27.jobs.data.ClientJobsData;
 import net.polarfox27.jobs.data.registry.unlock.UnlockStack;
@@ -162,10 +163,12 @@ public class GuiLevelUp extends Screen {
      * @param y the y coordinate of the mouse
      */
     protected void renderToolTipAndCount(PoseStack mStack, ItemStack stack, int x, int y) {
-        List<Component> tooltips = new ArrayList<>();
 
-        tooltips.add(stack.getHoverName());
-        tooltips.add(new TextComponent(ChatFormatting.GREEN + Integer.toString(stack.getCount())));
+        // Add all tooltips except the tool modifiers.
+        stack.hideTooltipPart(ItemStack.TooltipPart.MODIFIERS);
+        List<Component> tooltips = stack.getTooltipLines(Minecraft.getInstance().player, TooltipFlag.Default.NORMAL);
+
+        tooltips.add(new TextComponent(ChatFormatting.GREEN + "x " + stack.getCount()));
 
         this.renderComponentTooltip(mStack, tooltips, x, y, Minecraft.getInstance().font);
     }

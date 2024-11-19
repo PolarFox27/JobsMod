@@ -120,7 +120,7 @@ public class JsonUtil {
             return Optional.empty();
         int count = object.get("count").getAsInt();
         int metadata = object.has("metadata") ? object.get("metadata").getAsInt() : -1;
-        CompoundTag nbt = object.has("tag") ? parseTagFromString(object.get("tag").getAsString()) : null;
+        CompoundTag nbt = object.has("tag") ? parseTagFromString(object.get("tag").toString()) : null;
         return Optional.of(JobsUtil.itemStack(item, count, metadata, nbt));
     }
 
