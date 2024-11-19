@@ -1,5 +1,6 @@
 package net.polarfox27.jobs.events.server;
 
+import net.minecraft.network.protocol.game.ClientboundContainerSetContentPacket;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.block.CropBlock;
@@ -90,9 +91,15 @@ public class BlockInteractionEvents {
         if(event.getWorld().isClientSide() || !(event.getEntity() instanceof ServerPlayer player))
             return;
 
+        // Check block placement
         PlayerJobs jobs = PlayerData.getPlayerJobs(player);
         if (ServerJobsData.BLOCKED_PLACEMENTS.isBlocked(jobs, event.getPlacedBlock())) {
             event.setCanceled(true);
+            player.connection.send(new ClientboundContainerSetContentPacket(
+                player.inventoryMenu.containerId,
+                player.inventoryMenu.getStateId(),
+                player.inventoryMenu.getItems(),
+                player.inventoryMenu.getCarried()));
         }
     }
 }
