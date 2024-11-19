@@ -67,6 +67,7 @@ public class GuiJobInfos extends Screen implements SliderParent{
 
         if(offsetUnlock == -70) {
             this.addRenderableWidget(slideBar);
+            this.slideBar.update();
         }
         super.init();
     }

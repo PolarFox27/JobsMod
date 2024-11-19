@@ -269,16 +269,18 @@ public class JsonUtil {
     /**
      * Creates the Blocked Item data represented in the JSON object
      * @param object the JSON object representing the Blocked Item data
+     * @param type The blocking type
+     * @param maxLevel The maximum level, the blocking data level is capped at this maximum
      * @return the created Blocked Item data
      */
-    public static Optional<BlockedData.ItemBlockedData> blockedItemFromJSON(JsonObject object, BlockedData.Type type){
+    public static Optional<BlockedData.ItemBlockedData> blockedItemFromJSON(JsonObject object, BlockedData.Type type, int maxLevel){
         Item item = getItemFromRegistryName(object.get("item").getAsString());
         if(item == Items.AIR)
             return Optional.empty();
         int metadata = -1;
         if(object.has("metadata"))
             metadata = object.get("metadata").getAsInt();
-        int level = object.get("level").getAsInt();
+        int level = Math.min(object.get("level").getAsInt(), maxLevel);
         return Optional.of(new BlockedData.ItemBlockedData(level, type, item, metadata));
     }
 
@@ -297,13 +299,15 @@ public class JsonUtil {
     /**
      * Creates the Blocked Block data represented in the JSON object
      * @param object the JSON object representing the Blocked Block data
+     * @param type The blocking type
+     * @param maxLevel The maximum level, the blocking data level is capped at this maximum
      * @return the created Blocked Block data
      */
-    public static Optional<BlockedData.BlockBlockedData> blockedBlockFromJSON(JsonObject object, BlockedData.Type type){
+    public static Optional<BlockedData.BlockBlockedData> blockedBlockFromJSON(JsonObject object, BlockedData.Type type, int maxLevel){
         Block block = getBlockFromRegistryName(object.get("block").getAsString());
         if(block == Blocks.AIR)
             return Optional.empty();
-        int level = object.get("level").getAsInt();
+        int level = Math.min(object.get("level").getAsInt(), maxLevel);
         return Optional.of(new BlockedData.BlockBlockedData(level, type, block));
     }
 }

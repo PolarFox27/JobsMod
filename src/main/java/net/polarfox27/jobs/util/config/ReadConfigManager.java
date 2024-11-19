@@ -189,7 +189,9 @@ public class ReadConfigManager {
             registry.clear();
             for(Map.Entry<String, JsonElement> e : object.entrySet()) {
                 for(JsonElement element : e.getValue().getAsJsonArray())
-                    JsonUtil.blockedItemFromJSON(element.getAsJsonObject(), registry.getType())
+                    JsonUtil.blockedItemFromJSON(element.getAsJsonObject(),
+                                                 registry.getType(),
+                                                 ServerJobsData.JOBS_LEVELS.getMaxLevel(e.getKey()))
                             .ifPresent(x -> registry.addBlockedData(e.getKey(), x));
             }
         }
@@ -208,7 +210,9 @@ public class ReadConfigManager {
             registry.clear();
             for(Map.Entry<String, JsonElement> e : object.entrySet()) {
                 for(JsonElement element : e.getValue().getAsJsonArray())
-                    JsonUtil.blockedBlockFromJSON(element.getAsJsonObject(), registry.getType())
+                    JsonUtil.blockedBlockFromJSON(element.getAsJsonObject(),
+                                                  registry.getType(),
+                                                  ServerJobsData.JOBS_LEVELS.getMaxLevel(e.getKey()))
                             .ifPresent(x -> registry.addBlockedData(e.getKey(), x));
             }
         }
