@@ -1,6 +1,9 @@
 package net.polarfox27.jobs.util.config;
 
 import com.google.gson.*;
+import com.mojang.brigadier.exceptions.CommandSyntaxException;
+import net.minecraft.nbt.CompoundTag;
+import net.minecraft.nbt.TagParser;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.entity.Entity;
@@ -10,6 +13,7 @@ import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Items;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraftforge.registries.ForgeRegistries;
+import net.polarfox27.jobs.ModJobs;
 import net.polarfox27.jobs.data.registry.RewardsData;
 import net.polarfox27.jobs.data.registry.unlock.BlockedData;
 import net.polarfox27.jobs.data.registry.xp.XPData;
@@ -116,7 +120,23 @@ public class JsonUtil {
             return Optional.empty();
         int count = object.get("count").getAsInt();
         int metadata = object.has("metadata") ? object.get("metadata").getAsInt() : -1;
-        return Optional.of(JobsUtil.itemStack(item, count, metadata));
+        CompoundTag nbt = object.has("tag") ? parseTagFromString(object.get("tag").getAsString()) : null;
+        return Optional.of(JobsUtil.itemStack(item, count, metadata, nbt));
+    }
+
+    /**
+     * Converts a string representation of a NBT tag, in the command format into a CompoundTag.
+     *
+     * @param tag The string representation of the tag.
+     * @return The tag parsed. Or null if the string representation is invalid.
+     */
+    public static CompoundTag parseTagFromString(String tag){
+        try {
+            return TagParser.parseTag(tag);
+        } catch (CommandSyntaxException e) {
+            ModJobs.info("Invalid NBT Tag : " + tag, true);
+            return null;
+        }
     }
 
     /**
