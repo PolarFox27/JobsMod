@@ -76,7 +76,7 @@ public class ServerJobsData {
                 new ItemBlockedRegistry[]{BLOCKED_CRAFTS, BLOCKED_EQUIPMENTS, BLOCKED_LEFT_CLICKS, BLOCKED_RIGHT_CLICKS}
                 ).collect(Collectors.toSet());
         Set<BlockBlockedRegistry> blockBlockedRegistries = Arrays.stream(
-                new BlockBlockedRegistry[]{BLOCKED_BLOCKS}).collect(Collectors.toSet());
+                new BlockBlockedRegistry[]{BLOCKED_BLOCKS, BLOCKED_BLOCK_USAGES, BLOCKED_PLACEMENTS}).collect(Collectors.toSet());
         PacketUpdateClientJobsData packet1 = new PacketUpdateClientJobsData(XP_REGISTRIES,
                 JOBS_LEVELS,
                 itemBlockedRegistries,
