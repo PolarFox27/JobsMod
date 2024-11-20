@@ -8,6 +8,7 @@ import net.minecraft.client.gui.screens.Screen;
 import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.TooltipFlag;
 import net.polarfox27.jobs.ModJobs;
 import net.polarfox27.jobs.data.ClientJobsData;
 import net.polarfox27.jobs.data.registry.unlock.UnlockStack;
@@ -149,16 +150,18 @@ public class GuiLevelUp extends Screen {
 
     /**
      * Renders the tooltip and the count for the hovered reward
-     * @param gui the render object
+     * @param gui the render stack
      * @param stack the hovered stack
      * @param x the x coordinate of the mouse
      * @param y the y coordinate of the mouse
      */
     protected void renderToolTipAndCount(GuiGraphics gui, ItemStack stack, int x, int y) {
-        List<Component> tooltips = new ArrayList<>();
 
-        tooltips.add(stack.getHoverName());
-        tooltips.add(Component.literal(ChatFormatting.GREEN + Integer.toString(stack.getCount())));
+        // Add all tooltips except the tool modifiers.
+        stack.hideTooltipPart(ItemStack.TooltipPart.MODIFIERS);
+        List<Component> tooltips = stack.getTooltipLines(Minecraft.getInstance().player, TooltipFlag.Default.NORMAL);
+
+        tooltips.add(Component.literal(ChatFormatting.GREEN + "x " + stack.getCount()));
 
         gui.renderComponentTooltip(Minecraft.getInstance().font, tooltips, x, y);
     }
