@@ -91,11 +91,11 @@ public class ClientJobsData {
         List<UnlockStack> blockedItems = new ArrayList<>(Stream.concat(
                 BLOCKED_ITEMS_REGISTRIES.values()
                                 .stream()
-                                .flatMap(r -> r.getBlockedData(job).stream())
+                                .flatMap(r -> r.getBlockedData(job, playerJobs).stream())
                                 .map(BlockedData.ItemBlockedData::createUnlockStack),
                 BLOCKED_BLOCKS_REGISTRIES.values()
                                 .stream()
-                                .flatMap(r -> r.getBlockedData(job).stream())
+                                .flatMap(r -> r.getBlockedData(job, playerJobs).stream())
                                 .map(BlockedData.BlockBlockedData::createUnlockStack))
                 .sorted().toList());
 
