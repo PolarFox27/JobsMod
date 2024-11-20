@@ -40,6 +40,8 @@ public class ServerJobsData {
     public static final ItemBlockedRegistry BLOCKED_EQUIPMENTS = new ItemBlockedRegistry(BlockedData.Type.EQUIP);
     public static final ItemBlockedRegistry BLOCKED_LEFT_CLICKS = new ItemBlockedRegistry(BlockedData.Type.LEFT_CLICK);
     public static final ItemBlockedRegistry BLOCKED_RIGHT_CLICKS = new ItemBlockedRegistry(BlockedData.Type.RIGHT_CLICK);
+    public static final BlockBlockedRegistry BLOCKED_PLACEMENTS = new BlockBlockedRegistry(BlockedData.Type.PLACEMENT);
+    public static final BlockBlockedRegistry BLOCKED_BLOCK_USAGES = new BlockBlockedRegistry(BlockedData.Type.BLOCK_USE);
     private static final Set<XPRegistry<? extends XPData>> XP_REGISTRIES = new HashSet<>();
 
 

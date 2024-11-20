@@ -66,12 +66,22 @@ public abstract class BlockedData<T> {
      */
     public abstract boolean matches(T object);
 
+    /**
+     * Checks if an object blocked data matches. That means if it unlocks the same thing.
+     *
+     * @param object the object to check
+     * @return true if the object matches this blocked data
+     */
+    public abstract boolean matches(BlockedData<T> object);
+
     public enum Type{
         CRAFTING(0),
         BREAKING(1),
         EQUIP(2),
         LEFT_CLICK(3),
-        RIGHT_CLICK(4);
+        RIGHT_CLICK(4),
+        PLACEMENT(5),
+        BLOCK_USE(6);
 
         public final int code;
         Type(int code) {
@@ -146,6 +156,17 @@ public abstract class BlockedData<T> {
         public boolean matches(BlockState state){
             return block == state.getBlock();
         }
+
+        /**
+         * Checks if an object blocked data matches. That means if it unlocks the same thing.
+         *
+         * @param object the object to check
+         * @return true if the object matches this blocked data
+         */
+        @Override
+        public boolean matches(BlockedData<BlockState> object) {
+            return block == ((BlockBlockedData)object).block;
+        }
     }
 
     public static class ItemBlockedData extends BlockedData<ItemStack> {
@@ -211,6 +232,18 @@ public abstract class BlockedData<T> {
         @Override
         public boolean matches(ItemStack stack){
             return item == stack.getItem() && (metadata < 0 || metadata == stack.getDamageValue());
+        }
+
+        /**
+         * Checks if an object blocked data matches. That means if it unlocks the same thing.
+         *
+         * @param object the object to check
+         * @return true if the object matches this blocked data
+         */
+        @Override
+        public boolean matches(BlockedData<ItemStack> object) {
+            ItemBlockedData other = (ItemBlockedData) object;
+            return item == other.item && metadata == other.metadata;
         }
     }
 }

@@ -1,6 +1,9 @@
 package net.polarfox27.jobs.util.config;
 
 import com.google.gson.*;
+import com.mojang.brigadier.exceptions.CommandSyntaxException;
+import net.minecraft.nbt.CompoundTag;
+import net.minecraft.nbt.TagParser;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.entity.Entity;
@@ -10,6 +13,7 @@ import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Items;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraftforge.registries.ForgeRegistries;
+import net.polarfox27.jobs.ModJobs;
 import net.polarfox27.jobs.data.registry.RewardsData;
 import net.polarfox27.jobs.data.registry.unlock.BlockedData;
 import net.polarfox27.jobs.data.registry.xp.XPData;
@@ -118,7 +122,23 @@ public class JsonUtil {
             return Optional.empty();
         int count = object.get("count").getAsInt();
         int metadata = object.has("metadata") ? object.get("metadata").getAsInt() : -1;
-        return Optional.of(JobsUtil.itemStack(item, count, metadata));
+        CompoundTag nbt = object.has("tag") ? parseTagFromString(object.get("tag").toString()) : null;
+        return Optional.of(JobsUtil.itemStack(item, count, metadata, nbt));
+    }
+
+    /**
+     * Converts a string representation of a NBT tag, in the command format into a CompoundTag.
+     *
+     * @param tag The string representation of the tag.
+     * @return The tag parsed. Or null if the string representation is invalid.
+     */
+    public static CompoundTag parseTagFromString(String tag){
+        try {
+            return TagParser.parseTag(tag);
+        } catch (CommandSyntaxException e) {
+            ModJobs.info("Invalid NBT Tag : " + tag, true);
+            return null;
+        }
     }
 
     /**
@@ -251,16 +271,18 @@ public class JsonUtil {
     /**
      * Creates the Blocked Item data represented in the JSON object
      * @param object the JSON object representing the Blocked Item data
+     * @param type The blocking type
+     * @param maxLevel The maximum level, the blocking data level is capped at this maximum
      * @return the created Blocked Item data
      */
-    public static Optional<BlockedData.ItemBlockedData> blockedItemFromJSON(JsonObject object, BlockedData.Type type){
+    public static Optional<BlockedData.ItemBlockedData> blockedItemFromJSON(JsonObject object, BlockedData.Type type, int maxLevel){
         Item item = getItemFromRegistryName(object.get("item").getAsString());
         if(item == Items.AIR)
             return Optional.empty();
         int metadata = -1;
         if(object.has("metadata"))
             metadata = object.get("metadata").getAsInt();
-        int level = object.get("level").getAsInt();
+        int level = Math.min(object.get("level").getAsInt(), maxLevel);
         return Optional.of(new BlockedData.ItemBlockedData(level, type, item, metadata));
     }
 
@@ -279,13 +301,15 @@ public class JsonUtil {
     /**
      * Creates the Blocked Block data represented in the JSON object
      * @param object the JSON object representing the Blocked Block data
+     * @param type The blocking type
+     * @param maxLevel The maximum level, the blocking data level is capped at this maximum
      * @return the created Blocked Block data
      */
-    public static Optional<BlockedData.BlockBlockedData> blockedBlockFromJSON(JsonObject object, BlockedData.Type type){
+    public static Optional<BlockedData.BlockBlockedData> blockedBlockFromJSON(JsonObject object, BlockedData.Type type, int maxLevel){
         Block block = getBlockFromRegistryName(object.get("block").getAsString());
         if(block == Blocks.AIR)
             return Optional.empty();
-        int level = object.get("level").getAsInt();
+        int level = Math.min(object.get("level").getAsInt(), maxLevel);
         return Optional.of(new BlockedData.BlockBlockedData(level, type, block));
     }
 }

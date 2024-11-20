@@ -19,6 +19,8 @@ public class FileUtil {
     public static final String BLOCKED_LEFT_CLICKS_FILE = "blocked_left_clicks.json";
     public static final String BLOCKED_RIGHT_CLICKS_FILE = "blocked_right_clicks.json";
     public static final String BLOCKED_BLOCKS_FILE = "blocked_blocks.json";
+    public static final String BLOCKED_PLACEMENTS_FILE = "blocked_placements.json";
+    public static final String BLOCKED_BLOCK_USAGES_FILE = "blocked_block_usages.json";
     public static final String REWARDS_FILE = "rewards.json";
 
     /**

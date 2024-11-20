@@ -1,6 +1,7 @@
 package net.polarfox27.jobs.util;
 
 import com.google.common.primitives.Longs;
+import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.EntityType;
@@ -147,10 +148,12 @@ public class JobsUtil {
      * @param metadata the metadata of the stack (e.g. item durability)
      * @return the item stack
      */
-    public static ItemStack itemStack(Item item, int count, int metadata){
+    public static ItemStack itemStack(Item item, int count, int metadata, CompoundTag nbt){
         ItemStack s = new ItemStack(item, count);
         if(metadata != 0)
             s.setDamageValue(metadata);
+        if(nbt != null)
+            s.setTag(nbt);
         return s;
     }
 

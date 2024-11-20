@@ -150,7 +150,7 @@ public abstract class  XPData {
          */
         @Override
         public ItemStack createStack() {
-            return JobsUtil.itemStack(item, 1, metadata);
+            return JobsUtil.itemStack(item, 1, metadata, null);
         }
 
         /**
@@ -238,7 +238,7 @@ public abstract class  XPData {
          */
         @Override
         public ItemStack createStack() {
-            return JobsUtil.itemStack(Item.BY_BLOCK.getOrDefault(block, Items.AIR), 1, -1);
+            return JobsUtil.itemStack(Item.BY_BLOCK.getOrDefault(block, Items.AIR), 1, -1, null);
         }
 
         /**

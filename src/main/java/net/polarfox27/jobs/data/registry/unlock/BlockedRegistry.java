@@ -71,8 +71,11 @@ public abstract class BlockedRegistry<T extends BlockedData<S>, S> {
      * @param job the job from which to get the blocked data
      * @return a list of the blocked data
      */
-    public List<T> getBlockedData(String job){
-        return DATA.getOrDefault(job, new ArrayList<>());
+    public List<T> getBlockedData(String job, PlayerJobs playerJobs){
+        return DATA.getOrDefault(job, new ArrayList<>())
+            .stream()
+            .filter(data -> !this.isAlreadyUnlocked(playerJobs, data))
+            .toList();
     }
 
     /**
@@ -125,5 +128,25 @@ public abstract class BlockedRegistry<T extends BlockedData<S>, S> {
                 }
             }
         return found;
+    }
+
+    /**
+     * Checks if a blocked data is already unlocked.
+     * @param jobs the jobs data of the player
+     * @param object the object to check
+     * @return true if the object is already unlocked.
+     */
+    public boolean isAlreadyUnlocked(PlayerJobs jobs, T object){
+        if(jobs == null || object == null)
+            return false;
+
+        for(Map.Entry<String, List<T>> e : this.getAllEntries())
+            for(T d : e.getValue()) {
+                if (!d.equals(object) && d.matches(object)) {
+                    if(d.getLevel() <= jobs.getLevelByJob(e.getKey()))
+                        return true;
+                }
+            }
+        return false;
     }
 }

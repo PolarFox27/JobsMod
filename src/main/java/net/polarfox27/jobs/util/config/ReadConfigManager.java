@@ -49,6 +49,12 @@ public class ReadConfigManager {
         ModJobs.info("Loading blocked blocks...", false);
         FileUtil.safeReadJSONFromFile(FileUtil.join(blockedFolder, FileUtil.BLOCKED_BLOCKS_FILE))
                 .ifPresent(x -> loadBlockedBlocks(x, ServerJobsData.BLOCKED_BLOCKS));
+        ModJobs.info("Loading blocked placements...", false);
+        FileUtil.safeReadJSONFromFile(FileUtil.join(blockedFolder, FileUtil.BLOCKED_PLACEMENTS_FILE))
+            .ifPresent(x -> loadBlockedBlocks(x, ServerJobsData.BLOCKED_PLACEMENTS));
+        ModJobs.info("Loading blocked block usages...", false);
+        FileUtil.safeReadJSONFromFile(FileUtil.join(blockedFolder, FileUtil.BLOCKED_BLOCK_USAGES_FILE))
+            .ifPresent(x -> loadBlockedBlocks(x, ServerJobsData.BLOCKED_BLOCK_USAGES));
 
         ModJobs.info("Loading jobs xp...", false);
         FileUtil.safeReadJSONFromFile(FileUtil.join(xpFolder, ServerJobsData.CRAFTING_ITEMS_XP.getFileName()))
@@ -183,7 +189,9 @@ public class ReadConfigManager {
             registry.clear();
             for(Map.Entry<String, JsonElement> e : object.entrySet()) {
                 for(JsonElement element : e.getValue().getAsJsonArray())
-                    JsonUtil.blockedItemFromJSON(element.getAsJsonObject(), registry.getType())
+                    JsonUtil.blockedItemFromJSON(element.getAsJsonObject(),
+                                                 registry.getType(),
+                                                 ServerJobsData.JOBS_LEVELS.getMaxLevel(e.getKey()))
                             .ifPresent(x -> registry.addBlockedData(e.getKey(), x));
             }
         }
@@ -202,7 +210,9 @@ public class ReadConfigManager {
             registry.clear();
             for(Map.Entry<String, JsonElement> e : object.entrySet()) {
                 for(JsonElement element : e.getValue().getAsJsonArray())
-                    JsonUtil.blockedBlockFromJSON(element.getAsJsonObject(), registry.getType())
+                    JsonUtil.blockedBlockFromJSON(element.getAsJsonObject(),
+                                                  registry.getType(),
+                                                  ServerJobsData.JOBS_LEVELS.getMaxLevel(e.getKey()))
                             .ifPresent(x -> registry.addBlockedData(e.getKey(), x));
             }
         }
